@@ -10,36 +10,39 @@ type ScrollUntilVisibleData = {
   maxScrolls?: string;
 };
 
-export const scrollUntilVisibleExecutor: NodeExecutor<ScrollUntilVisibleData> = async ({
-  data,
-  nodeId,
-  context,
-  step,
-  publish,
-}) => {
+export const scrollUntilVisibleExecutor: NodeExecutor<
+  ScrollUntilVisibleData
+> = async ({ data, nodeId, context, step, publish }) => {
   await publish(
     iosScrollUntilVisibleChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
     const result = await step.run("scroll-until-visible", async () => {
       if (!data.accessibilityId) {
-        throw new NonRetriableError("Scroll Until Visible: Accessibility ID is required");
+        throw new NonRetriableError(
+          "Scroll Until Visible: Accessibility ID is required",
+        );
       }
 
       if (!data.variableName) {
-        throw new NonRetriableError("Scroll Until Visible: Variable name is required");
+        throw new NonRetriableError(
+          "Scroll Until Visible: Variable name is required",
+        );
       }
 
       // Get the device ID from context (set by simulator-boot node)
-      const simulatorContext = context.simulator as { deviceId?: string } | undefined;
-      const deviceId = simulatorContext?.deviceId || (context.deviceId as string | undefined);
+      const simulatorContext = context.simulator as
+        | { deviceId?: string }
+        | undefined;
+      const deviceId =
+        simulatorContext?.deviceId || (context.deviceId as string | undefined);
       if (!deviceId) {
         throw new NonRetriableError(
-          "Scroll Until Visible: No device ID found in context. Ensure Simulator Boot node runs first."
+          "Scroll Until Visible: No device ID found in context. Ensure Simulator Boot node runs first.",
         );
       }
 
@@ -50,12 +53,12 @@ export const scrollUntilVisibleExecutor: NodeExecutor<ScrollUntilVisibleData> = 
         deviceId,
         data.accessibilityId,
         direction,
-        maxScrolls
+        maxScrolls,
       );
 
       if (!scrollResult.found) {
         throw new NonRetriableError(
-          `Scroll Until Visible failed: Element ${data.accessibilityId} not found after ${maxScrolls} scrolls`
+          `Scroll Until Visible failed: Element ${data.accessibilityId} not found after ${maxScrolls} scrolls`,
         );
       }
 
@@ -74,7 +77,7 @@ export const scrollUntilVisibleExecutor: NodeExecutor<ScrollUntilVisibleData> = 
       iosScrollUntilVisibleChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -83,7 +86,7 @@ export const scrollUntilVisibleExecutor: NodeExecutor<ScrollUntilVisibleData> = 
       iosScrollUntilVisibleChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

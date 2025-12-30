@@ -22,13 +22,15 @@ export const expectTextExecutor: NodeExecutor<ExpectTextData> = async ({
     iosExpectTextChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
     const result = await step.run("expect-text", async () => {
       if (!data.accessibilityId) {
-        throw new NonRetriableError("Expect Text: Accessibility ID is required");
+        throw new NonRetriableError(
+          "Expect Text: Accessibility ID is required",
+        );
       }
 
       if (!data.expectedText) {
@@ -41,10 +43,11 @@ export const expectTextExecutor: NodeExecutor<ExpectTextData> = async ({
 
       // Get device ID from context (should be set by simulator boot node)
       const simulator = context.simulator as { deviceId?: string } | undefined;
-      const deviceId = simulator?.deviceId || (context.deviceId as string | undefined);
+      const deviceId =
+        simulator?.deviceId || (context.deviceId as string | undefined);
       if (!deviceId) {
         throw new NonRetriableError(
-          "Expect Text: No device ID found. Make sure simulator is booted first."
+          "Expect Text: No device ID found. Make sure simulator is booted first.",
         );
       }
 
@@ -55,12 +58,12 @@ export const expectTextExecutor: NodeExecutor<ExpectTextData> = async ({
       const element = await idb.waitForElement(
         deviceId,
         data.accessibilityId,
-        timeout
+        timeout,
       );
 
       if (!element) {
         throw new NonRetriableError(
-          `Expect Text failed: Element '${data.accessibilityId}' not found within ${timeout}ms`
+          `Expect Text failed: Element '${data.accessibilityId}' not found within ${timeout}ms`,
         );
       }
 
@@ -82,7 +85,7 @@ export const expectTextExecutor: NodeExecutor<ExpectTextData> = async ({
             matches = regex.test(actualText);
           } catch {
             throw new NonRetriableError(
-              `Expect Text: Invalid regular expression: ${data.expectedText}`
+              `Expect Text: Invalid regular expression: ${data.expectedText}`,
             );
           }
           break;
@@ -90,7 +93,7 @@ export const expectTextExecutor: NodeExecutor<ExpectTextData> = async ({
 
       if (!matches) {
         throw new NonRetriableError(
-          `Expect Text failed: Expected "${data.expectedText}" (${matchType}) but got "${actualText}"`
+          `Expect Text failed: Expected "${data.expectedText}" (${matchType}) but got "${actualText}"`,
         );
       }
 
@@ -111,7 +114,7 @@ export const expectTextExecutor: NodeExecutor<ExpectTextData> = async ({
       iosExpectTextChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -120,7 +123,7 @@ export const expectTextExecutor: NodeExecutor<ExpectTextData> = async ({
       iosExpectTextChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

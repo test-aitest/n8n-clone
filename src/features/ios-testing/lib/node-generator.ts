@@ -1,5 +1,5 @@
 import { createId } from "@paralleldrive/cuid2";
-import type { Node, Edge } from "@xyflow/react";
+import type { Edge, Node } from "@xyflow/react";
 import { NodeType } from "@/generated/prisma/client";
 
 /**
@@ -82,7 +82,7 @@ function mapComponentToNodeType(componentType: string): NodeType {
  */
 function getDefaultNodeData(
   nodeType: NodeType,
-  component: UIComponentInput
+  component: UIComponentInput,
 ): Record<string, unknown> {
   const baseData = {
     accessibilityId: component.suggestedId,
@@ -150,7 +150,7 @@ function getDefaultNodeData(
  */
 function calculatePosition(
   index: number,
-  layout: LayoutConfig
+  layout: LayoutConfig,
 ): { x: number; y: number } {
   const row = Math.floor(index / layout.nodesPerRow);
   const col = index % layout.nodesPerRow;
@@ -167,7 +167,7 @@ function calculatePosition(
 export function generateNodesFromComponents(
   components: UIComponentInput[],
   existingNodes: Node[] = [],
-  options: Partial<LayoutConfig> = {}
+  options: Partial<LayoutConfig> = {},
 ): { nodes: Node[]; edges: Edge[] } {
   const layout = { ...DEFAULT_LAYOUT, ...options };
 
@@ -175,11 +175,11 @@ export function generateNodesFromComponents(
   const existingAccessibilityIds = new Set(
     existingNodes
       .filter((n) => n.data?.accessibilityId)
-      .map((n) => n.data.accessibilityId as string)
+      .map((n) => n.data.accessibilityId as string),
   );
 
   const newComponents = components.filter(
-    (c) => !existingAccessibilityIds.has(c.suggestedId)
+    (c) => !existingAccessibilityIds.has(c.suggestedId),
   );
 
   // Calculate starting index based on existing nodes
@@ -229,7 +229,7 @@ export function generateNodesFromComponents(
  * Group components by view name for organized layout
  */
 export function groupComponentsByView(
-  components: UIComponentInput[]
+  components: UIComponentInput[],
 ): Map<string, UIComponentInput[]> {
   const groups = new Map<string, UIComponentInput[]>();
 
@@ -253,7 +253,7 @@ export function generateTestFlow(
     simulatorId?: string;
     bundleId?: string;
     appPath?: string;
-  } = {}
+  } = {},
 ): { nodes: Node[]; edges: Edge[] } {
   const nodes: Node[] = [];
   const edges: Edge[] = [];
@@ -356,9 +356,7 @@ export function validateGeneratedNodes(nodes: Node[]): {
       iosInteractionTypes.includes(node.type as NodeType) &&
       !node.data?.accessibilityId
     ) {
-      errors.push(
-        `Node ${node.id} (${node.type}) is missing accessibilityId`
-      );
+      errors.push(`Node ${node.id} (${node.type}) is missing accessibilityId`);
     }
   }
 

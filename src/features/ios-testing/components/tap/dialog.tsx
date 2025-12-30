@@ -1,5 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -18,11 +23,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
   variableName: z
@@ -31,7 +31,9 @@ const formSchema = z.object({
     .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
       message: "Variable name must start with a letter or underscore",
     }),
-  accessibilityId: z.string().min(1, { message: "Accessibility ID is required" }),
+  accessibilityId: z
+    .string()
+    .min(1, { message: "Accessibility ID is required" }),
   timeout: z.string().optional(),
 });
 
@@ -84,7 +86,10 @@ export const TapDialog = ({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mt-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6 mt-4"
+          >
             <FormField
               control={form.control}
               name="variableName"
@@ -108,10 +113,7 @@ export const TapDialog = ({
                 <FormItem>
                   <FormLabel>Accessibility ID</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="loginButton"
-                      {...field}
-                    />
+                    <Input placeholder="loginButton" {...field} />
                   </FormControl>
                   <FormDescription>
                     The accessibility identifier of the element to tap

@@ -1,5 +1,11 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -18,7 +24,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -26,13 +31,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { useTRPC } from "@/trpc/client";
-import { useQuery } from "@tanstack/react-query";
 
 const formSchema = z.object({
   variableName: z
@@ -88,8 +88,8 @@ export const ExpectVisualDialog = ({
   const { data: goldenMasters } = useQuery(
     trpc.iosTesting.getGoldenMasters.queryOptions(
       { workflowId: workflowId || "" },
-      { enabled: !!workflowId && open }
-    )
+      { enabled: !!workflowId && open },
+    ),
   );
 
   useEffect(() => {

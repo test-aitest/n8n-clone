@@ -3,13 +3,13 @@
 import { type NodeProps, Position, useReactFlow } from "@xyflow/react";
 import type { LucideIcon } from "lucide-react";
 import { memo, type ReactNode } from "react";
-import { BaseNode, BaseNodeContent } from "@/components/react-flow/base-node";
 import { BaseHandle } from "@/components/react-flow/base-handle";
-import { WorkflowNode } from "@/components/workflow-node";
+import { BaseNode, BaseNodeContent } from "@/components/react-flow/base-node";
 import {
   type NodeStatus,
   NodeStatusIndicator,
 } from "@/components/react-flow/node-status-indicator";
+import { WorkflowNode } from "@/components/workflow-node";
 
 interface BaseIOSNodeProps extends NodeProps {
   icon: LucideIcon;
@@ -52,7 +52,7 @@ export const BaseIOSNode = memo(
 
       setEdges((currentEdges) => {
         const updatedEdges = currentEdges.filter(
-          (edge) => edge.source !== id && edge.target !== id
+          (edge) => edge.source !== id && edge.target !== id,
         );
         return updatedEdges;
       });
@@ -71,19 +71,29 @@ export const BaseIOSNode = memo(
           <BaseNode
             status={status}
             onDoubleClick={onDoubleClick}
-            className={categoryClass ? `border-l-4 ${categoryClass}` : undefined}
+            className={
+              categoryClass ? `border-l-4 ${categoryClass}` : undefined
+            }
           >
             <BaseNodeContent>
               <Icon className="size-4 text-muted-foreground" />
               {children}
-              <BaseHandle id="target-1" type="target" position={Position.Left} />
-              <BaseHandle id="source-1" type="source" position={Position.Right} />
+              <BaseHandle
+                id="target-1"
+                type="target"
+                position={Position.Left}
+              />
+              <BaseHandle
+                id="source-1"
+                type="source"
+                position={Position.Right}
+              />
             </BaseNodeContent>
           </BaseNode>
         </NodeStatusIndicator>
       </WorkflowNode>
     );
-  }
+  },
 );
 
 BaseIOSNode.displayName = "BaseIOSNode";

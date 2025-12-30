@@ -1,13 +1,13 @@
 "use client";
 
-import { useReactFlow, type Node, type NodeProps } from "@xyflow/react";
+import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
 import { Move } from "lucide-react";
 import { memo, useState } from "react";
-import { BaseIOSNode } from "../base-ios-node";
-import { SwipeDialog, type SwipeFormValues } from "./dialog";
 import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
-import { fetchSwipeRealtimeToken } from "./actions";
 import { IOS_SWIPE_CHANNEL_NAME } from "@/inngest/channels/ios-testing";
+import { BaseIOSNode } from "../base-ios-node";
+import { fetchSwipeRealtimeToken } from "./actions";
+import { SwipeDialog, type SwipeFormValues } from "./dialog";
 
 type SwipeNodeData = {
   variableName?: string;
@@ -43,7 +43,7 @@ export const SwipeNode = memo((props: NodeProps<SwipeNodeType>) => {
           };
         }
         return node;
-      })
+      }),
     );
   };
 

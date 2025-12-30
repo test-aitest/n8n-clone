@@ -1,16 +1,20 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Button } from "@/components/ui/button";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { formatDistanceToNow } from "date-fns";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Download,
+  Edit,
+  Eye,
+  FolderOpen,
+  Image,
+  Loader2,
+  MoreVertical,
+  Trash2,
+  Upload,
+} from "lucide-react";
+import { useCallback, useState } from "react";
+import { toast } from "sonner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,10 +25,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -34,26 +36,24 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Image,
-  Upload,
-  Trash2,
-  MoreVertical,
-  Edit,
-  Eye,
-  Download,
-  Loader2,
-  FolderOpen,
-} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTRPC } from "@/trpc/client";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { formatDistanceToNow } from "date-fns";
 
 interface GoldenMasterManagerProps {
   workflowId: string;
@@ -84,7 +84,7 @@ export function GoldenMasterManager({
     trpc.iosTesting.getGoldenMasters.queryOptions({
       workflowId,
       nodeId,
-    })
+    }),
   );
 
   // Delete mutation
@@ -101,7 +101,7 @@ export function GoldenMasterManager({
       onError: (error) => {
         toast.error(`Failed to delete: ${error.message}`);
       },
-    })
+    }),
   );
 
   // Update mutation
@@ -116,7 +116,7 @@ export function GoldenMasterManager({
       onError: (error) => {
         toast.error(`Failed to update: ${error.message}`);
       },
-    })
+    }),
   );
 
   // Create mutation
@@ -134,7 +134,7 @@ export function GoldenMasterManager({
       onError: (error) => {
         toast.error(`Failed to create: ${error.message}`);
       },
-    })
+    }),
   );
 
   const handleFileSelect = useCallback(
@@ -148,7 +148,7 @@ export function GoldenMasterManager({
         setUploadFile(file);
       }
     },
-    []
+    [],
   );
 
   const handleCreate = useCallback(async () => {
@@ -191,7 +191,7 @@ export function GoldenMasterManager({
     (id: string, name: string) => {
       updateMutation.mutate({ id, name });
     },
-    [updateMutation]
+    [updateMutation],
   );
 
   const handleDownload = useCallback(
@@ -203,7 +203,7 @@ export function GoldenMasterManager({
       link.click();
       document.body.removeChild(link);
     },
-    []
+    [],
   );
 
   if (isLoading) {
@@ -459,7 +459,7 @@ export function GoldenMasterSelector({
   const { data: goldenMasters, isLoading } = useQuery(
     trpc.iosTesting.getGoldenMasters.queryOptions({
       workflowId,
-    })
+    }),
   );
 
   if (isLoading) {

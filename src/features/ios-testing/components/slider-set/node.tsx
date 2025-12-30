@@ -1,13 +1,13 @@
 "use client";
 
-import { useReactFlow, type Node, type NodeProps } from "@xyflow/react";
+import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
 import { SlidersHorizontal } from "lucide-react";
 import { memo, useState } from "react";
-import { BaseIOSNode } from "../base-ios-node";
-import { SliderSetDialog, type SliderSetFormValues } from "./dialog";
 import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
-import { fetchSliderSetRealtimeToken } from "./actions";
 import { IOS_SLIDER_SET_CHANNEL_NAME } from "@/inngest/channels/ios-testing";
+import { BaseIOSNode } from "../base-ios-node";
+import { fetchSliderSetRealtimeToken } from "./actions";
+import { SliderSetDialog, type SliderSetFormValues } from "./dialog";
 
 type SliderSetNodeData = {
   variableName?: string;
@@ -43,14 +43,15 @@ export const SliderSetNode = memo((props: NodeProps<SliderSetNodeType>) => {
           };
         }
         return node;
-      })
+      }),
     );
   };
 
   const nodeData = props.data;
-  const description = nodeData?.value !== undefined
-    ? `Set to ${Math.round(nodeData.value * 100)}%`
-    : "Not configured";
+  const description =
+    nodeData?.value !== undefined
+      ? `Set to ${Math.round(nodeData.value * 100)}%`
+      : "Not configured";
 
   return (
     <>

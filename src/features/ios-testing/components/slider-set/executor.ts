@@ -20,7 +20,7 @@ export const sliderSetExecutor: NodeExecutor<SliderSetData> = async ({
     iosSliderSetChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
@@ -38,23 +38,26 @@ export const sliderSetExecutor: NodeExecutor<SliderSetData> = async ({
       }
 
       // Get the device ID from context (set by simulator-boot node)
-      const simulatorContext = context.simulator as { deviceId?: string } | undefined;
-      const deviceId = simulatorContext?.deviceId || (context.deviceId as string | undefined);
+      const simulatorContext = context.simulator as
+        | { deviceId?: string }
+        | undefined;
+      const deviceId =
+        simulatorContext?.deviceId || (context.deviceId as string | undefined);
       if (!deviceId) {
         throw new NonRetriableError(
-          "Slider Set: No device ID found in context. Ensure Simulator Boot node runs first."
+          "Slider Set: No device ID found in context. Ensure Simulator Boot node runs first.",
         );
       }
 
       const sliderResult = await idb.setSliderValue(
         deviceId,
         data.accessibilityId,
-        data.value
+        data.value,
       );
 
       if (!sliderResult.success) {
         throw new NonRetriableError(
-          `Slider Set failed: Could not set slider ${data.accessibilityId} to ${data.value}. ${sliderResult.error || ""}`
+          `Slider Set failed: Could not set slider ${data.accessibilityId} to ${data.value}. ${sliderResult.error || ""}`,
         );
       }
 
@@ -72,7 +75,7 @@ export const sliderSetExecutor: NodeExecutor<SliderSetData> = async ({
       iosSliderSetChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -81,7 +84,7 @@ export const sliderSetExecutor: NodeExecutor<SliderSetData> = async ({
       iosSliderSetChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

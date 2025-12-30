@@ -20,7 +20,7 @@ export const swipeExecutor: NodeExecutor<SwipeData> = async ({
     iosSwipeChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
@@ -34,20 +34,27 @@ export const swipeExecutor: NodeExecutor<SwipeData> = async ({
       }
 
       // Get the device ID from context (set by simulator-boot node)
-      const simulatorContext = context.simulator as { deviceId?: string } | undefined;
-      const deviceId = simulatorContext?.deviceId || (context.deviceId as string | undefined);
+      const simulatorContext = context.simulator as
+        | { deviceId?: string }
+        | undefined;
+      const deviceId =
+        simulatorContext?.deviceId || (context.deviceId as string | undefined);
       if (!deviceId) {
         throw new NonRetriableError(
-          "Swipe: No device ID found in context. Ensure Simulator Boot node runs first."
+          "Swipe: No device ID found in context. Ensure Simulator Boot node runs first.",
         );
       }
 
       const distance = data.distance ? parseInt(data.distance, 10) : 300;
-      const swipeResult = await idb.swipeDirection(deviceId, data.direction, distance);
+      const swipeResult = await idb.swipeDirection(
+        deviceId,
+        data.direction,
+        distance,
+      );
 
       if (!swipeResult.success) {
         throw new NonRetriableError(
-          `Swipe failed: Could not perform swipe ${data.direction}`
+          `Swipe failed: Could not perform swipe ${data.direction}`,
         );
       }
 
@@ -65,7 +72,7 @@ export const swipeExecutor: NodeExecutor<SwipeData> = async ({
       iosSwipeChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -74,7 +81,7 @@ export const swipeExecutor: NodeExecutor<SwipeData> = async ({
       iosSwipeChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

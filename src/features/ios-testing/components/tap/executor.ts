@@ -1,14 +1,14 @@
 import type { NodeExecutor } from "@/features/executions/types";
+import {
+  createIOSError,
+  formatErrorForDisplay,
+  getDeviceIdFromContext,
+  IOS_ERROR_CODES,
+  parseTimeout,
+  validateRequired,
+} from "@/features/ios-testing/lib/errors";
 import { iosTapChannel } from "@/inngest/channels/ios-testing";
 import * as idb from "@/lib/ios/idb";
-import {
-  validateRequired,
-  getDeviceIdFromContext,
-  parseTimeout,
-  createIOSError,
-  IOS_ERROR_CODES,
-  formatErrorForDisplay,
-} from "@/features/ios-testing/lib/errors";
 
 type TapData = {
   variableName?: string;
@@ -29,7 +29,7 @@ export const tapExecutor: NodeExecutor<TapData> = async ({
     iosTapChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
@@ -49,7 +49,7 @@ export const tapExecutor: NodeExecutor<TapData> = async ({
             ? IOS_ERROR_CODES.ELEMENT_NOT_INTERACTABLE
             : IOS_ERROR_CODES.ELEMENT_NOT_FOUND,
           `${NODE_NAME} failed: Element "${data.accessibilityId}" ${tapResult.elementFound ? "found but tap failed" : "not found"}`,
-          { accessibilityId: data.accessibilityId, timeout }
+          { accessibilityId: data.accessibilityId, timeout },
         );
       }
 
@@ -67,7 +67,7 @@ export const tapExecutor: NodeExecutor<TapData> = async ({
       iosTapChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -79,7 +79,7 @@ export const tapExecutor: NodeExecutor<TapData> = async ({
         status: "error",
         errorMessage: errorInfo.message,
         errorCode: errorInfo.code,
-      })
+      }),
     );
     throw error;
   }

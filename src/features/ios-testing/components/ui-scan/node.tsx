@@ -1,13 +1,13 @@
 "use client";
 
-import { useReactFlow, type Node, type NodeProps } from "@xyflow/react";
+import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
 import { Scan } from "lucide-react";
 import { memo, useState } from "react";
-import { BaseIOSNode } from "../base-ios-node";
-import { UiScanDialog, type UiScanFormValues } from "./dialog";
 import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
-import { fetchUiScanRealtimeToken } from "./actions";
 import { IOS_UI_SCAN_CHANNEL_NAME } from "@/inngest/channels/ios-testing";
+import { BaseIOSNode } from "../base-ios-node";
+import { fetchUiScanRealtimeToken } from "./actions";
+import { UiScanDialog, type UiScanFormValues } from "./dialog";
 
 type UiScanNodeData = {
   variableName?: string;
@@ -42,7 +42,7 @@ export const UiScanNode = memo((props: NodeProps<UiScanNodeType>) => {
           };
         }
         return node;
-      })
+      }),
     );
   };
 

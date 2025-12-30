@@ -3,10 +3,10 @@
  * Uses pixelmatch for image comparison
  */
 
+import { mkdir, readFile, writeFile } from "fs/promises";
+import path from "path";
 import pixelmatch from "pixelmatch";
 import { PNG } from "pngjs";
-import { readFile, writeFile, mkdir } from "fs/promises";
-import path from "path";
 
 /**
  * Result of visual comparison
@@ -78,7 +78,7 @@ const DEFAULT_OPTIONS: Required<CompareOptions> = {
 export async function compareImages(
   actualBuffer: Buffer,
   expectedBuffer: Buffer,
-  options: CompareOptions = {}
+  options: CompareOptions = {},
 ): Promise<VisualComparisonResult> {
   const opts = { ...DEFAULT_OPTIONS, ...options };
 
@@ -125,7 +125,7 @@ export async function compareImages(
         diffColor: opts.diffColor,
         aaColor: opts.aaColor,
         diffColorAlt: opts.diffColorAlt,
-      }
+      },
     );
 
     const diffPercent = (diffPixelCount / totalPixels) * 100;
@@ -148,7 +148,7 @@ export async function compareImages(
         await mkdir(opts.diffOutputDir, { recursive: true });
         const diffPath = path.join(
           opts.diffOutputDir,
-          `${opts.diffFileName}_${Date.now()}.png`
+          `${opts.diffFileName}_${Date.now()}.png`,
         );
         await writeFile(diffPath, result.diffImage);
         result.diffImagePath = diffPath;
@@ -174,7 +174,7 @@ export async function compareImages(
 export async function compareImageFiles(
   actualPath: string,
   expectedPath: string,
-  options: CompareOptions = {}
+  options: CompareOptions = {},
 ): Promise<VisualComparisonResult> {
   try {
     const [actualBuffer, expectedBuffer] = await Promise.all([
@@ -190,7 +190,8 @@ export async function compareImageFiles(
       diffPixelCount: 0,
       totalPixels: 0,
       dimensions: { width: 0, height: 0 },
-      error: error instanceof Error ? error.message : "Failed to read image files",
+      error:
+        error instanceof Error ? error.message : "Failed to read image files",
     };
   }
 }
@@ -201,7 +202,7 @@ export async function compareImageFiles(
 export async function compareWithGoldenMaster(
   actualBuffer: Buffer,
   goldenMasterUrl: string,
-  options: CompareOptions = {}
+  options: CompareOptions = {},
 ): Promise<VisualComparisonResult> {
   try {
     // Fetch golden master image
@@ -219,7 +220,10 @@ export async function compareWithGoldenMaster(
       diffPixelCount: 0,
       totalPixels: 0,
       dimensions: { width: 0, height: 0 },
-      error: error instanceof Error ? error.message : "Failed to compare with golden master",
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to compare with golden master",
     };
   }
 }
@@ -230,7 +234,7 @@ export async function compareWithGoldenMaster(
 export async function createGoldenMaster(
   screenshotBuffer: Buffer,
   outputDir: string,
-  name: string
+  name: string,
 ): Promise<{ path: string; dimensions: { width: number; height: number } }> {
   await mkdir(outputDir, { recursive: true });
 
@@ -275,7 +279,7 @@ export function generateReport(
     result: VisualComparisonResult;
     actualImagePath?: string;
     expectedImagePath?: string;
-  }>
+  }>,
 ): VisualRegressionReport {
   const passed = results.filter((r) => r.result.passed).length;
   const failed = results.length - passed;
@@ -299,7 +303,7 @@ export function generateReport(
 export async function resizeImage(
   imageBuffer: Buffer,
   targetWidth: number,
-  targetHeight: number
+  targetHeight: number,
 ): Promise<Buffer> {
   const png = PNG.sync.read(imageBuffer);
 

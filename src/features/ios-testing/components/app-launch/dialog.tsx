@@ -1,5 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -18,11 +23,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
   variableName: z
@@ -87,7 +87,10 @@ export const AppLaunchDialog = ({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mt-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6 mt-4"
+          >
             <FormField
               control={form.control}
               name="variableName"
@@ -130,10 +133,7 @@ export const AppLaunchDialog = ({
                 <FormItem>
                   <FormLabel>Bundle ID</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="com.example.MyApp"
-                      {...field}
-                    />
+                    <Input placeholder="com.example.MyApp" {...field} />
                   </FormControl>
                   <FormDescription>
                     The bundle identifier of the app to launch

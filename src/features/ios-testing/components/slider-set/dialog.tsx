@@ -1,5 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -19,11 +24,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
   variableName: z
@@ -32,7 +32,9 @@ const formSchema = z.object({
     .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
       message: "Variable name must start with a letter or underscore",
     }),
-  accessibilityId: z.string().min(1, { message: "Accessibility ID is required" }),
+  accessibilityId: z
+    .string()
+    .min(1, { message: "Accessibility ID is required" }),
   value: z.number().min(0).max(1),
 });
 
@@ -87,7 +89,10 @@ export const SliderSetDialog = ({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mt-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6 mt-4"
+          >
             <FormField
               control={form.control}
               name="variableName"
@@ -111,10 +116,7 @@ export const SliderSetDialog = ({
                 <FormItem>
                   <FormLabel>Accessibility ID</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="volumeSlider"
-                      {...field}
-                    />
+                    <Input placeholder="volumeSlider" {...field} />
                   </FormControl>
                   <FormDescription>
                     The accessibility identifier of the slider element
@@ -128,7 +130,9 @@ export const SliderSetDialog = ({
               name="value"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Value ({Math.round(currentValue * 100)}%)</FormLabel>
+                  <FormLabel>
+                    Value ({Math.round(currentValue * 100)}%)
+                  </FormLabel>
                   <FormControl>
                     <Slider
                       min={0}

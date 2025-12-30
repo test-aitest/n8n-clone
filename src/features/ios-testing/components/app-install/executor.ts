@@ -20,7 +20,7 @@ export const appInstallExecutor: NodeExecutor<AppInstallData> = async ({
     iosAppInstallChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
@@ -37,11 +37,14 @@ export const appInstallExecutor: NodeExecutor<AppInstallData> = async ({
         throw new NonRetriableError("App Install: App path is required");
       }
 
-      const installResult = await simulator.installApp(data.deviceId, data.appPath);
+      const installResult = await simulator.installApp(
+        data.deviceId,
+        data.appPath,
+      );
 
       if (!installResult.success) {
         throw new NonRetriableError(
-          `App Install failed: ${installResult.error || "Unknown error"}`
+          `App Install failed: ${installResult.error || "Unknown error"}`,
         );
       }
 
@@ -59,7 +62,7 @@ export const appInstallExecutor: NodeExecutor<AppInstallData> = async ({
       iosAppInstallChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -68,7 +71,7 @@ export const appInstallExecutor: NodeExecutor<AppInstallData> = async ({
       iosAppInstallChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

@@ -1,8 +1,8 @@
 import { NonRetriableError } from "inngest";
+import path from "path";
 import type { NodeExecutor } from "@/features/executions/types";
 import { iosScreenshotChannel } from "@/inngest/channels/ios-testing";
 import * as simulator from "@/lib/ios/simulator";
-import path from "path";
 
 type ScreenshotData = {
   variableName?: string;
@@ -20,7 +20,7 @@ export const screenshotExecutor: NodeExecutor<ScreenshotData> = async ({
     iosScreenshotChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
@@ -30,11 +30,14 @@ export const screenshotExecutor: NodeExecutor<ScreenshotData> = async ({
       }
 
       // Get the device ID from context (set by simulator-boot node)
-      const simulatorContext = context.simulator as { deviceId?: string } | undefined;
-      const deviceId = simulatorContext?.deviceId || (context.deviceId as string | undefined);
+      const simulatorContext = context.simulator as
+        | { deviceId?: string }
+        | undefined;
+      const deviceId =
+        simulatorContext?.deviceId || (context.deviceId as string | undefined);
       if (!deviceId) {
         throw new NonRetriableError(
-          "Screenshot: No device ID found in context. Ensure Simulator Boot node runs first."
+          "Screenshot: No device ID found in context. Ensure Simulator Boot node runs first.",
         );
       }
 
@@ -48,11 +51,14 @@ export const screenshotExecutor: NodeExecutor<ScreenshotData> = async ({
         outputPath = path.join("/tmp", filename);
       }
 
-      const screenshotResult = await simulator.takeScreenshot(deviceId, outputPath);
+      const screenshotResult = await simulator.takeScreenshot(
+        deviceId,
+        outputPath,
+      );
 
       if (!screenshotResult.success) {
         throw new NonRetriableError(
-          "Screenshot failed: Could not capture screenshot from simulator"
+          "Screenshot failed: Could not capture screenshot from simulator",
         );
       }
 
@@ -70,7 +76,7 @@ export const screenshotExecutor: NodeExecutor<ScreenshotData> = async ({
       iosScreenshotChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -79,7 +85,7 @@ export const screenshotExecutor: NodeExecutor<ScreenshotData> = async ({
       iosScreenshotChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

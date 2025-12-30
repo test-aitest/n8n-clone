@@ -1,4 +1,6 @@
+import { readFile } from "fs/promises";
 import { NonRetriableError } from "inngest";
+import path from "path";
 import type { NodeExecutor } from "@/features/executions/types";
 import { iosExpectVisualChannel } from "@/inngest/channels/ios-testing";
 import { takeScreenshot } from "@/lib/ios/simulator";
@@ -7,8 +9,6 @@ import {
   compareWithGoldenMaster,
   createGoldenMaster,
 } from "@/lib/visual/pixelmatch";
-import { readFile } from "fs/promises";
-import path from "path";
 
 // Directory for storing visual test artifacts
 const VISUAL_ARTIFACTS_DIR = "/tmp/visual-tests";
@@ -36,15 +36,13 @@ export const expectVisualExecutor: NodeExecutor<ExpectVisualData> = async ({
     iosExpectVisualChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
     const result = await step.run("expect-visual", async () => {
       if (!data.variableName) {
-        throw new NonRetriableError(
-          "Expect Visual: Variable name is required"
-        );
+        throw new NonRetriableError("Expect Visual: Variable name is required");
       }
 
       // Get device ID from context
@@ -53,7 +51,7 @@ export const expectVisualExecutor: NodeExecutor<ExpectVisualData> = async ({
         simulator?.deviceId || (context.deviceId as string | undefined);
       if (!deviceId) {
         throw new NonRetriableError(
-          "Expect Visual: No device ID found. Make sure simulator is booted first."
+          "Expect Visual: No device ID found. Make sure simulator is booted first.",
         );
       }
 
@@ -61,7 +59,7 @@ export const expectVisualExecutor: NodeExecutor<ExpectVisualData> = async ({
 
       if (threshold < 0 || threshold > 1) {
         throw new NonRetriableError(
-          "Expect Visual: Threshold must be between 0 and 1"
+          "Expect Visual: Threshold must be between 0 and 1",
         );
       }
 
@@ -69,9 +67,7 @@ export const expectVisualExecutor: NodeExecutor<ExpectVisualData> = async ({
       const screenshotResult = await takeScreenshot(deviceId);
 
       if (!screenshotResult.success || !screenshotResult.buffer) {
-        throw new NonRetriableError(
-          "Expect Visual: Failed to take screenshot"
-        );
+        throw new NonRetriableError("Expect Visual: Failed to take screenshot");
       }
 
       const screenshotBuffer = screenshotResult.buffer;
@@ -84,7 +80,7 @@ export const expectVisualExecutor: NodeExecutor<ExpectVisualData> = async ({
         const baselineResult = await createGoldenMaster(
           screenshotBuffer,
           baselineDir,
-          baselineName
+          baselineName,
         );
 
         return {
@@ -110,12 +106,12 @@ export const expectVisualExecutor: NodeExecutor<ExpectVisualData> = async ({
             saveDiff: data.saveOnMismatch ?? true,
             diffOutputDir: path.join(VISUAL_ARTIFACTS_DIR, "diffs"),
             diffFileName: `diff_${nodeId}`,
-          }
+          },
         );
 
         if (comparisonResult.error) {
           throw new NonRetriableError(
-            `Expect Visual: ${comparisonResult.error}`
+            `Expect Visual: ${comparisonResult.error}`,
           );
         }
 
@@ -146,7 +142,7 @@ export const expectVisualExecutor: NodeExecutor<ExpectVisualData> = async ({
           baselineBuffer = await readFile(data.baselineImage);
         } catch (error) {
           throw new NonRetriableError(
-            `Expect Visual: Failed to read baseline image: ${data.baselineImage}`
+            `Expect Visual: Failed to read baseline image: ${data.baselineImage}`,
           );
         }
 
@@ -159,12 +155,12 @@ export const expectVisualExecutor: NodeExecutor<ExpectVisualData> = async ({
             saveDiff: data.saveOnMismatch ?? true,
             diffOutputDir: path.join(VISUAL_ARTIFACTS_DIR, "diffs"),
             diffFileName: `diff_${nodeId}`,
-          }
+          },
         );
 
         if (comparisonResult.error) {
           throw new NonRetriableError(
-            `Expect Visual: ${comparisonResult.error}`
+            `Expect Visual: ${comparisonResult.error}`,
           );
         }
 
@@ -189,7 +185,7 @@ export const expectVisualExecutor: NodeExecutor<ExpectVisualData> = async ({
       }
 
       throw new NonRetriableError(
-        "Expect Visual: Either baselineImage, goldenMasterUrl, or createBaseline must be specified"
+        "Expect Visual: Either baselineImage, goldenMasterUrl, or createBaseline must be specified",
       );
     });
 
@@ -197,7 +193,7 @@ export const expectVisualExecutor: NodeExecutor<ExpectVisualData> = async ({
       iosExpectVisualChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -206,7 +202,7 @@ export const expectVisualExecutor: NodeExecutor<ExpectVisualData> = async ({
       iosExpectVisualChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

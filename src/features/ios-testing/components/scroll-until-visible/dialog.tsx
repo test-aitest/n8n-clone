@@ -1,5 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -25,11 +30,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
   variableName: z
@@ -38,7 +38,9 @@ const formSchema = z.object({
     .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
       message: "Variable name must start with a letter or underscore",
     }),
-  accessibilityId: z.string().min(1, { message: "Accessibility ID is required" }),
+  accessibilityId: z
+    .string()
+    .min(1, { message: "Accessibility ID is required" }),
   direction: z.enum(["up", "down"]),
   maxScrolls: z.string().optional(),
 });
@@ -94,7 +96,10 @@ export const ScrollUntilVisibleDialog = ({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mt-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6 mt-4"
+          >
             <FormField
               control={form.control}
               name="variableName"
@@ -118,10 +123,7 @@ export const ScrollUntilVisibleDialog = ({
                 <FormItem>
                   <FormLabel>Accessibility ID</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="submitButton"
-                      {...field}
-                    />
+                    <Input placeholder="submitButton" {...field} />
                   </FormControl>
                   <FormDescription>
                     The accessibility identifier of the element to find
@@ -136,20 +138,25 @@ export const ScrollUntilVisibleDialog = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Direction</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select direction" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="up">Up (scroll to see content above)</SelectItem>
-                      <SelectItem value="down">Down (scroll to see content below)</SelectItem>
+                      <SelectItem value="up">
+                        Up (scroll to see content above)
+                      </SelectItem>
+                      <SelectItem value="down">
+                        Down (scroll to see content below)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormDescription>
-                    The direction to scroll
-                  </FormDescription>
+                  <FormDescription>The direction to scroll</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

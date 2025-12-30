@@ -1,8 +1,8 @@
-import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
-import { z } from "zod";
-import prisma from "@/lib/db";
 import { exec } from "child_process";
 import { promisify } from "util";
+import { z } from "zod";
+import prisma from "@/lib/db";
+import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 
 const execAsync = promisify(exec);
 
@@ -49,7 +49,7 @@ export const iosTestingRouter = createTRPCRouter({
               state: device.state,
               runtime: runtime.replace(
                 /^com\.apple\.CoreSimulator\.SimRuntime\./,
-                ""
+                "",
               ),
               isAvailable: device.isAvailable,
             });
@@ -75,7 +75,7 @@ export const iosTestingRouter = createTRPCRouter({
         bundleId: z.string().optional(),
         targetDeviceId: z.string().optional(),
         platform: z.enum(["ios", "android"]).optional(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const { workflowId, ...config } = input;
@@ -119,7 +119,7 @@ export const iosTestingRouter = createTRPCRouter({
       z.object({
         workflowId: z.string(),
         sourceFilePath: z.string().optional(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       // Verify workflow ownership
@@ -148,7 +148,7 @@ export const iosTestingRouter = createTRPCRouter({
         workflowId: z.string(),
         sourceFilePath: z.string().optional(),
         componentIds: z.array(z.string()).optional(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       // Verify workflow ownership
@@ -217,7 +217,7 @@ export const iosTestingRouter = createTRPCRouter({
         nodeId: z.string(),
         name: z.string(),
         imageUrl: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       // Verify workflow ownership
@@ -246,7 +246,7 @@ export const iosTestingRouter = createTRPCRouter({
       z.object({
         workflowId: z.string(),
         nodeId: z.string().optional(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       // Verify workflow ownership
@@ -295,7 +295,7 @@ export const iosTestingRouter = createTRPCRouter({
         id: z.string(),
         name: z.string().optional(),
         imageUrl: z.string().optional(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;

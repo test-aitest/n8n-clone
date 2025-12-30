@@ -34,7 +34,8 @@ export const IOS_ERROR_CODES = {
   COMPARISON_FAILED: "IOS_COMPARISON_FAILED",
 } as const;
 
-export type IOSErrorCode = (typeof IOS_ERROR_CODES)[keyof typeof IOS_ERROR_CODES];
+export type IOSErrorCode =
+  (typeof IOS_ERROR_CODES)[keyof typeof IOS_ERROR_CODES];
 
 /**
  * Create a structured iOS error
@@ -42,7 +43,7 @@ export type IOSErrorCode = (typeof IOS_ERROR_CODES)[keyof typeof IOS_ERROR_CODES
 export function createIOSError(
   code: IOSErrorCode,
   message: string,
-  details?: Record<string, unknown>
+  details?: Record<string, unknown>,
 ): NonRetriableError {
   const error = new NonRetriableError(message);
   (error as unknown as Record<string, unknown>).code = code;
@@ -56,14 +57,18 @@ export function createIOSError(
 export function validateRequired<T extends Record<string, unknown>>(
   data: T,
   fields: (keyof T)[],
-  nodeName: string
+  nodeName: string,
 ): void {
   for (const field of fields) {
-    if (data[field] === undefined || data[field] === null || data[field] === "") {
+    if (
+      data[field] === undefined ||
+      data[field] === null ||
+      data[field] === ""
+    ) {
       throw createIOSError(
         IOS_ERROR_CODES.MISSING_REQUIRED_FIELD,
         `${nodeName}: ${String(field)} is required`,
-        { field: String(field) }
+        { field: String(field) },
       );
     }
   }
@@ -74,16 +79,17 @@ export function validateRequired<T extends Record<string, unknown>>(
  */
 export function getDeviceIdFromContext(
   context: Record<string, unknown>,
-  nodeName: string
+  nodeName: string,
 ): string {
   const simulator = context.simulator as { deviceId?: string } | undefined;
-  const deviceId = simulator?.deviceId || (context.deviceId as string | undefined);
+  const deviceId =
+    simulator?.deviceId || (context.deviceId as string | undefined);
 
   if (!deviceId) {
     throw createIOSError(
       IOS_ERROR_CODES.DEVICE_NOT_BOOTED,
       `${nodeName}: No device ID found. Make sure simulator is booted first.`,
-      { context: Object.keys(context) }
+      { context: Object.keys(context) },
     );
   }
 
@@ -93,7 +99,10 @@ export function getDeviceIdFromContext(
 /**
  * Parse timeout value with default
  */
-export function parseTimeout(value: string | undefined, defaultMs: number): number {
+export function parseTimeout(
+  value: string | undefined,
+  defaultMs: number,
+): number {
   if (!value) return defaultMs;
   const parsed = parseInt(value, 10);
   return isNaN(parsed) ? defaultMs : parsed;
@@ -105,7 +114,7 @@ export function parseTimeout(value: string | undefined, defaultMs: number): numb
 export function parseThreshold(
   value: string | undefined,
   defaultValue: number,
-  nodeName: string
+  nodeName: string,
 ): number {
   if (!value) return defaultValue;
   const parsed = parseFloat(value);
@@ -114,7 +123,7 @@ export function parseThreshold(
     throw createIOSError(
       IOS_ERROR_CODES.INVALID_VALUE,
       `${nodeName}: Threshold must be between 0 and 1`,
-      { value, expected: "0-1" }
+      { value, expected: "0-1" },
     );
   }
 
@@ -127,7 +136,7 @@ export function parseThreshold(
 export async function withIOSErrorHandling<T>(
   operation: () => Promise<T>,
   nodeName: string,
-  onError?: (error: Error) => void
+  onError?: (error: Error) => void,
 ): Promise<T> {
   try {
     return await operation();
@@ -141,7 +150,7 @@ export async function withIOSErrorHandling<T>(
     const wrappedError = createIOSError(
       IOS_ERROR_CODES.COMMAND_FAILED,
       `${nodeName}: ${message}`,
-      { originalError: message }
+      { originalError: message },
     );
     onError?.(wrappedError);
     throw wrappedError;

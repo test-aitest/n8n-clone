@@ -21,7 +21,7 @@ export const textInputExecutor: NodeExecutor<TextInputData> = async ({
     iosTextInputChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
@@ -35,11 +35,14 @@ export const textInputExecutor: NodeExecutor<TextInputData> = async ({
       }
 
       // Get the device ID from context (set by simulator-boot node)
-      const simulatorContext = context.simulator as { deviceId?: string } | undefined;
-      const deviceId = simulatorContext?.deviceId || (context.deviceId as string | undefined);
+      const simulatorContext = context.simulator as
+        | { deviceId?: string }
+        | undefined;
+      const deviceId =
+        simulatorContext?.deviceId || (context.deviceId as string | undefined);
       if (!deviceId) {
         throw new NonRetriableError(
-          "Text Input: No device ID found in context. Ensure Simulator Boot node runs first."
+          "Text Input: No device ID found in context. Ensure Simulator Boot node runs first.",
         );
       }
 
@@ -51,7 +54,7 @@ export const textInputExecutor: NodeExecutor<TextInputData> = async ({
           deviceId,
           data.accessibilityId,
           data.text,
-          data.clearFirst ?? true
+          data.clearFirst ?? true,
         );
       } else {
         // Type into the currently focused field
@@ -60,7 +63,7 @@ export const textInputExecutor: NodeExecutor<TextInputData> = async ({
 
       if (!inputResult.success) {
         throw new NonRetriableError(
-          `Text Input failed: Could not type text${data.accessibilityId ? ` into ${data.accessibilityId}` : ""}`
+          `Text Input failed: Could not type text${data.accessibilityId ? ` into ${data.accessibilityId}` : ""}`,
         );
       }
 
@@ -79,7 +82,7 @@ export const textInputExecutor: NodeExecutor<TextInputData> = async ({
       iosTextInputChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -88,7 +91,7 @@ export const textInputExecutor: NodeExecutor<TextInputData> = async ({
       iosTextInputChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

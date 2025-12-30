@@ -8,35 +8,35 @@ type SimulatorShutdownData = {
   deviceId?: string;
 };
 
-export const simulatorShutdownExecutor: NodeExecutor<SimulatorShutdownData> = async ({
-  data,
-  nodeId,
-  context,
-  step,
-  publish,
-}) => {
+export const simulatorShutdownExecutor: NodeExecutor<
+  SimulatorShutdownData
+> = async ({ data, nodeId, context, step, publish }) => {
   await publish(
     iosSimulatorShutdownChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
     const result = await step.run("simulator-shutdown", async () => {
       if (!data.deviceId) {
-        throw new NonRetriableError("Simulator Shutdown: Device ID is required");
+        throw new NonRetriableError(
+          "Simulator Shutdown: Device ID is required",
+        );
       }
 
       if (!data.variableName) {
-        throw new NonRetriableError("Simulator Shutdown: Variable name is required");
+        throw new NonRetriableError(
+          "Simulator Shutdown: Variable name is required",
+        );
       }
 
       const shutdownResult = await simulator.shutdownSimulator(data.deviceId);
 
       if (!shutdownResult.success) {
         throw new NonRetriableError(
-          `Simulator Shutdown failed: ${shutdownResult.error || "Unknown error"}`
+          `Simulator Shutdown failed: ${shutdownResult.error || "Unknown error"}`,
         );
       }
 
@@ -54,7 +54,7 @@ export const simulatorShutdownExecutor: NodeExecutor<SimulatorShutdownData> = as
       iosSimulatorShutdownChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -63,7 +63,7 @@ export const simulatorShutdownExecutor: NodeExecutor<SimulatorShutdownData> = as
       iosSimulatorShutdownChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

@@ -18,7 +18,7 @@ const execAsync = promisify(exec);
  */
 export async function executeCommand(
   command: string,
-  timeout = 30000
+  timeout = 30000,
 ): Promise<CommandResult<string>> {
   try {
     const { stdout, stderr } = await execAsync(command, {
@@ -57,7 +57,7 @@ export function executeCommandStream(
   command: string,
   args: string[],
   onStdout?: (data: string) => void,
-  onStderr?: (data: string) => void
+  onStderr?: (data: string) => void,
 ): Promise<CommandResult<void>> {
   return new Promise((resolve) => {
     const child = spawn(command, args, {
@@ -107,14 +107,17 @@ export function executeCommandStream(
  */
 export function findElementByAccessibilityId(
   elements: UIElement[],
-  accessibilityId: string
+  accessibilityId: string,
 ): UIElement | undefined {
   for (const element of elements) {
     if (element.AXIdentifier === accessibilityId) {
       return element;
     }
     if (element.AXChildren) {
-      const found = findElementByAccessibilityId(element.AXChildren, accessibilityId);
+      const found = findElementByAccessibilityId(
+        element.AXChildren,
+        accessibilityId,
+      );
       if (found) {
         return found;
       }
@@ -128,7 +131,7 @@ export function findElementByAccessibilityId(
  */
 export function findElements(
   elements: UIElement[],
-  predicate: (element: UIElement) => boolean
+  predicate: (element: UIElement) => boolean,
 ): UIElement[] {
   const results: UIElement[] = [];
 
@@ -150,7 +153,9 @@ export function findElements(
 /**
  * Get the center point of an element's frame
  */
-export function getElementCenter(element: UIElement): { x: number; y: number } | null {
+export function getElementCenter(
+  element: UIElement,
+): { x: number; y: number } | null {
   if (!element.AXFrame) {
     return null;
   }
@@ -198,7 +203,8 @@ export function isValidBundleId(bundleId: string): boolean {
  */
 export function isValidUDID(udid: string): boolean {
   // UDID format: UUID-style or older format
-  const uuidRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
+  const uuidRegex =
+    /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
   const oldFormatRegex = /^[0-9A-Fa-f]{40}$/;
   return uuidRegex.test(udid) || oldFormatRegex.test(udid);
 }
@@ -215,7 +221,9 @@ export function sanitizePath(path: string, baseDir?: string): string {
 
   if (baseDir) {
     // Ensure the path is within the base directory
-    const fullPath = sanitized.startsWith("/") ? sanitized : `${baseDir}/${sanitized}`;
+    const fullPath = sanitized.startsWith("/")
+      ? sanitized
+      : `${baseDir}/${sanitized}`;
     if (!fullPath.startsWith(baseDir)) {
       throw new Error("Path traversal detected");
     }
@@ -239,7 +247,7 @@ export async function withRetry<T>(
     maxDelay?: number;
     factor?: number;
     onRetry?: (attempt: number, error: Error) => void;
-  } = {}
+  } = {},
 ): Promise<T> {
   const {
     maxAttempts = 3,
@@ -281,9 +289,13 @@ export async function waitFor<T>(
     timeout?: number;
     interval?: number;
     errorMessage?: string;
-  } = {}
+  } = {},
 ): Promise<T> {
-  const { timeout = 10000, interval = 500, errorMessage = "Timeout waiting for condition" } = options;
+  const {
+    timeout = 10000,
+    interval = 500,
+    errorMessage = "Timeout waiting for condition",
+  } = options;
 
   const startTime = Date.now();
 

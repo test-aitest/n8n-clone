@@ -3,23 +3,23 @@
  * Wrapper for xcrun simctl commands
  */
 
+import fs from "fs/promises";
+import path from "path";
 import type {
+  CommandResult,
+  ScreenshotResult,
   Simulator,
   SimulatorListResult,
   SimulatorState,
-  CommandResult,
-  ScreenshotResult,
 } from "./types";
 import {
+  escapeShellArg,
   executeCommand,
   executeCommandStream,
   safeJsonParse,
-  escapeShellArg,
-  withRetry,
   sleep,
+  withRetry,
 } from "./utils";
-import path from "path";
-import fs from "fs/promises";
 
 // ============================================
 // Simulator Discovery
@@ -49,7 +49,7 @@ export async function listSimulators(): Promise<Simulator[]> {
           runtime: runtime.replace("com.apple.CoreSimulator.SimRuntime.", ""),
           deviceType: device.deviceTypeIdentifier.replace(
             "com.apple.CoreSimulator.SimDeviceType.",
-            ""
+            "",
           ),
           isAvailable: device.isAvailable,
         });
@@ -63,7 +63,9 @@ export async function listSimulators(): Promise<Simulator[]> {
 /**
  * Get simulator by UDID
  */
-export async function getSimulator(udid: string): Promise<Simulator | undefined> {
+export async function getSimulator(
+  udid: string,
+): Promise<Simulator | undefined> {
   const simulators = await listSimulators();
   return simulators.find((sim) => sim.udid === udid);
 }
@@ -85,7 +87,7 @@ export async function getBootedSimulator(): Promise<Simulator | undefined> {
  */
 export async function bootSimulator(
   udid: string,
-  timeout = 60000
+  timeout = 60000,
 ): Promise<CommandResult<void>> {
   // Check current state
   const simulator = await getSimulator(udid);
@@ -98,10 +100,15 @@ export async function bootSimulator(
   }
 
   // Boot the simulator
-  const result = await executeCommand(`xcrun simctl boot ${escapeShellArg(udid)}`);
+  const result = await executeCommand(
+    `xcrun simctl boot ${escapeShellArg(udid)}`,
+  );
 
   if (!result.success) {
-    return { success: false, error: `Failed to boot simulator: ${result.error}` };
+    return {
+      success: false,
+      error: `Failed to boot simulator: ${result.error}`,
+    };
   }
 
   // Wait for simulator to be fully booted
@@ -122,7 +129,9 @@ export async function bootSimulator(
 /**
  * Shutdown a simulator
  */
-export async function shutdownSimulator(udid: string): Promise<CommandResult<void>> {
+export async function shutdownSimulator(
+  udid: string,
+): Promise<CommandResult<void>> {
   const simulator = await getSimulator(udid);
   if (!simulator) {
     return { success: false, error: `Simulator not found: ${udid}` };
@@ -132,10 +141,15 @@ export async function shutdownSimulator(udid: string): Promise<CommandResult<voi
     return { success: true };
   }
 
-  const result = await executeCommand(`xcrun simctl shutdown ${escapeShellArg(udid)}`);
+  const result = await executeCommand(
+    `xcrun simctl shutdown ${escapeShellArg(udid)}`,
+  );
 
   if (!result.success) {
-    return { success: false, error: `Failed to shutdown simulator: ${result.error}` };
+    return {
+      success: false,
+      error: `Failed to shutdown simulator: ${result.error}`,
+    };
   }
 
   return { success: true };
@@ -155,7 +169,9 @@ export async function shutdownAllSimulators(): Promise<CommandResult<void>> {
 /**
  * Erase a simulator (reset to clean state)
  */
-export async function eraseSimulator(udid: string): Promise<CommandResult<void>> {
+export async function eraseSimulator(
+  udid: string,
+): Promise<CommandResult<void>> {
   // Shutdown first if booted
   const simulator = await getSimulator(udid);
   if (simulator?.state === "Booted") {
@@ -163,10 +179,14 @@ export async function eraseSimulator(udid: string): Promise<CommandResult<void>>
     await sleep(2000);
   }
 
-  const result = await executeCommand(`xcrun simctl erase ${escapeShellArg(udid)}`);
+  const result = await executeCommand(
+    `xcrun simctl erase ${escapeShellArg(udid)}`,
+  );
   return {
     success: result.success,
-    error: result.success ? undefined : `Failed to erase simulator: ${result.error}`,
+    error: result.success
+      ? undefined
+      : `Failed to erase simulator: ${result.error}`,
   };
 }
 
@@ -179,7 +199,7 @@ export async function eraseSimulator(udid: string): Promise<CommandResult<void>>
  */
 export async function installApp(
   udid: string,
-  appPath: string
+  appPath: string,
 ): Promise<CommandResult<void>> {
   // Verify app path exists
   try {
@@ -190,12 +210,14 @@ export async function installApp(
 
   const result = await executeCommand(
     `xcrun simctl install ${escapeShellArg(udid)} ${escapeShellArg(appPath)}`,
-    120000 // 2 minute timeout for large apps
+    120000, // 2 minute timeout for large apps
   );
 
   return {
     success: result.success,
-    error: result.success ? undefined : `Failed to install app: ${result.error}`,
+    error: result.success
+      ? undefined
+      : `Failed to install app: ${result.error}`,
   };
 }
 
@@ -204,15 +226,17 @@ export async function installApp(
  */
 export async function uninstallApp(
   udid: string,
-  bundleId: string
+  bundleId: string,
 ): Promise<CommandResult<void>> {
   const result = await executeCommand(
-    `xcrun simctl uninstall ${escapeShellArg(udid)} ${escapeShellArg(bundleId)}`
+    `xcrun simctl uninstall ${escapeShellArg(udid)} ${escapeShellArg(bundleId)}`,
   );
 
   return {
     success: result.success,
-    error: result.success ? undefined : `Failed to uninstall app: ${result.error}`,
+    error: result.success
+      ? undefined
+      : `Failed to uninstall app: ${result.error}`,
   };
 }
 
@@ -223,17 +247,21 @@ export async function launchApp(
   udid: string,
   bundleId: string,
   args: string[] = [],
-  env: Record<string, string> = {}
+  env: Record<string, string> = {},
 ): Promise<CommandResult<{ pid?: number }>> {
   // Build environment variables
   const envArgs = Object.entries(env)
-    .map(([key, value]) => `--setenv ${escapeShellArg(key)}=${escapeShellArg(value)}`)
+    .map(
+      ([key, value]) =>
+        `--setenv ${escapeShellArg(key)}=${escapeShellArg(value)}`,
+    )
     .join(" ");
 
   // Build launch arguments
   const launchArgs = args.map((arg) => escapeShellArg(arg)).join(" ");
 
-  const command = `xcrun simctl launch ${envArgs} ${escapeShellArg(udid)} ${escapeShellArg(bundleId)} ${launchArgs}`.trim();
+  const command =
+    `xcrun simctl launch ${envArgs} ${escapeShellArg(udid)} ${escapeShellArg(bundleId)} ${launchArgs}`.trim();
 
   const result = await executeCommand(command);
 
@@ -253,15 +281,17 @@ export async function launchApp(
  */
 export async function terminateApp(
   udid: string,
-  bundleId: string
+  bundleId: string,
 ): Promise<CommandResult<void>> {
   const result = await executeCommand(
-    `xcrun simctl terminate ${escapeShellArg(udid)} ${escapeShellArg(bundleId)}`
+    `xcrun simctl terminate ${escapeShellArg(udid)} ${escapeShellArg(bundleId)}`,
   );
 
   return {
     success: result.success,
-    error: result.success ? undefined : `Failed to terminate app: ${result.error}`,
+    error: result.success
+      ? undefined
+      : `Failed to terminate app: ${result.error}`,
   };
 }
 
@@ -270,7 +300,7 @@ export async function terminateApp(
  */
 export async function listInstalledApps(udid: string): Promise<string[]> {
   const result = await executeCommand(
-    `xcrun simctl listapps ${escapeShellArg(udid)} | grep CFBundleIdentifier | awk '{print $3}' | tr -d '";'`
+    `xcrun simctl listapps ${escapeShellArg(udid)} | grep CFBundleIdentifier | awk '{print $3}' | tr -d '";'`,
   );
 
   if (!result.success || !result.data) {
@@ -289,13 +319,13 @@ export async function listInstalledApps(udid: string): Promise<string[]> {
  */
 export async function takeScreenshot(
   udid: string,
-  outputPath?: string
+  outputPath?: string,
 ): Promise<ScreenshotResult> {
   const finalPath =
     outputPath || path.join("/tmp", `screenshot_${Date.now()}.png`);
 
   const result = await executeCommand(
-    `xcrun simctl io ${escapeShellArg(udid)} screenshot ${escapeShellArg(finalPath)}`
+    `xcrun simctl io ${escapeShellArg(udid)} screenshot ${escapeShellArg(finalPath)}`,
   );
 
   if (!result.success) {
@@ -326,7 +356,7 @@ export async function takeScreenshot(
  */
 export function startVideoRecording(
   udid: string,
-  outputPath: string
+  outputPath: string,
 ): {
   stop: () => Promise<CommandResult<void>>;
   promise: Promise<CommandResult<void>>;
@@ -342,7 +372,7 @@ export function startVideoRecording(
     "xcrun",
     ["simctl", "io", udid, "recordVideo", outputPath],
     undefined,
-    undefined
+    undefined,
   );
 
   const stop = async (): Promise<CommandResult<void>> => {
@@ -370,9 +400,11 @@ export function startVideoRecording(
 /**
  * Open the Simulator.app and focus on a specific device
  */
-export async function openSimulator(udid: string): Promise<CommandResult<void>> {
+export async function openSimulator(
+  udid: string,
+): Promise<CommandResult<void>> {
   const result = await executeCommand(
-    `open -a Simulator --args -CurrentDeviceUDID ${escapeShellArg(udid)}`
+    `open -a Simulator --args -CurrentDeviceUDID ${escapeShellArg(udid)}`,
   );
 
   return {
@@ -386,10 +418,10 @@ export async function openSimulator(udid: string): Promise<CommandResult<void>> 
  */
 export async function setStatusBarTime(
   udid: string,
-  time: string
+  time: string,
 ): Promise<CommandResult<void>> {
   const result = await executeCommand(
-    `xcrun simctl status_bar ${escapeShellArg(udid)} override --time ${escapeShellArg(time)}`
+    `xcrun simctl status_bar ${escapeShellArg(udid)} override --time ${escapeShellArg(time)}`,
   );
 
   return {
@@ -402,10 +434,10 @@ export async function setStatusBarTime(
  * Clear status bar overrides
  */
 export async function clearStatusBarOverrides(
-  udid: string
+  udid: string,
 ): Promise<CommandResult<void>> {
   const result = await executeCommand(
-    `xcrun simctl status_bar ${escapeShellArg(udid)} clear`
+    `xcrun simctl status_bar ${escapeShellArg(udid)} clear`,
   );
 
   return {
@@ -425,7 +457,7 @@ export async function setAppPermission(
   udid: string,
   bundleId: string,
   permission: string,
-  value: "grant" | "revoke" | "reset"
+  value: "grant" | "revoke" | "reset",
 ): Promise<CommandResult<void>> {
   const command =
     value === "reset"
@@ -449,10 +481,10 @@ export async function setAppPermission(
  */
 export async function openURL(
   udid: string,
-  url: string
+  url: string,
 ): Promise<CommandResult<void>> {
   const result = await executeCommand(
-    `xcrun simctl openurl ${escapeShellArg(udid)} ${escapeShellArg(url)}`
+    `xcrun simctl openurl ${escapeShellArg(udid)} ${escapeShellArg(url)}`,
   );
 
   return {
@@ -471,7 +503,7 @@ export async function openURL(
 export async function spawnProcess(
   udid: string,
   executable: string,
-  args: string[] = []
+  args: string[] = [],
 ): Promise<CommandResult<string>> {
   const command = `xcrun simctl spawn ${escapeShellArg(udid)} ${escapeShellArg(executable)} ${args.map(escapeShellArg).join(" ")}`;
   return executeCommand(command);

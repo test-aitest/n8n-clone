@@ -1,6 +1,16 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import {
+  CheckCircle,
+  Code,
+  Download,
+  FileCode,
+  Loader2,
+  Upload,
+  XCircle,
+} from "lucide-react";
+import { useCallback, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,17 +21,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  CheckCircle,
-  XCircle,
-  Code,
-  FileCode,
-  Download,
-  Upload,
-  Loader2,
-} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -81,7 +81,7 @@ export function CodePreviewDialog({
   const [file, setFile] = useState<File | null>(null);
   const [originalSource, setOriginalSource] = useState<string>("");
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
-    null
+    null,
   );
   const [injectionResult, setInjectionResult] =
     useState<InjectionResult | null>(null);
@@ -109,7 +109,7 @@ export function CodePreviewDialog({
       const content = await selectedFile.text();
       setOriginalSource(content);
     },
-    []
+    [],
   );
 
   const handleAnalyze = useCallback(async () => {
@@ -187,7 +187,7 @@ export function CodePreviewDialog({
     a.href = url;
     a.download = injectionResult.originalFilePath.replace(
       ".swift",
-      "_injected.swift"
+      "_injected.swift",
     );
     document.body.appendChild(a);
     a.click();
@@ -203,7 +203,7 @@ export function CodePreviewDialog({
 
   const renderCodeWithHighlights = (
     source: string,
-    components: UIComponent[]
+    components: UIComponent[],
   ) => {
     const lines = source.split("\n");
 
@@ -212,7 +212,7 @@ export function CodePreviewDialog({
         {lines.map((line, index) => {
           const lineNumber = index + 1;
           const componentsOnLine = components.filter(
-            (c) => c.sourceLocation.line === lineNumber
+            (c) => c.sourceLocation.line === lineNumber,
           );
 
           const hasComponent = componentsOnLine.length > 0;
@@ -224,7 +224,7 @@ export function CodePreviewDialog({
               className={cn(
                 "flex",
                 hasComponent && needsId && "bg-yellow-500/10",
-                hasComponent && !needsId && "bg-green-500/10"
+                hasComponent && !needsId && "bg-green-500/10",
               )}
             >
               <span className="w-12 text-right pr-4 text-muted-foreground select-none">
@@ -382,7 +382,7 @@ export function CodePreviewDialog({
                 <ScrollArea className="h-100 border rounded-md p-4 bg-muted/30">
                   {renderCodeWithHighlights(
                     originalSource,
-                    analysisResult?.components || []
+                    analysisResult?.components || [],
                   )}
                 </ScrollArea>
               </TabsContent>
@@ -471,13 +471,16 @@ interface ComponentListProps {
 }
 
 export function ComponentList({ components, onSelect }: ComponentListProps) {
-  const groupedByView = components.reduce((acc, comp) => {
-    if (!acc[comp.parentView]) {
-      acc[comp.parentView] = [];
-    }
-    acc[comp.parentView].push(comp);
-    return acc;
-  }, {} as Record<string, UIComponent[]>);
+  const groupedByView = components.reduce(
+    (acc, comp) => {
+      if (!acc[comp.parentView]) {
+        acc[comp.parentView] = [];
+      }
+      acc[comp.parentView].push(comp);
+      return acc;
+    },
+    {} as Record<string, UIComponent[]>,
+  );
 
   return (
     <div className="space-y-4">

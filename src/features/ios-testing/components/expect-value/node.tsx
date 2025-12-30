@@ -1,13 +1,13 @@
 "use client";
 
-import { useReactFlow, type Node, type NodeProps } from "@xyflow/react";
+import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
 import { Hash } from "lucide-react";
 import { memo, useState } from "react";
-import { BaseIOSNode } from "../base-ios-node";
-import { ExpectValueDialog, type ExpectValueFormValues } from "./dialog";
 import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
-import { fetchExpectValueRealtimeToken } from "./actions";
 import { IOS_EXPECT_VALUE_CHANNEL_NAME } from "@/inngest/channels/ios-testing";
+import { BaseIOSNode } from "../base-ios-node";
+import { fetchExpectValueRealtimeToken } from "./actions";
+import { ExpectValueDialog, type ExpectValueFormValues } from "./dialog";
 
 type ExpectValueNodeData = {
   variableName?: string;
@@ -44,14 +44,15 @@ export const ExpectValueNode = memo((props: NodeProps<ExpectValueNodeType>) => {
           };
         }
         return node;
-      })
+      }),
     );
   };
 
   const nodeData = props.data;
-  const description = nodeData?.accessibilityId && nodeData?.expectedValue
-    ? `${nodeData.accessibilityId}: "${nodeData.expectedValue.slice(0, 15)}${nodeData.expectedValue.length > 15 ? "..." : ""}"`
-    : "Not configured";
+  const description =
+    nodeData?.accessibilityId && nodeData?.expectedValue
+      ? `${nodeData.accessibilityId}: "${nodeData.expectedValue.slice(0, 15)}${nodeData.expectedValue.length > 15 ? "..." : ""}"`
+      : "Not configured";
 
   return (
     <>

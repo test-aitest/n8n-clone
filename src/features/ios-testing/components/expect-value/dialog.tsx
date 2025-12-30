@@ -1,5 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -18,11 +23,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
   variableName: z
@@ -31,7 +31,9 @@ const formSchema = z.object({
     .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
       message: "Variable name must start with a letter or underscore",
     }),
-  accessibilityId: z.string().min(1, { message: "Accessibility ID is required" }),
+  accessibilityId: z
+    .string()
+    .min(1, { message: "Accessibility ID is required" }),
   expectedValue: z.string().min(1, { message: "Expected value is required" }),
   timeout: z.string().optional(),
 });
@@ -88,7 +90,10 @@ export const ExpectValueDialog = ({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mt-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6 mt-4"
+          >
             <FormField
               control={form.control}
               name="variableName"
@@ -112,10 +117,7 @@ export const ExpectValueDialog = ({
                 <FormItem>
                   <FormLabel>Accessibility ID</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="usernameField"
-                      {...field}
-                    />
+                    <Input placeholder="usernameField" {...field} />
                   </FormControl>
                   <FormDescription>
                     The accessibility identifier of the element to check
@@ -131,13 +133,11 @@ export const ExpectValueDialog = ({
                 <FormItem>
                   <FormLabel>Expected Value</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="john@example.com"
-                      {...field}
-                    />
+                    <Input placeholder="john@example.com" {...field} />
                   </FormControl>
                   <FormDescription>
-                    The AXValue to match (e.g., text field content, "1" for ON switch)
+                    The AXValue to match (e.g., text field content, "1" for ON
+                    switch)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

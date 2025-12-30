@@ -1,13 +1,13 @@
 import type { NodeExecutor } from "@/features/executions/types";
+import {
+  createIOSError,
+  formatErrorForDisplay,
+  IOS_ERROR_CODES,
+  parseTimeout,
+  validateRequired,
+} from "@/features/ios-testing/lib/errors";
 import { iosSimulatorBootChannel } from "@/inngest/channels/ios-testing";
 import * as simulator from "@/lib/ios/simulator";
-import {
-  validateRequired,
-  parseTimeout,
-  createIOSError,
-  IOS_ERROR_CODES,
-  formatErrorForDisplay,
-} from "@/features/ios-testing/lib/errors";
 
 type SimulatorBootData = {
   variableName?: string;
@@ -28,7 +28,7 @@ export const simulatorBootExecutor: NodeExecutor<SimulatorBootData> = async ({
     iosSimulatorBootChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
@@ -43,7 +43,7 @@ export const simulatorBootExecutor: NodeExecutor<SimulatorBootData> = async ({
         throw createIOSError(
           IOS_ERROR_CODES.DEVICE_BOOT_TIMEOUT,
           `${NODE_NAME} failed: ${bootResult.error || "Unknown error"}`,
-          { deviceId: data.deviceId }
+          { deviceId: data.deviceId },
         );
       }
 
@@ -73,7 +73,7 @@ export const simulatorBootExecutor: NodeExecutor<SimulatorBootData> = async ({
       iosSimulatorBootChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -85,7 +85,7 @@ export const simulatorBootExecutor: NodeExecutor<SimulatorBootData> = async ({
         status: "error",
         errorMessage: errorInfo.message,
         errorCode: errorInfo.code,
-      })
+      }),
     );
     throw error;
   }

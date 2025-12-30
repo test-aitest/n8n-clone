@@ -1,13 +1,13 @@
 "use client";
 
-import { useReactFlow, type Node, type NodeProps } from "@xyflow/react";
+import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
 import { Type } from "lucide-react";
 import { memo, useState } from "react";
-import { BaseIOSNode } from "../base-ios-node";
-import { TextInputDialog, type TextInputFormValues } from "./dialog";
 import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
-import { fetchTextInputRealtimeToken } from "./actions";
 import { IOS_TEXT_INPUT_CHANNEL_NAME } from "@/inngest/channels/ios-testing";
+import { BaseIOSNode } from "../base-ios-node";
+import { fetchTextInputRealtimeToken } from "./actions";
+import { TextInputDialog, type TextInputFormValues } from "./dialog";
 
 type TextInputNodeData = {
   variableName?: string;
@@ -44,7 +44,7 @@ export const TextInputNode = memo((props: NodeProps<TextInputNodeType>) => {
           };
         }
         return node;
-      })
+      }),
     );
   };
 

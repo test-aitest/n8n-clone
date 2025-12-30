@@ -1,5 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -25,11 +30,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
   variableName: z
@@ -38,7 +38,9 @@ const formSchema = z.object({
     .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
       message: "Variable name must start with a letter or underscore",
     }),
-  accessibilityId: z.string().min(1, { message: "Accessibility ID is required" }),
+  accessibilityId: z
+    .string()
+    .min(1, { message: "Accessibility ID is required" }),
   expectedText: z.string().min(1, { message: "Expected text is required" }),
   matchType: z.enum(["exact", "contains", "regex"]),
   timeout: z.string().optional(),
@@ -97,7 +99,10 @@ export const ExpectTextDialog = ({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mt-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6 mt-4"
+          >
             <FormField
               control={form.control}
               name="variableName"
@@ -121,10 +126,7 @@ export const ExpectTextDialog = ({
                 <FormItem>
                   <FormLabel>Accessibility ID</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="welcomeLabel"
-                      {...field}
-                    />
+                    <Input placeholder="welcomeLabel" {...field} />
                   </FormControl>
                   <FormDescription>
                     The accessibility identifier of the element to check
@@ -140,10 +142,7 @@ export const ExpectTextDialog = ({
                 <FormItem>
                   <FormLabel>Expected Text</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Welcome to the app"
-                      {...field}
-                    />
+                    <Input placeholder="Welcome to the app" {...field} />
                   </FormControl>
                   <FormDescription>
                     The text content to match against
@@ -158,7 +157,10 @@ export const ExpectTextDialog = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Match Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select match type" />

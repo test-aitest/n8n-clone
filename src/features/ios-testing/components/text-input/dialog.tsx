@@ -1,5 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -19,11 +24,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
   variableName: z
@@ -88,7 +88,10 @@ export const TextInputDialog = ({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mt-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6 mt-4"
+          >
             <FormField
               control={form.control}
               name="variableName"
@@ -112,13 +115,11 @@ export const TextInputDialog = ({
                 <FormItem>
                   <FormLabel>Accessibility ID (optional)</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="usernameField"
-                      {...field}
-                    />
+                    <Input placeholder="usernameField" {...field} />
                   </FormControl>
                   <FormDescription>
-                    If provided, taps the element first to focus it. Leave empty to type in the currently focused field.
+                    If provided, taps the element first to focus it. Leave empty
+                    to type in the currently focused field.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -131,10 +132,7 @@ export const TextInputDialog = ({
                 <FormItem>
                   <FormLabel>Text</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Hello World"
-                      {...field}
-                    />
+                    <Input placeholder="Hello World" {...field} />
                   </FormControl>
                   <FormDescription>
                     The text to type into the field

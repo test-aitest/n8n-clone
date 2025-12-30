@@ -1,2 +1,2 @@
-export { WaitNode } from "./node";
 export { WaitDialog, type WaitFormValues } from "./dialog";
+export { WaitNode } from "./node";

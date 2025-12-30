@@ -20,13 +20,15 @@ export const toggleSwitchExecutor: NodeExecutor<ToggleSwitchData> = async ({
     iosToggleSwitchChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
     const result = await step.run("toggle-switch", async () => {
       if (!data.accessibilityId) {
-        throw new NonRetriableError("Toggle Switch: Accessibility ID is required");
+        throw new NonRetriableError(
+          "Toggle Switch: Accessibility ID is required",
+        );
       }
 
       if (!data.variableName) {
@@ -34,11 +36,14 @@ export const toggleSwitchExecutor: NodeExecutor<ToggleSwitchData> = async ({
       }
 
       // Get the device ID from context (set by simulator-boot node)
-      const simulatorContext = context.simulator as { deviceId?: string } | undefined;
-      const deviceId = simulatorContext?.deviceId || (context.deviceId as string | undefined);
+      const simulatorContext = context.simulator as
+        | { deviceId?: string }
+        | undefined;
+      const deviceId =
+        simulatorContext?.deviceId || (context.deviceId as string | undefined);
       if (!deviceId) {
         throw new NonRetriableError(
-          "Toggle Switch: No device ID found in context. Ensure Simulator Boot node runs first."
+          "Toggle Switch: No device ID found in context. Ensure Simulator Boot node runs first.",
         );
       }
 
@@ -54,12 +59,12 @@ export const toggleSwitchExecutor: NodeExecutor<ToggleSwitchData> = async ({
       const toggleResult = await idb.toggleSwitch(
         deviceId,
         data.accessibilityId,
-        targetStateBoolean
+        targetStateBoolean,
       );
 
       if (!toggleResult.success) {
         throw new NonRetriableError(
-          `Toggle Switch failed: Could not toggle switch ${data.accessibilityId}. ${toggleResult.error || ""}`
+          `Toggle Switch failed: Could not toggle switch ${data.accessibilityId}. ${toggleResult.error || ""}`,
         );
       }
 
@@ -78,7 +83,7 @@ export const toggleSwitchExecutor: NodeExecutor<ToggleSwitchData> = async ({
       iosToggleSwitchChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -87,7 +92,7 @@ export const toggleSwitchExecutor: NodeExecutor<ToggleSwitchData> = async ({
       iosToggleSwitchChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

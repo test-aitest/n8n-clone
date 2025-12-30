@@ -21,13 +21,15 @@ export const expectValueExecutor: NodeExecutor<ExpectValueData> = async ({
     iosExpectValueChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
     const result = await step.run("expect-value", async () => {
       if (!data.accessibilityId) {
-        throw new NonRetriableError("Expect Value: Accessibility ID is required");
+        throw new NonRetriableError(
+          "Expect Value: Accessibility ID is required",
+        );
       }
 
       if (!data.expectedValue) {
@@ -40,10 +42,11 @@ export const expectValueExecutor: NodeExecutor<ExpectValueData> = async ({
 
       // Get device ID from context (should be set by simulator boot node)
       const simulator = context.simulator as { deviceId?: string } | undefined;
-      const deviceId = simulator?.deviceId || (context.deviceId as string | undefined);
+      const deviceId =
+        simulator?.deviceId || (context.deviceId as string | undefined);
       if (!deviceId) {
         throw new NonRetriableError(
-          "Expect Value: No device ID found. Make sure simulator is booted first."
+          "Expect Value: No device ID found. Make sure simulator is booted first.",
         );
       }
 
@@ -53,12 +56,12 @@ export const expectValueExecutor: NodeExecutor<ExpectValueData> = async ({
       const element = await idb.waitForElement(
         deviceId,
         data.accessibilityId,
-        timeout
+        timeout,
       );
 
       if (!element) {
         throw new NonRetriableError(
-          `Expect Value failed: Element '${data.accessibilityId}' not found within ${timeout}ms`
+          `Expect Value failed: Element '${data.accessibilityId}' not found within ${timeout}ms`,
         );
       }
 
@@ -70,7 +73,7 @@ export const expectValueExecutor: NodeExecutor<ExpectValueData> = async ({
 
       if (!matches) {
         throw new NonRetriableError(
-          `Expect Value failed: Expected "${data.expectedValue}" but got "${actualValue}"`
+          `Expect Value failed: Expected "${data.expectedValue}" but got "${actualValue}"`,
         );
       }
 
@@ -90,7 +93,7 @@ export const expectValueExecutor: NodeExecutor<ExpectValueData> = async ({
       iosExpectValueChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -99,7 +102,7 @@ export const expectValueExecutor: NodeExecutor<ExpectValueData> = async ({
       iosExpectValueChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

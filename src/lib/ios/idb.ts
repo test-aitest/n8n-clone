@@ -8,23 +8,23 @@
  */
 
 import type {
-  UIHierarchy,
-  UIElement,
   CommandResult,
+  HardwareButton,
+  SwipeDirection,
+  SwipeResult,
   TapResult,
   TextInputResult,
-  SwipeResult,
-  SwipeDirection,
-  HardwareButton,
+  UIElement,
+  UIHierarchy,
 } from "./types";
 import {
-  executeCommand,
-  safeJsonParse,
   escapeShellArg,
-  waitFor,
+  executeCommand,
   findElementByAccessibilityId,
   getElementCenter,
+  safeJsonParse,
   sleep,
+  waitFor,
 } from "./utils";
 
 // ============================================
@@ -37,7 +37,7 @@ import {
 export async function describeAll(udid: string): Promise<UIHierarchy> {
   const result = await executeCommand(
     `idb ui describe-all --udid ${escapeShellArg(udid)} --json`,
-    30000
+    30000,
   );
 
   if (!result.success || !result.data) {
@@ -58,10 +58,10 @@ export async function describeAll(udid: string): Promise<UIHierarchy> {
 export async function describePoint(
   udid: string,
   x: number,
-  y: number
+  y: number,
 ): Promise<UIElement | null> {
   const result = await executeCommand(
-    `idb ui describe-point --udid ${escapeShellArg(udid)} ${x} ${y} --json`
+    `idb ui describe-point --udid ${escapeShellArg(udid)} ${x} ${y} --json`,
   );
 
   if (!result.success || !result.data) {
@@ -81,7 +81,7 @@ export async function describePoint(
 export async function tap(
   udid: string,
   accessibilityId: string,
-  timeout = 10000
+  timeout = 10000,
 ): Promise<TapResult> {
   // First, find the element
   const element = await waitForElement(udid, accessibilityId, timeout);
@@ -105,10 +105,10 @@ export async function tap(
 export async function tapCoordinate(
   udid: string,
   x: number,
-  y: number
+  y: number,
 ): Promise<TapResult> {
   const result = await executeCommand(
-    `idb ui tap --udid ${escapeShellArg(udid)} ${x} ${y}`
+    `idb ui tap --udid ${escapeShellArg(udid)} ${x} ${y}`,
   );
 
   return {
@@ -123,10 +123,10 @@ export async function tapCoordinate(
 export async function doubleTap(
   udid: string,
   x: number,
-  y: number
+  y: number,
 ): Promise<TapResult> {
   const result = await executeCommand(
-    `idb ui tap --udid ${escapeShellArg(udid)} ${x} ${y} --duration 0.1 && idb ui tap --udid ${escapeShellArg(udid)} ${x} ${y}`
+    `idb ui tap --udid ${escapeShellArg(udid)} ${x} ${y} --duration 0.1 && idb ui tap --udid ${escapeShellArg(udid)} ${x} ${y}`,
   );
 
   return {
@@ -142,10 +142,10 @@ export async function longPress(
   udid: string,
   x: number,
   y: number,
-  duration = 1.0
+  duration = 1.0,
 ): Promise<TapResult> {
   const result = await executeCommand(
-    `idb ui tap --udid ${escapeShellArg(udid)} ${x} ${y} --duration ${duration}`
+    `idb ui tap --udid ${escapeShellArg(udid)} ${x} ${y} --duration ${duration}`,
   );
 
   return {
@@ -163,10 +163,10 @@ export async function longPress(
  */
 export async function typeText(
   udid: string,
-  text: string
+  text: string,
 ): Promise<TextInputResult> {
   const result = await executeCommand(
-    `idb ui text --udid ${escapeShellArg(udid)} ${escapeShellArg(text)}`
+    `idb ui text --udid ${escapeShellArg(udid)} ${escapeShellArg(text)}`,
   );
 
   return {
@@ -182,7 +182,7 @@ export async function typeTextInField(
   udid: string,
   accessibilityId: string,
   text: string,
-  clearFirst = true
+  clearFirst = true,
 ): Promise<TextInputResult> {
   // First, tap the field to focus it
   const tapResult = await tap(udid, accessibilityId);
@@ -197,11 +197,11 @@ export async function typeTextInField(
   if (clearFirst) {
     // Select all and delete
     await executeCommand(
-      `idb ui key --udid ${escapeShellArg(udid)} 1 --modifier command` // Cmd+A
+      `idb ui key --udid ${escapeShellArg(udid)} 1 --modifier command`, // Cmd+A
     );
     await sleep(100);
     await executeCommand(
-      `idb ui key --udid ${escapeShellArg(udid)} 51` // Delete key
+      `idb ui key --udid ${escapeShellArg(udid)} 51`, // Delete key
     );
     await sleep(100);
   }
@@ -216,7 +216,7 @@ export async function typeTextInField(
 export async function sendKey(
   udid: string,
   keyCode: number,
-  modifier?: "command" | "shift" | "option" | "control"
+  modifier?: "command" | "shift" | "option" | "control",
 ): Promise<CommandResult<void>> {
   let command = `idb ui key --udid ${escapeShellArg(udid)} ${keyCode}`;
   if (modifier) {
@@ -243,10 +243,10 @@ export async function swipe(
   startY: number,
   endX: number,
   endY: number,
-  duration = 0.5
+  duration = 0.5,
 ): Promise<SwipeResult> {
   const result = await executeCommand(
-    `idb ui swipe --udid ${escapeShellArg(udid)} ${startX} ${startY} ${endX} ${endY} --duration ${duration}`
+    `idb ui swipe --udid ${escapeShellArg(udid)} ${startX} ${startY} ${endX} ${endY} --duration ${duration}`,
   );
 
   // Determine direction based on coordinates
@@ -272,14 +272,14 @@ export async function swipe(
 export async function swipeDirection(
   udid: string,
   direction: SwipeDirection,
-  distance = 300
+  distance = 300,
 ): Promise<SwipeResult> {
   // Default screen center (adjust based on actual device dimensions)
   const centerX = 195; // iPhone 14 Pro width / 2
   const centerY = 422; // iPhone 14 Pro height / 2
 
-  let startX = centerX;
-  let startY = centerY;
+  const startX = centerX;
+  const startY = centerY;
   let endX = centerX;
   let endY = centerY;
 
@@ -309,7 +309,7 @@ export async function scrollUntilVisible(
   accessibilityId: string,
   direction: "up" | "down" = "down",
   maxScrolls = 10,
-  scrollDistance = 300
+  scrollDistance = 300,
 ): Promise<{ found: boolean; scrollCount: number }> {
   for (let i = 0; i < maxScrolls; i++) {
     // Check if element is visible
@@ -337,7 +337,7 @@ export async function scrollUntilVisible(
  */
 export async function pressButton(
   udid: string,
-  button: HardwareButton
+  button: HardwareButton,
 ): Promise<CommandResult<void>> {
   const buttonMap: Record<HardwareButton, string> = {
     HOME: "HOME",
@@ -349,7 +349,7 @@ export async function pressButton(
   };
 
   const result = await executeCommand(
-    `idb ui button --udid ${escapeShellArg(udid)} ${buttonMap[button]}`
+    `idb ui button --udid ${escapeShellArg(udid)} ${buttonMap[button]}`,
   );
 
   return {
@@ -367,7 +367,7 @@ export async function pressButton(
  */
 export async function findElement(
   udid: string,
-  accessibilityId: string
+  accessibilityId: string,
 ): Promise<UIElement | undefined> {
   const hierarchy = await describeAll(udid);
   return findElementByAccessibilityId(hierarchy.elements, accessibilityId);
@@ -378,7 +378,7 @@ export async function findElement(
  */
 export async function elementExists(
   udid: string,
-  accessibilityId: string
+  accessibilityId: string,
 ): Promise<boolean> {
   const element = await findElement(udid, accessibilityId);
   return element !== undefined;
@@ -390,17 +390,14 @@ export async function elementExists(
 export async function waitForElement(
   udid: string,
   accessibilityId: string,
-  timeout = 10000
+  timeout = 10000,
 ): Promise<UIElement | undefined> {
   try {
-    return await waitFor(
-      () => findElement(udid, accessibilityId),
-      {
-        timeout,
-        interval: 500,
-        errorMessage: `Element not found: ${accessibilityId}`,
-      }
-    );
+    return await waitFor(() => findElement(udid, accessibilityId), {
+      timeout,
+      interval: 500,
+      errorMessage: `Element not found: ${accessibilityId}`,
+    });
   } catch {
     return undefined;
   }
@@ -411,7 +408,7 @@ export async function waitForElement(
  */
 export async function getElementValue(
   udid: string,
-  accessibilityId: string
+  accessibilityId: string,
 ): Promise<string | undefined> {
   const element = await findElement(udid, accessibilityId);
   return element?.AXValue;
@@ -422,7 +419,7 @@ export async function getElementValue(
  */
 export async function getElementLabel(
   udid: string,
-  accessibilityId: string
+  accessibilityId: string,
 ): Promise<string | undefined> {
   const element = await findElement(udid, accessibilityId);
   return element?.AXLabel;
@@ -433,7 +430,7 @@ export async function getElementLabel(
  */
 export async function isElementEnabled(
   udid: string,
-  accessibilityId: string
+  accessibilityId: string,
 ): Promise<boolean> {
   const element = await findElement(udid, accessibilityId);
   return element?.AXEnabled ?? false;
@@ -450,7 +447,7 @@ export async function isElementEnabled(
 export async function selectPickerValue(
   udid: string,
   accessibilityId: string,
-  targetValue: string
+  targetValue: string,
 ): Promise<CommandResult<void>> {
   // First, find the picker element
   const element = await findElement(udid, accessibilityId);
@@ -482,7 +479,7 @@ export async function selectPickerValue(
       center.y,
       center.x,
       center.y - 50, // Small swipe up
-      0.3
+      0.3,
     );
     await sleep(300);
   }
@@ -500,7 +497,7 @@ export async function selectPickerValue(
 export async function setSliderValue(
   udid: string,
   accessibilityId: string,
-  value: number
+  value: number,
 ): Promise<CommandResult<void>> {
   if (value < 0 || value > 1) {
     return { success: false, error: "Slider value must be between 0 and 1" };
@@ -538,7 +535,7 @@ export async function setSliderValue(
 export async function toggleSwitch(
   udid: string,
   accessibilityId: string,
-  targetState?: boolean
+  targetState?: boolean,
 ): Promise<CommandResult<{ newState: boolean }>> {
   const element = await findElement(udid, accessibilityId);
   if (!element) {
@@ -576,7 +573,9 @@ export async function toggleSwitch(
 /**
  * Get the currently focused element
  */
-export async function getFocusedElement(udid: string): Promise<UIElement | undefined> {
+export async function getFocusedElement(
+  udid: string,
+): Promise<UIElement | undefined> {
   const hierarchy = await describeAll(udid);
 
   function findFocused(elements: UIElement[]): UIElement | undefined {
@@ -603,9 +602,7 @@ export async function getFocusedElement(udid: string): Promise<UIElement | undef
  * Connect idb to a simulator
  */
 export async function connect(udid: string): Promise<CommandResult<void>> {
-  const result = await executeCommand(
-    `idb connect ${escapeShellArg(udid)}`
-  );
+  const result = await executeCommand(`idb connect ${escapeShellArg(udid)}`);
 
   return {
     success: result.success,
@@ -617,9 +614,7 @@ export async function connect(udid: string): Promise<CommandResult<void>> {
  * Disconnect idb from a simulator
  */
 export async function disconnect(udid: string): Promise<CommandResult<void>> {
-  const result = await executeCommand(
-    `idb disconnect ${escapeShellArg(udid)}`
-  );
+  const result = await executeCommand(`idb disconnect ${escapeShellArg(udid)}`);
 
   return {
     success: result.success,

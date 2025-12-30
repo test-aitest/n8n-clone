@@ -1,13 +1,13 @@
 "use client";
 
-import { useReactFlow, type Node, type NodeProps } from "@xyflow/react";
+import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
 import { MousePointerClick } from "lucide-react";
 import { memo, useState } from "react";
-import { BaseIOSNode } from "../base-ios-node";
-import { TapDialog, type TapFormValues } from "./dialog";
 import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
-import { fetchTapRealtimeToken } from "./actions";
 import { IOS_TAP_CHANNEL_NAME } from "@/inngest/channels/ios-testing";
+import { BaseIOSNode } from "../base-ios-node";
+import { fetchTapRealtimeToken } from "./actions";
+import { TapDialog, type TapFormValues } from "./dialog";
 
 type TapNodeData = {
   variableName?: string;
@@ -43,7 +43,7 @@ export const TapNode = memo((props: NodeProps<TapNodeType>) => {
           };
         }
         return node;
-      })
+      }),
     );
   };
 

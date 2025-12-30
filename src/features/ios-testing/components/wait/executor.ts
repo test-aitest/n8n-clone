@@ -23,7 +23,7 @@ export const waitExecutor: NodeExecutor<WaitData> = async ({
     iosWaitChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
@@ -39,7 +39,9 @@ export const waitExecutor: NodeExecutor<WaitData> = async ({
       if (data.waitType === "duration") {
         // Wait for a fixed duration
         if (!data.duration) {
-          throw new NonRetriableError("Wait: Duration is required for duration wait");
+          throw new NonRetriableError(
+            "Wait: Duration is required for duration wait",
+          );
         }
 
         const duration = parseInt(data.duration, 10);
@@ -57,24 +59,33 @@ export const waitExecutor: NodeExecutor<WaitData> = async ({
 
       // Wait for element
       if (!data.accessibilityId) {
-        throw new NonRetriableError("Wait: Accessibility ID is required for element wait");
+        throw new NonRetriableError(
+          "Wait: Accessibility ID is required for element wait",
+        );
       }
 
       // Get the device ID from context (set by simulator-boot node)
-      const simulatorContext = context.simulator as { deviceId?: string } | undefined;
-      const deviceId = simulatorContext?.deviceId || (context.deviceId as string | undefined);
+      const simulatorContext = context.simulator as
+        | { deviceId?: string }
+        | undefined;
+      const deviceId =
+        simulatorContext?.deviceId || (context.deviceId as string | undefined);
       if (!deviceId) {
         throw new NonRetriableError(
-          "Wait: No device ID found in context. Ensure Simulator Boot node runs first."
+          "Wait: No device ID found in context. Ensure Simulator Boot node runs first.",
         );
       }
 
       const timeout = data.timeout ? parseInt(data.timeout, 10) : 10000;
-      const element = await idb.waitForElement(deviceId, data.accessibilityId, timeout);
+      const element = await idb.waitForElement(
+        deviceId,
+        data.accessibilityId,
+        timeout,
+      );
 
       if (!element) {
         throw new NonRetriableError(
-          `Wait failed: Element ${data.accessibilityId} did not appear within ${timeout}ms`
+          `Wait failed: Element ${data.accessibilityId} did not appear within ${timeout}ms`,
         );
       }
 
@@ -93,7 +104,7 @@ export const waitExecutor: NodeExecutor<WaitData> = async ({
       iosWaitChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -102,7 +113,7 @@ export const waitExecutor: NodeExecutor<WaitData> = async ({
       iosWaitChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

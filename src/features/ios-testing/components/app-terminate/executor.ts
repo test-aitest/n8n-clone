@@ -20,7 +20,7 @@ export const appTerminateExecutor: NodeExecutor<AppTerminateData> = async ({
     iosAppTerminateChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
@@ -39,12 +39,12 @@ export const appTerminateExecutor: NodeExecutor<AppTerminateData> = async ({
 
       const terminateResult = await simulator.terminateApp(
         data.deviceId,
-        data.bundleId
+        data.bundleId,
       );
 
       if (!terminateResult.success) {
         throw new NonRetriableError(
-          `App Terminate failed: ${terminateResult.error || "Unknown error"}`
+          `App Terminate failed: ${terminateResult.error || "Unknown error"}`,
         );
       }
 
@@ -62,7 +62,7 @@ export const appTerminateExecutor: NodeExecutor<AppTerminateData> = async ({
       iosAppTerminateChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -71,7 +71,7 @@ export const appTerminateExecutor: NodeExecutor<AppTerminateData> = async ({
       iosAppTerminateChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

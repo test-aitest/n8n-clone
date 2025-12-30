@@ -20,13 +20,15 @@ export const expectExistsExecutor: NodeExecutor<ExpectExistsData> = async ({
     iosExpectExistsChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
     const result = await step.run("expect-exists", async () => {
       if (!data.accessibilityId) {
-        throw new NonRetriableError("Expect Exists: Accessibility ID is required");
+        throw new NonRetriableError(
+          "Expect Exists: Accessibility ID is required",
+        );
       }
 
       if (!data.variableName) {
@@ -35,10 +37,11 @@ export const expectExistsExecutor: NodeExecutor<ExpectExistsData> = async ({
 
       // Get device ID from context (should be set by simulator boot node)
       const simulator = context.simulator as { deviceId?: string } | undefined;
-      const deviceId = simulator?.deviceId || (context.deviceId as string | undefined);
+      const deviceId =
+        simulator?.deviceId || (context.deviceId as string | undefined);
       if (!deviceId) {
         throw new NonRetriableError(
-          "Expect Exists: No device ID found. Make sure simulator is booted first."
+          "Expect Exists: No device ID found. Make sure simulator is booted first.",
         );
       }
 
@@ -48,14 +51,14 @@ export const expectExistsExecutor: NodeExecutor<ExpectExistsData> = async ({
       const element = await idb.waitForElement(
         deviceId,
         data.accessibilityId,
-        timeout
+        timeout,
       );
 
       const exists = element !== undefined;
 
       if (!exists) {
         throw new NonRetriableError(
-          `Expect Exists failed: Element '${data.accessibilityId}' not found within ${timeout}ms`
+          `Expect Exists failed: Element '${data.accessibilityId}' not found within ${timeout}ms`,
         );
       }
 
@@ -81,7 +84,7 @@ export const expectExistsExecutor: NodeExecutor<ExpectExistsData> = async ({
       iosExpectExistsChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -90,7 +93,7 @@ export const expectExistsExecutor: NodeExecutor<ExpectExistsData> = async ({
       iosExpectExistsChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

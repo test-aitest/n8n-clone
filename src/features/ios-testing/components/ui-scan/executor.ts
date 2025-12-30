@@ -19,7 +19,7 @@ export const uiScanExecutor: NodeExecutor<UiScanData> = async ({
     iosUiScanChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
@@ -30,10 +30,11 @@ export const uiScanExecutor: NodeExecutor<UiScanData> = async ({
 
       // Get device ID from context (should be set by simulator boot node)
       const simulator = context.simulator as { deviceId?: string } | undefined;
-      const deviceId = simulator?.deviceId || (context.deviceId as string | undefined);
+      const deviceId =
+        simulator?.deviceId || (context.deviceId as string | undefined);
       if (!deviceId) {
         throw new NonRetriableError(
-          "UI Scan: No device ID found. Make sure simulator is booted first."
+          "UI Scan: No device ID found. Make sure simulator is booted first.",
         );
       }
 
@@ -42,7 +43,7 @@ export const uiScanExecutor: NodeExecutor<UiScanData> = async ({
 
       // Count elements for summary
       const countElements = (
-        elements: typeof hierarchy.elements
+        elements: typeof hierarchy.elements,
       ): { total: number; byRole: Record<string, number> } => {
         let total = 0;
         const byRole: Record<string, number> = {};
@@ -66,7 +67,7 @@ export const uiScanExecutor: NodeExecutor<UiScanData> = async ({
 
       // Extract accessibility identifiers for easy reference
       const extractAccessibilityIds = (
-        elements: typeof hierarchy.elements
+        elements: typeof hierarchy.elements,
       ): string[] => {
         const ids: string[] = [];
 
@@ -106,7 +107,7 @@ export const uiScanExecutor: NodeExecutor<UiScanData> = async ({
       iosUiScanChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -115,7 +116,7 @@ export const uiScanExecutor: NodeExecutor<UiScanData> = async ({
       iosUiScanChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

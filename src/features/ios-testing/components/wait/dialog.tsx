@@ -1,5 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -25,35 +30,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
 
-const formSchema = z.object({
-  variableName: z
-    .string()
-    .min(1, { message: "Variable name is required" })
-    .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
-      message: "Variable name must start with a letter or underscore",
-    }),
-  waitType: z.enum(["duration", "element"]),
-  duration: z.string().optional(),
-  accessibilityId: z.string().optional(),
-  timeout: z.string().optional(),
-}).refine((data) => {
-  if (data.waitType === "duration") {
-    return data.duration && data.duration.length > 0;
-  }
-  if (data.waitType === "element") {
-    return data.accessibilityId && data.accessibilityId.length > 0;
-  }
-  return true;
-}, {
-  message: "Duration is required for duration wait, Accessibility ID is required for element wait",
-  path: ["duration"],
-});
+const formSchema = z
+  .object({
+    variableName: z
+      .string()
+      .min(1, { message: "Variable name is required" })
+      .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
+        message: "Variable name must start with a letter or underscore",
+      }),
+    waitType: z.enum(["duration", "element"]),
+    duration: z.string().optional(),
+    accessibilityId: z.string().optional(),
+    timeout: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.waitType === "duration") {
+        return data.duration && data.duration.length > 0;
+      }
+      if (data.waitType === "element") {
+        return data.accessibilityId && data.accessibilityId.length > 0;
+      }
+      return true;
+    },
+    {
+      message:
+        "Duration is required for duration wait, Accessibility ID is required for element wait",
+      path: ["duration"],
+    },
+  );
 
 export type WaitFormValues = z.infer<typeof formSchema>;
 
@@ -106,11 +112,15 @@ export const WaitDialog = ({
         <DialogHeader>
           <DialogTitle>Wait</DialogTitle>
           <DialogDescription>
-            Configure settings to wait for a duration or until an element appears.
+            Configure settings to wait for a duration or until an element
+            appears.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mt-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6 mt-4"
+          >
             <FormField
               control={form.control}
               name="variableName"
@@ -133,19 +143,25 @@ export const WaitDialog = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Wait Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select wait type" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="duration">Wait for duration</SelectItem>
+                      <SelectItem value="duration">
+                        Wait for duration
+                      </SelectItem>
                       <SelectItem value="element">Wait for element</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormDescription>
-                    Choose to wait for a fixed duration or until an element appears
+                    Choose to wait for a fixed duration or until an element
+                    appears
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -178,10 +194,7 @@ export const WaitDialog = ({
                     <FormItem>
                       <FormLabel>Accessibility ID</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="loadingSpinner"
-                          {...field}
-                        />
+                        <Input placeholder="loadingSpinner" {...field} />
                       </FormControl>
                       <FormDescription>
                         Wait until this element appears on screen

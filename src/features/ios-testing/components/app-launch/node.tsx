@@ -1,13 +1,13 @@
 "use client";
 
-import { useReactFlow, type Node, type NodeProps } from "@xyflow/react";
+import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
 import { Play } from "lucide-react";
 import { memo, useState } from "react";
-import { BaseIOSNode } from "../base-ios-node";
-import { AppLaunchDialog, type AppLaunchFormValues } from "./dialog";
 import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
-import { fetchAppLaunchRealtimeToken } from "./actions";
 import { IOS_APP_LAUNCH_CHANNEL_NAME } from "@/inngest/channels/ios-testing";
+import { BaseIOSNode } from "../base-ios-node";
+import { fetchAppLaunchRealtimeToken } from "./actions";
+import { AppLaunchDialog, type AppLaunchFormValues } from "./dialog";
 
 type AppLaunchNodeData = {
   variableName?: string;
@@ -44,7 +44,7 @@ export const AppLaunchNode = memo((props: NodeProps<AppLaunchNodeType>) => {
           };
         }
         return node;
-      })
+      }),
     );
   };
 

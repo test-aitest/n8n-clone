@@ -21,7 +21,7 @@ export const appLaunchExecutor: NodeExecutor<AppLaunchData> = async ({
     iosAppLaunchChannel().status({
       nodeId,
       status: "loading",
-    })
+    }),
   );
 
   try {
@@ -46,12 +46,12 @@ export const appLaunchExecutor: NodeExecutor<AppLaunchData> = async ({
       const launchResult = await simulator.launchApp(
         data.deviceId,
         data.bundleId,
-        argsArray
+        argsArray,
       );
 
       if (!launchResult.success) {
         throw new NonRetriableError(
-          `App Launch failed: ${launchResult.error || "Unknown error"}`
+          `App Launch failed: ${launchResult.error || "Unknown error"}`,
         );
       }
 
@@ -70,7 +70,7 @@ export const appLaunchExecutor: NodeExecutor<AppLaunchData> = async ({
       iosAppLaunchChannel().status({
         nodeId,
         status: "success",
-      })
+      }),
     );
 
     return result;
@@ -79,7 +79,7 @@ export const appLaunchExecutor: NodeExecutor<AppLaunchData> = async ({
       iosAppLaunchChannel().status({
         nodeId,
         status: "error",
-      })
+      }),
     );
     throw error;
   }

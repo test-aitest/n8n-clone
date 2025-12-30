@@ -1,2 +1,2 @@
-export { ToggleSwitchNode } from "./node";
 export { ToggleSwitchDialog, type ToggleSwitchFormValues } from "./dialog";
+export { ToggleSwitchNode } from "./node";

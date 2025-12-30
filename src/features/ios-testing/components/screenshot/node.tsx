@@ -1,13 +1,13 @@
 "use client";
 
-import { useReactFlow, type Node, type NodeProps } from "@xyflow/react";
+import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
 import { Camera } from "lucide-react";
 import { memo, useState } from "react";
-import { BaseIOSNode } from "../base-ios-node";
-import { ScreenshotDialog, type ScreenshotFormValues } from "./dialog";
 import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
-import { fetchScreenshotRealtimeToken } from "./actions";
 import { IOS_SCREENSHOT_CHANNEL_NAME } from "@/inngest/channels/ios-testing";
+import { BaseIOSNode } from "../base-ios-node";
+import { fetchScreenshotRealtimeToken } from "./actions";
+import { ScreenshotDialog, type ScreenshotFormValues } from "./dialog";
 
 type ScreenshotNodeData = {
   variableName?: string;
@@ -42,7 +42,7 @@ export const ScreenshotNode = memo((props: NodeProps<ScreenshotNodeType>) => {
           };
         }
         return node;
-      })
+      }),
     );
   };
 
