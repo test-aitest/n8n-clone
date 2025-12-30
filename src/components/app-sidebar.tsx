@@ -1,10 +1,12 @@
 "use client";
 
 import {
+  FileTextIcon,
   FolderOpenIcon,
   HistoryIcon,
   KeyIcon,
   LogOutIcon,
+  SmartphoneIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -40,6 +42,21 @@ const menuItems = [
         title: "Executions",
         icon: HistoryIcon,
         url: "/executions",
+      },
+    ],
+  },
+  {
+    title: "iOS Testing",
+    items: [
+      {
+        title: "Projects",
+        icon: SmartphoneIcon,
+        url: "/projects",
+      },
+      {
+        title: "Templates",
+        icon: FileTextIcon,
+        url: "/templates",
       },
     ],
   },

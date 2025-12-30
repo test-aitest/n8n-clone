@@ -41,6 +41,7 @@ export type UIComponentSumAggregateOutputType = {
 export type UIComponentMinAggregateOutputType = {
   id: string | null
   workflowId: string | null
+  projectId: string | null
   accessibilityId: string | null
   componentType: string | null
   label: string | null
@@ -54,6 +55,7 @@ export type UIComponentMinAggregateOutputType = {
 export type UIComponentMaxAggregateOutputType = {
   id: string | null
   workflowId: string | null
+  projectId: string | null
   accessibilityId: string | null
   componentType: string | null
   label: string | null
@@ -67,6 +69,7 @@ export type UIComponentMaxAggregateOutputType = {
 export type UIComponentCountAggregateOutputType = {
   id: number
   workflowId: number
+  projectId: number
   accessibilityId: number
   componentType: number
   label: number
@@ -94,6 +97,7 @@ export type UIComponentSumAggregateInputType = {
 export type UIComponentMinAggregateInputType = {
   id?: true
   workflowId?: true
+  projectId?: true
   accessibilityId?: true
   componentType?: true
   label?: true
@@ -107,6 +111,7 @@ export type UIComponentMinAggregateInputType = {
 export type UIComponentMaxAggregateInputType = {
   id?: true
   workflowId?: true
+  projectId?: true
   accessibilityId?: true
   componentType?: true
   label?: true
@@ -120,6 +125,7 @@ export type UIComponentMaxAggregateInputType = {
 export type UIComponentCountAggregateInputType = {
   id?: true
   workflowId?: true
+  projectId?: true
   accessibilityId?: true
   componentType?: true
   label?: true
@@ -219,7 +225,8 @@ export type UIComponentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 
 export type UIComponentGroupByOutputType = {
   id: string
-  workflowId: string
+  workflowId: string | null
+  projectId: string | null
   accessibilityId: string
   componentType: string
   label: string | null
@@ -255,7 +262,8 @@ export type UIComponentWhereInput = {
   OR?: Prisma.UIComponentWhereInput[]
   NOT?: Prisma.UIComponentWhereInput | Prisma.UIComponentWhereInput[]
   id?: Prisma.StringFilter<"UIComponent"> | string
-  workflowId?: Prisma.StringFilter<"UIComponent"> | string
+  workflowId?: Prisma.StringNullableFilter<"UIComponent"> | string | null
+  projectId?: Prisma.StringNullableFilter<"UIComponent"> | string | null
   accessibilityId?: Prisma.StringFilter<"UIComponent"> | string
   componentType?: Prisma.StringFilter<"UIComponent"> | string
   label?: Prisma.StringNullableFilter<"UIComponent"> | string | null
@@ -264,12 +272,14 @@ export type UIComponentWhereInput = {
   positionX?: Prisma.FloatNullableFilter<"UIComponent"> | number | null
   positionY?: Prisma.FloatNullableFilter<"UIComponent"> | number | null
   createdAt?: Prisma.DateTimeFilter<"UIComponent"> | Date | string
-  workflow?: Prisma.XOR<Prisma.WorkflowScalarRelationFilter, Prisma.WorkflowWhereInput>
+  workflow?: Prisma.XOR<Prisma.WorkflowNullableScalarRelationFilter, Prisma.WorkflowWhereInput> | null
+  project?: Prisma.XOR<Prisma.ProjectNullableScalarRelationFilter, Prisma.ProjectWhereInput> | null
 }
 
 export type UIComponentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  workflowId?: Prisma.SortOrder
+  workflowId?: Prisma.SortOrderInput | Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   accessibilityId?: Prisma.SortOrder
   componentType?: Prisma.SortOrder
   label?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -279,6 +289,7 @@ export type UIComponentOrderByWithRelationInput = {
   positionY?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   workflow?: Prisma.WorkflowOrderByWithRelationInput
+  project?: Prisma.ProjectOrderByWithRelationInput
 }
 
 export type UIComponentWhereUniqueInput = Prisma.AtLeast<{
@@ -286,7 +297,8 @@ export type UIComponentWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UIComponentWhereInput | Prisma.UIComponentWhereInput[]
   OR?: Prisma.UIComponentWhereInput[]
   NOT?: Prisma.UIComponentWhereInput | Prisma.UIComponentWhereInput[]
-  workflowId?: Prisma.StringFilter<"UIComponent"> | string
+  workflowId?: Prisma.StringNullableFilter<"UIComponent"> | string | null
+  projectId?: Prisma.StringNullableFilter<"UIComponent"> | string | null
   accessibilityId?: Prisma.StringFilter<"UIComponent"> | string
   componentType?: Prisma.StringFilter<"UIComponent"> | string
   label?: Prisma.StringNullableFilter<"UIComponent"> | string | null
@@ -295,12 +307,14 @@ export type UIComponentWhereUniqueInput = Prisma.AtLeast<{
   positionX?: Prisma.FloatNullableFilter<"UIComponent"> | number | null
   positionY?: Prisma.FloatNullableFilter<"UIComponent"> | number | null
   createdAt?: Prisma.DateTimeFilter<"UIComponent"> | Date | string
-  workflow?: Prisma.XOR<Prisma.WorkflowScalarRelationFilter, Prisma.WorkflowWhereInput>
+  workflow?: Prisma.XOR<Prisma.WorkflowNullableScalarRelationFilter, Prisma.WorkflowWhereInput> | null
+  project?: Prisma.XOR<Prisma.ProjectNullableScalarRelationFilter, Prisma.ProjectWhereInput> | null
 }, "id">
 
 export type UIComponentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  workflowId?: Prisma.SortOrder
+  workflowId?: Prisma.SortOrderInput | Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   accessibilityId?: Prisma.SortOrder
   componentType?: Prisma.SortOrder
   label?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -321,7 +335,8 @@ export type UIComponentScalarWhereWithAggregatesInput = {
   OR?: Prisma.UIComponentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UIComponentScalarWhereWithAggregatesInput | Prisma.UIComponentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"UIComponent"> | string
-  workflowId?: Prisma.StringWithAggregatesFilter<"UIComponent"> | string
+  workflowId?: Prisma.StringNullableWithAggregatesFilter<"UIComponent"> | string | null
+  projectId?: Prisma.StringNullableWithAggregatesFilter<"UIComponent"> | string | null
   accessibilityId?: Prisma.StringWithAggregatesFilter<"UIComponent"> | string
   componentType?: Prisma.StringWithAggregatesFilter<"UIComponent"> | string
   label?: Prisma.StringNullableWithAggregatesFilter<"UIComponent"> | string | null
@@ -342,12 +357,14 @@ export type UIComponentCreateInput = {
   positionX?: number | null
   positionY?: number | null
   createdAt?: Date | string
-  workflow: Prisma.WorkflowCreateNestedOneWithoutUiComponentsInput
+  workflow?: Prisma.WorkflowCreateNestedOneWithoutUiComponentsInput
+  project?: Prisma.ProjectCreateNestedOneWithoutUiComponentsInput
 }
 
 export type UIComponentUncheckedCreateInput = {
   id?: string
-  workflowId: string
+  workflowId?: string | null
+  projectId?: string | null
   accessibilityId: string
   componentType: string
   label?: string | null
@@ -368,12 +385,14 @@ export type UIComponentUpdateInput = {
   positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workflow?: Prisma.WorkflowUpdateOneRequiredWithoutUiComponentsNestedInput
+  workflow?: Prisma.WorkflowUpdateOneWithoutUiComponentsNestedInput
+  project?: Prisma.ProjectUpdateOneWithoutUiComponentsNestedInput
 }
 
 export type UIComponentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  workflowId?: Prisma.StringFieldUpdateOperationsInput | string
+  workflowId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessibilityId?: Prisma.StringFieldUpdateOperationsInput | string
   componentType?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -386,7 +405,8 @@ export type UIComponentUncheckedUpdateInput = {
 
 export type UIComponentCreateManyInput = {
   id?: string
-  workflowId: string
+  workflowId?: string | null
+  projectId?: string | null
   accessibilityId: string
   componentType: string
   label?: string | null
@@ -411,7 +431,8 @@ export type UIComponentUpdateManyMutationInput = {
 
 export type UIComponentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  workflowId?: Prisma.StringFieldUpdateOperationsInput | string
+  workflowId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessibilityId?: Prisma.StringFieldUpdateOperationsInput | string
   componentType?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -435,6 +456,7 @@ export type UIComponentOrderByRelationAggregateInput = {
 export type UIComponentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   workflowId?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   accessibilityId?: Prisma.SortOrder
   componentType?: Prisma.SortOrder
   label?: Prisma.SortOrder
@@ -454,6 +476,7 @@ export type UIComponentAvgOrderByAggregateInput = {
 export type UIComponentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   workflowId?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   accessibilityId?: Prisma.SortOrder
   componentType?: Prisma.SortOrder
   label?: Prisma.SortOrder
@@ -467,6 +490,7 @@ export type UIComponentMaxOrderByAggregateInput = {
 export type UIComponentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   workflowId?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   accessibilityId?: Prisma.SortOrder
   componentType?: Prisma.SortOrder
   label?: Prisma.SortOrder
@@ -541,6 +565,48 @@ export type NullableFloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type UIComponentCreateNestedManyWithoutProjectInput = {
+  create?: Prisma.XOR<Prisma.UIComponentCreateWithoutProjectInput, Prisma.UIComponentUncheckedCreateWithoutProjectInput> | Prisma.UIComponentCreateWithoutProjectInput[] | Prisma.UIComponentUncheckedCreateWithoutProjectInput[]
+  connectOrCreate?: Prisma.UIComponentCreateOrConnectWithoutProjectInput | Prisma.UIComponentCreateOrConnectWithoutProjectInput[]
+  createMany?: Prisma.UIComponentCreateManyProjectInputEnvelope
+  connect?: Prisma.UIComponentWhereUniqueInput | Prisma.UIComponentWhereUniqueInput[]
+}
+
+export type UIComponentUncheckedCreateNestedManyWithoutProjectInput = {
+  create?: Prisma.XOR<Prisma.UIComponentCreateWithoutProjectInput, Prisma.UIComponentUncheckedCreateWithoutProjectInput> | Prisma.UIComponentCreateWithoutProjectInput[] | Prisma.UIComponentUncheckedCreateWithoutProjectInput[]
+  connectOrCreate?: Prisma.UIComponentCreateOrConnectWithoutProjectInput | Prisma.UIComponentCreateOrConnectWithoutProjectInput[]
+  createMany?: Prisma.UIComponentCreateManyProjectInputEnvelope
+  connect?: Prisma.UIComponentWhereUniqueInput | Prisma.UIComponentWhereUniqueInput[]
+}
+
+export type UIComponentUpdateManyWithoutProjectNestedInput = {
+  create?: Prisma.XOR<Prisma.UIComponentCreateWithoutProjectInput, Prisma.UIComponentUncheckedCreateWithoutProjectInput> | Prisma.UIComponentCreateWithoutProjectInput[] | Prisma.UIComponentUncheckedCreateWithoutProjectInput[]
+  connectOrCreate?: Prisma.UIComponentCreateOrConnectWithoutProjectInput | Prisma.UIComponentCreateOrConnectWithoutProjectInput[]
+  upsert?: Prisma.UIComponentUpsertWithWhereUniqueWithoutProjectInput | Prisma.UIComponentUpsertWithWhereUniqueWithoutProjectInput[]
+  createMany?: Prisma.UIComponentCreateManyProjectInputEnvelope
+  set?: Prisma.UIComponentWhereUniqueInput | Prisma.UIComponentWhereUniqueInput[]
+  disconnect?: Prisma.UIComponentWhereUniqueInput | Prisma.UIComponentWhereUniqueInput[]
+  delete?: Prisma.UIComponentWhereUniqueInput | Prisma.UIComponentWhereUniqueInput[]
+  connect?: Prisma.UIComponentWhereUniqueInput | Prisma.UIComponentWhereUniqueInput[]
+  update?: Prisma.UIComponentUpdateWithWhereUniqueWithoutProjectInput | Prisma.UIComponentUpdateWithWhereUniqueWithoutProjectInput[]
+  updateMany?: Prisma.UIComponentUpdateManyWithWhereWithoutProjectInput | Prisma.UIComponentUpdateManyWithWhereWithoutProjectInput[]
+  deleteMany?: Prisma.UIComponentScalarWhereInput | Prisma.UIComponentScalarWhereInput[]
+}
+
+export type UIComponentUncheckedUpdateManyWithoutProjectNestedInput = {
+  create?: Prisma.XOR<Prisma.UIComponentCreateWithoutProjectInput, Prisma.UIComponentUncheckedCreateWithoutProjectInput> | Prisma.UIComponentCreateWithoutProjectInput[] | Prisma.UIComponentUncheckedCreateWithoutProjectInput[]
+  connectOrCreate?: Prisma.UIComponentCreateOrConnectWithoutProjectInput | Prisma.UIComponentCreateOrConnectWithoutProjectInput[]
+  upsert?: Prisma.UIComponentUpsertWithWhereUniqueWithoutProjectInput | Prisma.UIComponentUpsertWithWhereUniqueWithoutProjectInput[]
+  createMany?: Prisma.UIComponentCreateManyProjectInputEnvelope
+  set?: Prisma.UIComponentWhereUniqueInput | Prisma.UIComponentWhereUniqueInput[]
+  disconnect?: Prisma.UIComponentWhereUniqueInput | Prisma.UIComponentWhereUniqueInput[]
+  delete?: Prisma.UIComponentWhereUniqueInput | Prisma.UIComponentWhereUniqueInput[]
+  connect?: Prisma.UIComponentWhereUniqueInput | Prisma.UIComponentWhereUniqueInput[]
+  update?: Prisma.UIComponentUpdateWithWhereUniqueWithoutProjectInput | Prisma.UIComponentUpdateWithWhereUniqueWithoutProjectInput[]
+  updateMany?: Prisma.UIComponentUpdateManyWithWhereWithoutProjectInput | Prisma.UIComponentUpdateManyWithWhereWithoutProjectInput[]
+  deleteMany?: Prisma.UIComponentScalarWhereInput | Prisma.UIComponentScalarWhereInput[]
+}
+
 export type UIComponentCreateWithoutWorkflowInput = {
   id?: string
   accessibilityId: string
@@ -551,10 +617,12 @@ export type UIComponentCreateWithoutWorkflowInput = {
   positionX?: number | null
   positionY?: number | null
   createdAt?: Date | string
+  project?: Prisma.ProjectCreateNestedOneWithoutUiComponentsInput
 }
 
 export type UIComponentUncheckedCreateWithoutWorkflowInput = {
   id?: string
+  projectId?: string | null
   accessibilityId: string
   componentType: string
   label?: string | null
@@ -596,7 +664,8 @@ export type UIComponentScalarWhereInput = {
   OR?: Prisma.UIComponentScalarWhereInput[]
   NOT?: Prisma.UIComponentScalarWhereInput | Prisma.UIComponentScalarWhereInput[]
   id?: Prisma.StringFilter<"UIComponent"> | string
-  workflowId?: Prisma.StringFilter<"UIComponent"> | string
+  workflowId?: Prisma.StringNullableFilter<"UIComponent"> | string | null
+  projectId?: Prisma.StringNullableFilter<"UIComponent"> | string | null
   accessibilityId?: Prisma.StringFilter<"UIComponent"> | string
   componentType?: Prisma.StringFilter<"UIComponent"> | string
   label?: Prisma.StringNullableFilter<"UIComponent"> | string | null
@@ -607,8 +676,61 @@ export type UIComponentScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"UIComponent"> | Date | string
 }
 
+export type UIComponentCreateWithoutProjectInput = {
+  id?: string
+  accessibilityId: string
+  componentType: string
+  label?: string | null
+  sourceFilePath?: string | null
+  sourceLineNumber?: number | null
+  positionX?: number | null
+  positionY?: number | null
+  createdAt?: Date | string
+  workflow?: Prisma.WorkflowCreateNestedOneWithoutUiComponentsInput
+}
+
+export type UIComponentUncheckedCreateWithoutProjectInput = {
+  id?: string
+  workflowId?: string | null
+  accessibilityId: string
+  componentType: string
+  label?: string | null
+  sourceFilePath?: string | null
+  sourceLineNumber?: number | null
+  positionX?: number | null
+  positionY?: number | null
+  createdAt?: Date | string
+}
+
+export type UIComponentCreateOrConnectWithoutProjectInput = {
+  where: Prisma.UIComponentWhereUniqueInput
+  create: Prisma.XOR<Prisma.UIComponentCreateWithoutProjectInput, Prisma.UIComponentUncheckedCreateWithoutProjectInput>
+}
+
+export type UIComponentCreateManyProjectInputEnvelope = {
+  data: Prisma.UIComponentCreateManyProjectInput | Prisma.UIComponentCreateManyProjectInput[]
+  skipDuplicates?: boolean
+}
+
+export type UIComponentUpsertWithWhereUniqueWithoutProjectInput = {
+  where: Prisma.UIComponentWhereUniqueInput
+  update: Prisma.XOR<Prisma.UIComponentUpdateWithoutProjectInput, Prisma.UIComponentUncheckedUpdateWithoutProjectInput>
+  create: Prisma.XOR<Prisma.UIComponentCreateWithoutProjectInput, Prisma.UIComponentUncheckedCreateWithoutProjectInput>
+}
+
+export type UIComponentUpdateWithWhereUniqueWithoutProjectInput = {
+  where: Prisma.UIComponentWhereUniqueInput
+  data: Prisma.XOR<Prisma.UIComponentUpdateWithoutProjectInput, Prisma.UIComponentUncheckedUpdateWithoutProjectInput>
+}
+
+export type UIComponentUpdateManyWithWhereWithoutProjectInput = {
+  where: Prisma.UIComponentScalarWhereInput
+  data: Prisma.XOR<Prisma.UIComponentUpdateManyMutationInput, Prisma.UIComponentUncheckedUpdateManyWithoutProjectInput>
+}
+
 export type UIComponentCreateManyWorkflowInput = {
   id?: string
+  projectId?: string | null
   accessibilityId: string
   componentType: string
   label?: string | null
@@ -629,10 +751,12 @@ export type UIComponentUpdateWithoutWorkflowInput = {
   positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  project?: Prisma.ProjectUpdateOneWithoutUiComponentsNestedInput
 }
 
 export type UIComponentUncheckedUpdateWithoutWorkflowInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessibilityId?: Prisma.StringFieldUpdateOperationsInput | string
   componentType?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -645,6 +769,59 @@ export type UIComponentUncheckedUpdateWithoutWorkflowInput = {
 
 export type UIComponentUncheckedUpdateManyWithoutWorkflowInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessibilityId?: Prisma.StringFieldUpdateOperationsInput | string
+  componentType?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceFilePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceLineNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UIComponentCreateManyProjectInput = {
+  id?: string
+  workflowId?: string | null
+  accessibilityId: string
+  componentType: string
+  label?: string | null
+  sourceFilePath?: string | null
+  sourceLineNumber?: number | null
+  positionX?: number | null
+  positionY?: number | null
+  createdAt?: Date | string
+}
+
+export type UIComponentUpdateWithoutProjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  accessibilityId?: Prisma.StringFieldUpdateOperationsInput | string
+  componentType?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceFilePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceLineNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workflow?: Prisma.WorkflowUpdateOneWithoutUiComponentsNestedInput
+}
+
+export type UIComponentUncheckedUpdateWithoutProjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  workflowId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessibilityId?: Prisma.StringFieldUpdateOperationsInput | string
+  componentType?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceFilePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceLineNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UIComponentUncheckedUpdateManyWithoutProjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  workflowId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessibilityId?: Prisma.StringFieldUpdateOperationsInput | string
   componentType?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -660,6 +837,7 @@ export type UIComponentUncheckedUpdateManyWithoutWorkflowInput = {
 export type UIComponentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   workflowId?: boolean
+  projectId?: boolean
   accessibilityId?: boolean
   componentType?: boolean
   label?: boolean
@@ -668,12 +846,14 @@ export type UIComponentSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   positionX?: boolean
   positionY?: boolean
   createdAt?: boolean
-  workflow?: boolean | Prisma.WorkflowDefaultArgs<ExtArgs>
+  workflow?: boolean | Prisma.UIComponent$workflowArgs<ExtArgs>
+  project?: boolean | Prisma.UIComponent$projectArgs<ExtArgs>
 }, ExtArgs["result"]["uIComponent"]>
 
 export type UIComponentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   workflowId?: boolean
+  projectId?: boolean
   accessibilityId?: boolean
   componentType?: boolean
   label?: boolean
@@ -682,12 +862,14 @@ export type UIComponentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   positionX?: boolean
   positionY?: boolean
   createdAt?: boolean
-  workflow?: boolean | Prisma.WorkflowDefaultArgs<ExtArgs>
+  workflow?: boolean | Prisma.UIComponent$workflowArgs<ExtArgs>
+  project?: boolean | Prisma.UIComponent$projectArgs<ExtArgs>
 }, ExtArgs["result"]["uIComponent"]>
 
 export type UIComponentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   workflowId?: boolean
+  projectId?: boolean
   accessibilityId?: boolean
   componentType?: boolean
   label?: boolean
@@ -696,12 +878,14 @@ export type UIComponentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   positionX?: boolean
   positionY?: boolean
   createdAt?: boolean
-  workflow?: boolean | Prisma.WorkflowDefaultArgs<ExtArgs>
+  workflow?: boolean | Prisma.UIComponent$workflowArgs<ExtArgs>
+  project?: boolean | Prisma.UIComponent$projectArgs<ExtArgs>
 }, ExtArgs["result"]["uIComponent"]>
 
 export type UIComponentSelectScalar = {
   id?: boolean
   workflowId?: boolean
+  projectId?: boolean
   accessibilityId?: boolean
   componentType?: boolean
   label?: boolean
@@ -712,25 +896,30 @@ export type UIComponentSelectScalar = {
   createdAt?: boolean
 }
 
-export type UIComponentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workflowId" | "accessibilityId" | "componentType" | "label" | "sourceFilePath" | "sourceLineNumber" | "positionX" | "positionY" | "createdAt", ExtArgs["result"]["uIComponent"]>
+export type UIComponentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workflowId" | "projectId" | "accessibilityId" | "componentType" | "label" | "sourceFilePath" | "sourceLineNumber" | "positionX" | "positionY" | "createdAt", ExtArgs["result"]["uIComponent"]>
 export type UIComponentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  workflow?: boolean | Prisma.WorkflowDefaultArgs<ExtArgs>
+  workflow?: boolean | Prisma.UIComponent$workflowArgs<ExtArgs>
+  project?: boolean | Prisma.UIComponent$projectArgs<ExtArgs>
 }
 export type UIComponentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  workflow?: boolean | Prisma.WorkflowDefaultArgs<ExtArgs>
+  workflow?: boolean | Prisma.UIComponent$workflowArgs<ExtArgs>
+  project?: boolean | Prisma.UIComponent$projectArgs<ExtArgs>
 }
 export type UIComponentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  workflow?: boolean | Prisma.WorkflowDefaultArgs<ExtArgs>
+  workflow?: boolean | Prisma.UIComponent$workflowArgs<ExtArgs>
+  project?: boolean | Prisma.UIComponent$projectArgs<ExtArgs>
 }
 
 export type $UIComponentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "UIComponent"
   objects: {
-    workflow: Prisma.$WorkflowPayload<ExtArgs>
+    workflow: Prisma.$WorkflowPayload<ExtArgs> | null
+    project: Prisma.$ProjectPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    workflowId: string
+    workflowId: string | null
+    projectId: string | null
     accessibilityId: string
     componentType: string
     label: string | null
@@ -1133,7 +1322,8 @@ readonly fields: UIComponentFieldRefs;
  */
 export interface Prisma__UIComponentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  workflow<T extends Prisma.WorkflowDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkflowDefaultArgs<ExtArgs>>): Prisma.Prisma__WorkflowClient<runtime.Types.Result.GetResult<Prisma.$WorkflowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  workflow<T extends Prisma.UIComponent$workflowArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UIComponent$workflowArgs<ExtArgs>>): Prisma.Prisma__WorkflowClient<runtime.Types.Result.GetResult<Prisma.$WorkflowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  project<T extends Prisma.UIComponent$projectArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UIComponent$projectArgs<ExtArgs>>): Prisma.Prisma__ProjectClient<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1165,6 +1355,7 @@ export interface Prisma__UIComponentClient<T, Null = never, ExtArgs extends runt
 export interface UIComponentFieldRefs {
   readonly id: Prisma.FieldRef<"UIComponent", 'String'>
   readonly workflowId: Prisma.FieldRef<"UIComponent", 'String'>
+  readonly projectId: Prisma.FieldRef<"UIComponent", 'String'>
   readonly accessibilityId: Prisma.FieldRef<"UIComponent", 'String'>
   readonly componentType: Prisma.FieldRef<"UIComponent", 'String'>
   readonly label: Prisma.FieldRef<"UIComponent", 'String'>
@@ -1566,6 +1757,44 @@ export type UIComponentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many UIComponents to delete.
    */
   limit?: number
+}
+
+/**
+ * UIComponent.workflow
+ */
+export type UIComponent$workflowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Workflow
+   */
+  select?: Prisma.WorkflowSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Workflow
+   */
+  omit?: Prisma.WorkflowOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkflowInclude<ExtArgs> | null
+  where?: Prisma.WorkflowWhereInput
+}
+
+/**
+ * UIComponent.project
+ */
+export type UIComponent$projectArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Project
+   */
+  select?: Prisma.ProjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Project
+   */
+  omit?: Prisma.ProjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectInclude<ExtArgs> | null
+  where?: Prisma.ProjectWhereInput
 }
 
 /**

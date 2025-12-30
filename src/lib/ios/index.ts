@@ -7,6 +7,8 @@
 export * as idb from "./idb";
 // Simulator control (simctl wrapper)
 export * as simulator from "./simulator";
+// Xcode project detection
+export * as xcodeProject from "./xcode-project";
 // Type definitions
 export * from "./types";
 // Utility functions

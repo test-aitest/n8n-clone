@@ -19,7 +19,6 @@ import {
   EmptyTitle,
 } from "./ui/empty";
 import { cn } from "@/lib/utils";
-import { Card, CardContent, CardDescription, CardTitle } from "./ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,12 +49,10 @@ export const EntityHeader = ({
 }: EntityHeaderProps) => {
   return (
     <div className="flex flex-row items-center justify-between gap-x-4">
-      <div className="flex flex-col">
-        <h1 className="text-lg md:text-xl font-semibold">{title}</h1>
+      <div className="flex flex-col gap-0.5">
+        <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
         {description && (
-          <p className="text-xs md:text-sm text-muted-foreground">
-            {description}
-          </p>
+          <p className="text-sm text-muted-foreground">{description}</p>
         )}
       </div>
       {onNew && !newButtonHref && (
@@ -112,13 +109,13 @@ interface EntitySearchProps {
 export const EntitySearch = ({
   value,
   onChange,
-  placeholder = "Search",
+  placeholder,
 }: EntitySearchProps) => {
   return (
     <div className="relative ml-auto">
-      <SearchIcon className="size-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+      {/* <SearchIcon className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" /> */}
       <Input
-        className="max-w-50 bg-background shadow-none border-border pl-8"
+        className="w-64 bg-background shadow-none border-border pl-9 h-9"
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -141,11 +138,11 @@ export const EntityPagination = ({
   disabled,
 }: EntityPaginationProps) => {
   return (
-    <div className="flex items-center justify-between gap-x-2 w-full">
+    <div className="flex items-center justify-between gap-x-2 w-full pt-4">
       <div className="flex-1 text-sm text-muted-foreground">
         Page {page} of {totalPages || 1}
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end space-x-2">
         <Button
           disabled={page === 1 || disabled}
           variant="outline"
@@ -173,8 +170,8 @@ interface StateViewProps {
 
 export const LoadingView = ({ message }: StateViewProps) => {
   return (
-    <div className="flex justify-center items-center h-full flex-1 flex-col gap-y-4">
-      <Loader2Icon className="size-6 animate-spin text-primary" />
+    <div className="flex justify-center items-center h-full flex-1 flex-col gap-y-3">
+      <Loader2Icon className="size-5 animate-spin text-muted-foreground" />
       {!!message && <p className="text-sm text-muted-foreground">{message}</p>}
     </div>
   );
@@ -182,8 +179,8 @@ export const LoadingView = ({ message }: StateViewProps) => {
 
 export const ErrorView = ({ message }: StateViewProps) => {
   return (
-    <div className="flex justify-center items-center h-full flex-1 flex-col gap-y-4">
-      <AlertTriangleIcon className="size-6 text-primary" />
+    <div className="flex justify-center items-center h-full flex-1 flex-col gap-y-3">
+      <AlertTriangleIcon className="size-5 text-destructive" />
       {!!message && <p className="text-sm text-muted-foreground">{message}</p>}
     </div>
   );
@@ -195,7 +192,7 @@ interface EmptyViewProps extends StateViewProps {
 
 export const EmptyView = ({ message, onNew }: EmptyViewProps) => {
   return (
-    <Empty className="border border-dashed bg-white">
+    <Empty className="border border-dashed bg-card">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <PackageOpenIcon />
@@ -205,7 +202,9 @@ export const EmptyView = ({ message, onNew }: EmptyViewProps) => {
       {!!message && <EmptyDescription>{message}</EmptyDescription>}
       {!!onNew && (
         <EmptyContent>
-          <Button onClick={onNew}>Add item</Button>
+          <Button size="sm" onClick={onNew}>
+            Add item
+          </Button>
         </EmptyContent>
       )}
     </Empty>
@@ -236,7 +235,7 @@ export function EntityList<T>({
   }
 
   return (
-    <div className={cn("flex flex-col gap-y-4", className)}>
+    <div className={cn("flex flex-col gap-y-2", className)}>
       {items.map((item, index) => (
         <div key={getKey ? getKey(item, index) : index}>
           {renderItem(item, index)}
@@ -282,54 +281,58 @@ export const EntityItem = ({
 
   return (
     <Link href={href} prefetch>
-      <Card
+      <div
         className={cn(
-          "p-4 shadow-none hover:shadow cursor-pointer",
+          "flex items-center justify-between px-4 py-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors",
           isRemoving && "opacity-50 cursor-not-allowed",
           className
         )}
       >
-        <CardContent className="flex flex-row items-center justify-between p-0">
-          <div className="flex items-center gap-3">
-            {image}
-            <div>
-              <CardTitle className="text-base font-medium">{title}</CardTitle>
-              {!!subtitle && (
-                <CardDescription className="text-xs">
-                  {subtitle}
-                </CardDescription>
-              )}
-            </div>
-          </div>
-          {(actions || onRemove) && (
-            <div className="flex gap-x-4 items-center">
-              {actions}
-              {onRemove && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <MoreVerticalIcon className="size-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    align="end"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <DropdownMenuItem onClick={handleRemove}>
-                      <TrashIcon className="size-4" />
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
+        <div className="flex items-center gap-3 min-w-0">
+          {image && (
+            <div className="shrink-0 size-9 flex items-center justify-center rounded-md bg-muted">
+              {image}
             </div>
           )}
-        </CardContent>
-      </Card>
+          <div className="min-w-0">
+            <div className="text-sm font-medium truncate">{title}</div>
+            {!!subtitle && (
+              <div className="text-xs text-muted-foreground">{subtitle}</div>
+            )}
+          </div>
+        </div>
+        {(actions || onRemove) && (
+          <div className="flex gap-x-2 items-center shrink-0 ml-4">
+            {actions}
+            {onRemove && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="size-8"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <MoreVerticalIcon className="size-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <DropdownMenuItem
+                    onClick={handleRemove}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <TrashIcon className="size-4" />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </div>
+        )}
+      </div>
     </Link>
   );
 };

@@ -61,7 +61,9 @@ export const ModelName = {
   Connection: 'Connection',
   Execution: 'Execution',
   UIComponent: 'UIComponent',
-  GoldenMaster: 'GoldenMaster'
+  GoldenMaster: 'GoldenMaster',
+  Project: 'Project',
+  Template: 'Template'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -157,6 +159,8 @@ export const WorkflowScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId',
+  projectId: 'projectId',
+  templateId: 'templateId',
   targetAppPath: 'targetAppPath',
   bundleId: 'bundleId',
   targetDeviceId: 'targetDeviceId',
@@ -215,6 +219,7 @@ export type ExecutionScalarFieldEnum = (typeof ExecutionScalarFieldEnum)[keyof t
 export const UIComponentScalarFieldEnum = {
   id: 'id',
   workflowId: 'workflowId',
+  projectId: 'projectId',
   accessibilityId: 'accessibilityId',
   componentType: 'componentType',
   label: 'label',
@@ -238,6 +243,39 @@ export const GoldenMasterScalarFieldEnum = {
 } as const
 
 export type GoldenMasterScalarFieldEnum = (typeof GoldenMasterScalarFieldEnum)[keyof typeof GoldenMasterScalarFieldEnum]
+
+
+export const ProjectScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  userId: 'userId',
+  projectPath: 'projectPath',
+  bundleId: 'bundleId',
+  targetDeviceId: 'targetDeviceId',
+  appPath: 'appPath',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
+
+
+export const TemplateScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  projectId: 'projectId',
+  userId: 'userId',
+  definition: 'definition',
+  category: 'category',
+  tags: 'tags',
+  includesSimulatorConfig: 'includesSimulatorConfig',
+  defaultVariables: 'defaultVariables',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TemplateScalarFieldEnum = (typeof TemplateScalarFieldEnum)[keyof typeof TemplateScalarFieldEnum]
 
 
 export const SortOrder = {

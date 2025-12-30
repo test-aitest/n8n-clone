@@ -72,3 +72,13 @@ export type UIComponent = Prisma.UIComponentModel
  * 
  */
 export type GoldenMaster = Prisma.GoldenMasterModel
+/**
+ * Model Project
+ * 
+ */
+export type Project = Prisma.ProjectModel
+/**
+ * Model Template
+ * 
+ */
+export type Template = Prisma.TemplateModel

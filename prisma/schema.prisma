@@ -26,6 +26,8 @@ model User {
   accounts      Account[]
   workflows     Workflow[]
   credentials   Credential[]
+  projects      Project[]
+  templates     Template[]
 
   @@map("user")
 }
@@ -111,6 +113,13 @@ model Workflow {
   userId      String
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // Project connection
+  projectId   String?
+  project     Project?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  // Template origin (if created from template)
+  templateId  String?
+
   // iOS Testing Fields
   targetAppPath  String? // Path to .app file
   bundleId       String? // App Bundle ID (e.g., com.example.app)
@@ -119,6 +128,8 @@ model Workflow {
 
   uiComponents   UIComponent[]
   goldenMasters  GoldenMaster[]
+
+  @@index([projectId])
 }
 
 enum NodeType {
@@ -227,8 +238,10 @@ model Execution {
 
 model UIComponent {
   id              String   @id @default(cuid())
-  workflowId      String
-  workflow        Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflowId      String?
+  workflow        Workflow? @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  projectId       String?
+  project         Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   accessibilityId String
   componentType   String // "Button", "TextField", "Toggle", etc.
   label           String?
@@ -237,6 +250,9 @@ model UIComponent {
   positionX       Float?
   positionY       Float?
   createdAt       DateTime @default(now())
+
+  @@index([workflowId])
+  @@index([projectId])
 }
 
 // ============================================
@@ -251,4 +267,62 @@ model GoldenMaster {
   name       String
   imageUrl   String
   createdAt  DateTime @default(now())
+}
+
+// ============================================
+// Project Management
+// ============================================
+
+model Project {
+  id             String   @id @default(cuid())
+  name           String
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Xcode Project Information
+  projectPath    String   // Local path to .xcodeproj/.xcworkspace
+  bundleId       String?  // Auto-detected Bundle ID
+  targetDeviceId String?  // Default simulator UDID
+  appPath        String?  // Path to built .app file
+
+  // Metadata
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  workflows      Workflow[]
+  templates      Template[]
+  uiComponents   UIComponent[]
+
+  @@index([userId])
+}
+
+// ============================================
+// Workflow Templates
+// ============================================
+
+model Template {
+  id                     String   @id @default(cuid())
+  name                   String
+  description            String?
+  projectId              String?  // null = system default template
+  project                Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId                 String?  // For custom templates
+  user                   User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Template content
+  definition             Json     // React Flow format (nodes + edges)
+  category               String   // "default" | "custom"
+  tags                   String[] // Search tags
+
+  // Settings
+  includesSimulatorConfig Boolean @default(true)
+  defaultVariables       Json?    // Default values for template variables
+
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([userId])
+  @@index([category])
 }
