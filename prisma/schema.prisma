@@ -110,9 +110,19 @@ model Workflow {
   executions  Execution[]
   userId      String
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // iOS Testing Fields
+  targetAppPath  String? // Path to .app file
+  bundleId       String? // App Bundle ID (e.g., com.example.app)
+  targetDeviceId String? // Simulator UDID
+  platform       String? @default("ios") // "ios" | "android" (future)
+
+  uiComponents   UIComponent[]
+  goldenMasters  GoldenMaster[]
 }
 
 enum NodeType {
+  // 既存のノードタイプ
   INITIAL
   MANUAL_TRIGGER
   HTTP_REQUEST
@@ -123,6 +133,33 @@ enum NodeType {
   OPENAI
   DISCORD
   SLACK
+
+  // === iOSテスト: シミュレータ制御 ===
+  IOS_SIMULATOR_BOOT
+  IOS_SIMULATOR_SHUTDOWN
+  IOS_APP_INSTALL
+  IOS_APP_LAUNCH
+  IOS_APP_TERMINATE
+
+  // === iOSテスト: UIインタラクション ===
+  IOS_TAP
+  IOS_TEXT_INPUT
+  IOS_SWIPE
+  IOS_SCROLL_UNTIL_VISIBLE
+  IOS_PICKER_SELECT
+  IOS_SLIDER_SET
+  IOS_TOGGLE_SWITCH
+  IOS_SCREENSHOT
+  IOS_WAIT
+
+  // === iOSテスト: 検証（Expect） ===
+  IOS_EXPECT_EXISTS
+  IOS_EXPECT_TEXT
+  IOS_EXPECT_VALUE
+  IOS_EXPECT_VISUAL
+
+  // === iOSテスト: 解析 ===
+  IOS_UI_SCAN
 }
 
 model Node {
@@ -178,4 +215,40 @@ model Execution {
   completedAt    DateTime?
   inngestEventId String          @unique
   output         Json?
+
+  // iOS Testing Artifacts
+  artifacts Json?   // Array of screenshot URLs
+  videoUrl  String? // Recording URL (optional)
+}
+
+// ============================================
+// iOS Testing: UI Component Analysis
+// ============================================
+
+model UIComponent {
+  id              String   @id @default(cuid())
+  workflowId      String
+  workflow        Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  accessibilityId String
+  componentType   String // "Button", "TextField", "Toggle", etc.
+  label           String?
+  sourceFilePath  String?
+  sourceLineNumber Int?
+  positionX       Float?
+  positionY       Float?
+  createdAt       DateTime @default(now())
+}
+
+// ============================================
+// iOS Testing: Visual Regression
+// ============================================
+
+model GoldenMaster {
+  id         String   @id @default(cuid())
+  workflowId String
+  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  nodeId     String
+  name       String
+  imageUrl   String
+  createdAt  DateTime @default(now())
 }

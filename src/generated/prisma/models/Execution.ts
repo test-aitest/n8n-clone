@@ -33,6 +33,7 @@ export type ExecutionMinAggregateOutputType = {
   startedAt: Date | null
   completedAt: Date | null
   inngestEventId: string | null
+  videoUrl: string | null
 }
 
 export type ExecutionMaxAggregateOutputType = {
@@ -44,6 +45,7 @@ export type ExecutionMaxAggregateOutputType = {
   startedAt: Date | null
   completedAt: Date | null
   inngestEventId: string | null
+  videoUrl: string | null
 }
 
 export type ExecutionCountAggregateOutputType = {
@@ -56,6 +58,8 @@ export type ExecutionCountAggregateOutputType = {
   completedAt: number
   inngestEventId: number
   output: number
+  artifacts: number
+  videoUrl: number
   _all: number
 }
 
@@ -69,6 +73,7 @@ export type ExecutionMinAggregateInputType = {
   startedAt?: true
   completedAt?: true
   inngestEventId?: true
+  videoUrl?: true
 }
 
 export type ExecutionMaxAggregateInputType = {
@@ -80,6 +85,7 @@ export type ExecutionMaxAggregateInputType = {
   startedAt?: true
   completedAt?: true
   inngestEventId?: true
+  videoUrl?: true
 }
 
 export type ExecutionCountAggregateInputType = {
@@ -92,6 +98,8 @@ export type ExecutionCountAggregateInputType = {
   completedAt?: true
   inngestEventId?: true
   output?: true
+  artifacts?: true
+  videoUrl?: true
   _all?: true
 }
 
@@ -177,6 +185,8 @@ export type ExecutionGroupByOutputType = {
   completedAt: Date | null
   inngestEventId: string
   output: runtime.JsonValue | null
+  artifacts: runtime.JsonValue | null
+  videoUrl: string | null
   _count: ExecutionCountAggregateOutputType | null
   _min: ExecutionMinAggregateOutputType | null
   _max: ExecutionMaxAggregateOutputType | null
@@ -210,6 +220,8 @@ export type ExecutionWhereInput = {
   completedAt?: Prisma.DateTimeNullableFilter<"Execution"> | Date | string | null
   inngestEventId?: Prisma.StringFilter<"Execution"> | string
   output?: Prisma.JsonNullableFilter<"Execution">
+  artifacts?: Prisma.JsonNullableFilter<"Execution">
+  videoUrl?: Prisma.StringNullableFilter<"Execution"> | string | null
   workflow?: Prisma.XOR<Prisma.WorkflowScalarRelationFilter, Prisma.WorkflowWhereInput>
 }
 
@@ -223,6 +235,8 @@ export type ExecutionOrderByWithRelationInput = {
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   inngestEventId?: Prisma.SortOrder
   output?: Prisma.SortOrderInput | Prisma.SortOrder
+  artifacts?: Prisma.SortOrderInput | Prisma.SortOrder
+  videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   workflow?: Prisma.WorkflowOrderByWithRelationInput
 }
 
@@ -239,6 +253,8 @@ export type ExecutionWhereUniqueInput = Prisma.AtLeast<{
   startedAt?: Prisma.DateTimeFilter<"Execution"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"Execution"> | Date | string | null
   output?: Prisma.JsonNullableFilter<"Execution">
+  artifacts?: Prisma.JsonNullableFilter<"Execution">
+  videoUrl?: Prisma.StringNullableFilter<"Execution"> | string | null
   workflow?: Prisma.XOR<Prisma.WorkflowScalarRelationFilter, Prisma.WorkflowWhereInput>
 }, "id" | "inngestEventId">
 
@@ -252,6 +268,8 @@ export type ExecutionOrderByWithAggregationInput = {
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   inngestEventId?: Prisma.SortOrder
   output?: Prisma.SortOrderInput | Prisma.SortOrder
+  artifacts?: Prisma.SortOrderInput | Prisma.SortOrder
+  videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ExecutionCountOrderByAggregateInput
   _max?: Prisma.ExecutionMaxOrderByAggregateInput
   _min?: Prisma.ExecutionMinOrderByAggregateInput
@@ -270,6 +288,8 @@ export type ExecutionScalarWhereWithAggregatesInput = {
   completedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Execution"> | Date | string | null
   inngestEventId?: Prisma.StringWithAggregatesFilter<"Execution"> | string
   output?: Prisma.JsonNullableWithAggregatesFilter<"Execution">
+  artifacts?: Prisma.JsonNullableWithAggregatesFilter<"Execution">
+  videoUrl?: Prisma.StringNullableWithAggregatesFilter<"Execution"> | string | null
 }
 
 export type ExecutionCreateInput = {
@@ -281,6 +301,8 @@ export type ExecutionCreateInput = {
   completedAt?: Date | string | null
   inngestEventId: string
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  artifacts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoUrl?: string | null
   workflow: Prisma.WorkflowCreateNestedOneWithoutExecutionsInput
 }
 
@@ -294,6 +316,8 @@ export type ExecutionUncheckedCreateInput = {
   completedAt?: Date | string | null
   inngestEventId: string
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  artifacts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoUrl?: string | null
 }
 
 export type ExecutionUpdateInput = {
@@ -305,6 +329,8 @@ export type ExecutionUpdateInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   inngestEventId?: Prisma.StringFieldUpdateOperationsInput | string
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  artifacts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   workflow?: Prisma.WorkflowUpdateOneRequiredWithoutExecutionsNestedInput
 }
 
@@ -318,6 +344,8 @@ export type ExecutionUncheckedUpdateInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   inngestEventId?: Prisma.StringFieldUpdateOperationsInput | string
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  artifacts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ExecutionCreateManyInput = {
@@ -330,6 +358,8 @@ export type ExecutionCreateManyInput = {
   completedAt?: Date | string | null
   inngestEventId: string
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  artifacts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoUrl?: string | null
 }
 
 export type ExecutionUpdateManyMutationInput = {
@@ -341,6 +371,8 @@ export type ExecutionUpdateManyMutationInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   inngestEventId?: Prisma.StringFieldUpdateOperationsInput | string
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  artifacts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ExecutionUncheckedUpdateManyInput = {
@@ -353,6 +385,8 @@ export type ExecutionUncheckedUpdateManyInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   inngestEventId?: Prisma.StringFieldUpdateOperationsInput | string
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  artifacts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ExecutionListRelationFilter = {
@@ -375,6 +409,8 @@ export type ExecutionCountOrderByAggregateInput = {
   completedAt?: Prisma.SortOrder
   inngestEventId?: Prisma.SortOrder
   output?: Prisma.SortOrder
+  artifacts?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
 }
 
 export type ExecutionMaxOrderByAggregateInput = {
@@ -386,6 +422,7 @@ export type ExecutionMaxOrderByAggregateInput = {
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   inngestEventId?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
 }
 
 export type ExecutionMinOrderByAggregateInput = {
@@ -397,6 +434,7 @@ export type ExecutionMinOrderByAggregateInput = {
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   inngestEventId?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
 }
 
 export type ExecutionCreateNestedManyWithoutWorkflowInput = {
@@ -454,6 +492,8 @@ export type ExecutionCreateWithoutWorkflowInput = {
   completedAt?: Date | string | null
   inngestEventId: string
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  artifacts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoUrl?: string | null
 }
 
 export type ExecutionUncheckedCreateWithoutWorkflowInput = {
@@ -465,6 +505,8 @@ export type ExecutionUncheckedCreateWithoutWorkflowInput = {
   completedAt?: Date | string | null
   inngestEventId: string
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  artifacts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoUrl?: string | null
 }
 
 export type ExecutionCreateOrConnectWithoutWorkflowInput = {
@@ -506,6 +548,8 @@ export type ExecutionScalarWhereInput = {
   completedAt?: Prisma.DateTimeNullableFilter<"Execution"> | Date | string | null
   inngestEventId?: Prisma.StringFilter<"Execution"> | string
   output?: Prisma.JsonNullableFilter<"Execution">
+  artifacts?: Prisma.JsonNullableFilter<"Execution">
+  videoUrl?: Prisma.StringNullableFilter<"Execution"> | string | null
 }
 
 export type ExecutionCreateManyWorkflowInput = {
@@ -517,6 +561,8 @@ export type ExecutionCreateManyWorkflowInput = {
   completedAt?: Date | string | null
   inngestEventId: string
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  artifacts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoUrl?: string | null
 }
 
 export type ExecutionUpdateWithoutWorkflowInput = {
@@ -528,6 +574,8 @@ export type ExecutionUpdateWithoutWorkflowInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   inngestEventId?: Prisma.StringFieldUpdateOperationsInput | string
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  artifacts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ExecutionUncheckedUpdateWithoutWorkflowInput = {
@@ -539,6 +587,8 @@ export type ExecutionUncheckedUpdateWithoutWorkflowInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   inngestEventId?: Prisma.StringFieldUpdateOperationsInput | string
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  artifacts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ExecutionUncheckedUpdateManyWithoutWorkflowInput = {
@@ -550,6 +600,8 @@ export type ExecutionUncheckedUpdateManyWithoutWorkflowInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   inngestEventId?: Prisma.StringFieldUpdateOperationsInput | string
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  artifacts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -564,6 +616,8 @@ export type ExecutionSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   completedAt?: boolean
   inngestEventId?: boolean
   output?: boolean
+  artifacts?: boolean
+  videoUrl?: boolean
   workflow?: boolean | Prisma.WorkflowDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["execution"]>
 
@@ -577,6 +631,8 @@ export type ExecutionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   completedAt?: boolean
   inngestEventId?: boolean
   output?: boolean
+  artifacts?: boolean
+  videoUrl?: boolean
   workflow?: boolean | Prisma.WorkflowDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["execution"]>
 
@@ -590,6 +646,8 @@ export type ExecutionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   completedAt?: boolean
   inngestEventId?: boolean
   output?: boolean
+  artifacts?: boolean
+  videoUrl?: boolean
   workflow?: boolean | Prisma.WorkflowDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["execution"]>
 
@@ -603,9 +661,11 @@ export type ExecutionSelectScalar = {
   completedAt?: boolean
   inngestEventId?: boolean
   output?: boolean
+  artifacts?: boolean
+  videoUrl?: boolean
 }
 
-export type ExecutionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workflowId" | "status" | "error" | "errorStack" | "startedAt" | "completedAt" | "inngestEventId" | "output", ExtArgs["result"]["execution"]>
+export type ExecutionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workflowId" | "status" | "error" | "errorStack" | "startedAt" | "completedAt" | "inngestEventId" | "output" | "artifacts" | "videoUrl", ExtArgs["result"]["execution"]>
 export type ExecutionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workflow?: boolean | Prisma.WorkflowDefaultArgs<ExtArgs>
 }
@@ -631,6 +691,8 @@ export type $ExecutionPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     completedAt: Date | null
     inngestEventId: string
     output: runtime.JsonValue | null
+    artifacts: runtime.JsonValue | null
+    videoUrl: string | null
   }, ExtArgs["result"]["execution"]>
   composites: {}
 }
@@ -1064,6 +1126,8 @@ export interface ExecutionFieldRefs {
   readonly completedAt: Prisma.FieldRef<"Execution", 'DateTime'>
   readonly inngestEventId: Prisma.FieldRef<"Execution", 'String'>
   readonly output: Prisma.FieldRef<"Execution", 'Json'>
+  readonly artifacts: Prisma.FieldRef<"Execution", 'Json'>
+  readonly videoUrl: Prisma.FieldRef<"Execution", 'String'>
 }
     
 

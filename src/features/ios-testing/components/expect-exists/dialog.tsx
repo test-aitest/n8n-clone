@@ -1,0 +1,147 @@
+"use client";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
+
+const formSchema = z.object({
+  variableName: z
+    .string()
+    .min(1, { message: "Variable name is required" })
+    .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
+      message: "Variable name must start with a letter or underscore",
+    }),
+  accessibilityId: z.string().min(1, { message: "Accessibility ID is required" }),
+  timeout: z.string().optional(),
+});
+
+export type ExpectExistsFormValues = z.infer<typeof formSchema>;
+
+interface Props {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (values: ExpectExistsFormValues) => void;
+  defaultValues?: Partial<ExpectExistsFormValues>;
+}
+
+export const ExpectExistsDialog = ({
+  open,
+  onOpenChange,
+  onSubmit,
+  defaultValues = {},
+}: Props) => {
+  const form = useForm<ExpectExistsFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      variableName: defaultValues.variableName || "expectExists",
+      accessibilityId: defaultValues.accessibilityId || "",
+      timeout: defaultValues.timeout || "10000",
+    },
+  });
+
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        variableName: defaultValues.variableName || "expectExists",
+        accessibilityId: defaultValues.accessibilityId || "",
+        timeout: defaultValues.timeout || "10000",
+      });
+    }
+  }, [open, defaultValues, form]);
+
+  const handleSubmit = (values: ExpectExistsFormValues) => {
+    onSubmit(values);
+    onOpenChange(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Expect Element Exists</DialogTitle>
+          <DialogDescription>
+            Verify that an element exists in the UI hierarchy.
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mt-4">
+            <FormField
+              control={form.control}
+              name="variableName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Variable Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="expectExists" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Reference this result in other nodes
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="accessibilityId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Accessibility ID</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="loginButton"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    The accessibility identifier of the element to check
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="timeout"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Timeout (ms)</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder="10000" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Maximum time to wait for element to appear (default: 10s)
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <DialogFooter>
+              <Button type="submit">Save</Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  );
+};

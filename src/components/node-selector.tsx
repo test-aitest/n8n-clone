@@ -2,7 +2,29 @@
 
 import { createId } from "@paralleldrive/cuid2";
 import { useReactFlow } from "@xyflow/react";
-import { GlobeIcon, MousePointerIcon } from "lucide-react";
+import {
+  GlobeIcon,
+  MousePointerIcon,
+  Smartphone,
+  Power,
+  Download,
+  Play,
+  Square,
+  MousePointerClick,
+  Type,
+  Move,
+  ChevronsDown,
+  List,
+  SlidersHorizontal,
+  ToggleLeft,
+  Camera,
+  Clock,
+  CheckCircle,
+  FileText,
+  Hash,
+  Image,
+  Scan,
+} from "lucide-react";
 import { useCallback } from "react";
 import { toast } from "sonner";
 import {
@@ -81,6 +103,136 @@ const executionNodes: NodeTypeOption[] = [
     label: "Slack",
     description: "Send a message to Slack",
     icon: "/logos/slack.svg",
+  },
+];
+
+// iOS Testing - Simulator Control
+const iosSimulatorNodes: NodeTypeOption[] = [
+  {
+    type: NodeType.IOS_SIMULATOR_BOOT,
+    label: "Simulator Boot",
+    description: "Boot an iOS Simulator",
+    icon: Smartphone,
+  },
+  {
+    type: NodeType.IOS_SIMULATOR_SHUTDOWN,
+    label: "Simulator Shutdown",
+    description: "Shutdown an iOS Simulator",
+    icon: Power,
+  },
+  {
+    type: NodeType.IOS_APP_INSTALL,
+    label: "App Install",
+    description: "Install an app on Simulator",
+    icon: Download,
+  },
+  {
+    type: NodeType.IOS_APP_LAUNCH,
+    label: "App Launch",
+    description: "Launch an app on Simulator",
+    icon: Play,
+  },
+  {
+    type: NodeType.IOS_APP_TERMINATE,
+    label: "App Terminate",
+    description: "Terminate an app on Simulator",
+    icon: Square,
+  },
+];
+
+// iOS Testing - UI Interaction
+const iosInteractionNodes: NodeTypeOption[] = [
+  {
+    type: NodeType.IOS_TAP,
+    label: "Tap",
+    description: "Tap on an element",
+    icon: MousePointerClick,
+  },
+  {
+    type: NodeType.IOS_TEXT_INPUT,
+    label: "Text Input",
+    description: "Enter text into a field",
+    icon: Type,
+  },
+  {
+    type: NodeType.IOS_SWIPE,
+    label: "Swipe",
+    description: "Swipe in a direction",
+    icon: Move,
+  },
+  {
+    type: NodeType.IOS_SCROLL_UNTIL_VISIBLE,
+    label: "Scroll Until Visible",
+    description: "Scroll until element is visible",
+    icon: ChevronsDown,
+  },
+  {
+    type: NodeType.IOS_PICKER_SELECT,
+    label: "Picker Select",
+    description: "Select a value in a picker",
+    icon: List,
+  },
+  {
+    type: NodeType.IOS_SLIDER_SET,
+    label: "Slider Set",
+    description: "Set a slider value",
+    icon: SlidersHorizontal,
+  },
+  {
+    type: NodeType.IOS_TOGGLE_SWITCH,
+    label: "Toggle Switch",
+    description: "Toggle a switch on/off",
+    icon: ToggleLeft,
+  },
+  {
+    type: NodeType.IOS_SCREENSHOT,
+    label: "Screenshot",
+    description: "Take a screenshot",
+    icon: Camera,
+  },
+  {
+    type: NodeType.IOS_WAIT,
+    label: "Wait",
+    description: "Wait for duration or element",
+    icon: Clock,
+  },
+];
+
+// iOS Testing - Expect/Validation
+const iosExpectNodes: NodeTypeOption[] = [
+  {
+    type: NodeType.IOS_EXPECT_EXISTS,
+    label: "Expect Exists",
+    description: "Check if element exists",
+    icon: CheckCircle,
+  },
+  {
+    type: NodeType.IOS_EXPECT_TEXT,
+    label: "Expect Text",
+    description: "Check element text content",
+    icon: FileText,
+  },
+  {
+    type: NodeType.IOS_EXPECT_VALUE,
+    label: "Expect Value",
+    description: "Check element AXValue",
+    icon: Hash,
+  },
+  {
+    type: NodeType.IOS_EXPECT_VISUAL,
+    label: "Expect Visual",
+    description: "Visual regression check",
+    icon: Image,
+  },
+];
+
+// iOS Testing - Analysis
+const iosAnalysisNodes: NodeTypeOption[] = [
+  {
+    type: NodeType.IOS_UI_SCAN,
+    label: "UI Scan",
+    description: "Scan UI hierarchy",
+    icon: Scan,
   },
 ];
 
@@ -210,6 +362,118 @@ export function NodeSelector({
                     <span className="text-xs text-muted-foreground">
                       {nodeType.description}
                     </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <Separator />
+        <SheetHeader className="px-4 pt-4">
+          <SheetTitle className="text-base">iOS Testing - Simulator</SheetTitle>
+        </SheetHeader>
+        <div>
+          {iosSimulatorNodes.map((nodeType) => {
+            const Icon = nodeType.icon;
+            return (
+              <div
+                key={nodeType.type}
+                className="w-full justify-start h-auto py-4 px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-blue-500"
+                onClick={() => handleNodeSelect(nodeType)}
+              >
+                <div className="flex items-center gap-6 w-full overflow-hidden">
+                  {typeof Icon === "string" ? (
+                    <img src={Icon} alt={nodeType.label} className="size-5 object-contain rounded-sm" />
+                  ) : (
+                    <Icon className="size-5 text-blue-500" />
+                  )}
+                  <div className="flex flex-col items-start text-left">
+                    <span className="font-medium text-sm">{nodeType.label}</span>
+                    <span className="text-xs text-muted-foreground">{nodeType.description}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <Separator />
+        <SheetHeader className="px-4 pt-4">
+          <SheetTitle className="text-base">iOS Testing - Interaction</SheetTitle>
+        </SheetHeader>
+        <div>
+          {iosInteractionNodes.map((nodeType) => {
+            const Icon = nodeType.icon;
+            return (
+              <div
+                key={nodeType.type}
+                className="w-full justify-start h-auto py-4 px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-green-500"
+                onClick={() => handleNodeSelect(nodeType)}
+              >
+                <div className="flex items-center gap-6 w-full overflow-hidden">
+                  {typeof Icon === "string" ? (
+                    <img src={Icon} alt={nodeType.label} className="size-5 object-contain rounded-sm" />
+                  ) : (
+                    <Icon className="size-5 text-green-500" />
+                  )}
+                  <div className="flex flex-col items-start text-left">
+                    <span className="font-medium text-sm">{nodeType.label}</span>
+                    <span className="text-xs text-muted-foreground">{nodeType.description}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <Separator />
+        <SheetHeader className="px-4 pt-4">
+          <SheetTitle className="text-base">iOS Testing - Validation</SheetTitle>
+        </SheetHeader>
+        <div>
+          {iosExpectNodes.map((nodeType) => {
+            const Icon = nodeType.icon;
+            return (
+              <div
+                key={nodeType.type}
+                className="w-full justify-start h-auto py-4 px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-purple-500"
+                onClick={() => handleNodeSelect(nodeType)}
+              >
+                <div className="flex items-center gap-6 w-full overflow-hidden">
+                  {typeof Icon === "string" ? (
+                    <img src={Icon} alt={nodeType.label} className="size-5 object-contain rounded-sm" />
+                  ) : (
+                    <Icon className="size-5 text-purple-500" />
+                  )}
+                  <div className="flex flex-col items-start text-left">
+                    <span className="font-medium text-sm">{nodeType.label}</span>
+                    <span className="text-xs text-muted-foreground">{nodeType.description}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <Separator />
+        <SheetHeader className="px-4 pt-4">
+          <SheetTitle className="text-base">iOS Testing - Analysis</SheetTitle>
+        </SheetHeader>
+        <div>
+          {iosAnalysisNodes.map((nodeType) => {
+            const Icon = nodeType.icon;
+            return (
+              <div
+                key={nodeType.type}
+                className="w-full justify-start h-auto py-4 px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-orange-500"
+                onClick={() => handleNodeSelect(nodeType)}
+              >
+                <div className="flex items-center gap-6 w-full overflow-hidden">
+                  {typeof Icon === "string" ? (
+                    <img src={Icon} alt={nodeType.label} className="size-5 object-contain rounded-sm" />
+                  ) : (
+                    <Icon className="size-5 text-orange-500" />
+                  )}
+                  <div className="flex flex-col items-start text-left">
+                    <span className="font-medium text-sm">{nodeType.label}</span>
+                    <span className="text-xs text-muted-foreground">{nodeType.description}</span>
                   </div>
                 </div>
               </div>

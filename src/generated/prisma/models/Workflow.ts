@@ -30,6 +30,10 @@ export type WorkflowMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   userId: string | null
+  targetAppPath: string | null
+  bundleId: string | null
+  targetDeviceId: string | null
+  platform: string | null
 }
 
 export type WorkflowMaxAggregateOutputType = {
@@ -38,6 +42,10 @@ export type WorkflowMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   userId: string | null
+  targetAppPath: string | null
+  bundleId: string | null
+  targetDeviceId: string | null
+  platform: string | null
 }
 
 export type WorkflowCountAggregateOutputType = {
@@ -46,6 +54,10 @@ export type WorkflowCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   userId: number
+  targetAppPath: number
+  bundleId: number
+  targetDeviceId: number
+  platform: number
   _all: number
 }
 
@@ -56,6 +68,10 @@ export type WorkflowMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   userId?: true
+  targetAppPath?: true
+  bundleId?: true
+  targetDeviceId?: true
+  platform?: true
 }
 
 export type WorkflowMaxAggregateInputType = {
@@ -64,6 +80,10 @@ export type WorkflowMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   userId?: true
+  targetAppPath?: true
+  bundleId?: true
+  targetDeviceId?: true
+  platform?: true
 }
 
 export type WorkflowCountAggregateInputType = {
@@ -72,6 +92,10 @@ export type WorkflowCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   userId?: true
+  targetAppPath?: true
+  bundleId?: true
+  targetDeviceId?: true
+  platform?: true
   _all?: true
 }
 
@@ -153,6 +177,10 @@ export type WorkflowGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   userId: string
+  targetAppPath: string | null
+  bundleId: string | null
+  targetDeviceId: string | null
+  platform: string | null
   _count: WorkflowCountAggregateOutputType | null
   _min: WorkflowMinAggregateOutputType | null
   _max: WorkflowMaxAggregateOutputType | null
@@ -182,10 +210,16 @@ export type WorkflowWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Workflow"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Workflow"> | Date | string
   userId?: Prisma.StringFilter<"Workflow"> | string
+  targetAppPath?: Prisma.StringNullableFilter<"Workflow"> | string | null
+  bundleId?: Prisma.StringNullableFilter<"Workflow"> | string | null
+  targetDeviceId?: Prisma.StringNullableFilter<"Workflow"> | string | null
+  platform?: Prisma.StringNullableFilter<"Workflow"> | string | null
   nodes?: Prisma.NodeListRelationFilter
   connections?: Prisma.ConnectionListRelationFilter
   executions?: Prisma.ExecutionListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  uiComponents?: Prisma.UIComponentListRelationFilter
+  goldenMasters?: Prisma.GoldenMasterListRelationFilter
 }
 
 export type WorkflowOrderByWithRelationInput = {
@@ -194,10 +228,16 @@ export type WorkflowOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  targetAppPath?: Prisma.SortOrderInput | Prisma.SortOrder
+  bundleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  targetDeviceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  platform?: Prisma.SortOrderInput | Prisma.SortOrder
   nodes?: Prisma.NodeOrderByRelationAggregateInput
   connections?: Prisma.ConnectionOrderByRelationAggregateInput
   executions?: Prisma.ExecutionOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
+  uiComponents?: Prisma.UIComponentOrderByRelationAggregateInput
+  goldenMasters?: Prisma.GoldenMasterOrderByRelationAggregateInput
 }
 
 export type WorkflowWhereUniqueInput = Prisma.AtLeast<{
@@ -209,10 +249,16 @@ export type WorkflowWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Workflow"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Workflow"> | Date | string
   userId?: Prisma.StringFilter<"Workflow"> | string
+  targetAppPath?: Prisma.StringNullableFilter<"Workflow"> | string | null
+  bundleId?: Prisma.StringNullableFilter<"Workflow"> | string | null
+  targetDeviceId?: Prisma.StringNullableFilter<"Workflow"> | string | null
+  platform?: Prisma.StringNullableFilter<"Workflow"> | string | null
   nodes?: Prisma.NodeListRelationFilter
   connections?: Prisma.ConnectionListRelationFilter
   executions?: Prisma.ExecutionListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  uiComponents?: Prisma.UIComponentListRelationFilter
+  goldenMasters?: Prisma.GoldenMasterListRelationFilter
 }, "id">
 
 export type WorkflowOrderByWithAggregationInput = {
@@ -221,6 +267,10 @@ export type WorkflowOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  targetAppPath?: Prisma.SortOrderInput | Prisma.SortOrder
+  bundleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  targetDeviceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  platform?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.WorkflowCountOrderByAggregateInput
   _max?: Prisma.WorkflowMaxOrderByAggregateInput
   _min?: Prisma.WorkflowMinOrderByAggregateInput
@@ -235,6 +285,10 @@ export type WorkflowScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Workflow"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Workflow"> | Date | string
   userId?: Prisma.StringWithAggregatesFilter<"Workflow"> | string
+  targetAppPath?: Prisma.StringNullableWithAggregatesFilter<"Workflow"> | string | null
+  bundleId?: Prisma.StringNullableWithAggregatesFilter<"Workflow"> | string | null
+  targetDeviceId?: Prisma.StringNullableWithAggregatesFilter<"Workflow"> | string | null
+  platform?: Prisma.StringNullableWithAggregatesFilter<"Workflow"> | string | null
 }
 
 export type WorkflowCreateInput = {
@@ -242,10 +296,16 @@ export type WorkflowCreateInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
   nodes?: Prisma.NodeCreateNestedManyWithoutWorkflowInput
   connections?: Prisma.ConnectionCreateNestedManyWithoutWorkflowInput
   executions?: Prisma.ExecutionCreateNestedManyWithoutWorkflowInput
   user: Prisma.UserCreateNestedOneWithoutWorkflowsInput
+  uiComponents?: Prisma.UIComponentCreateNestedManyWithoutWorkflowInput
+  goldenMasters?: Prisma.GoldenMasterCreateNestedManyWithoutWorkflowInput
 }
 
 export type WorkflowUncheckedCreateInput = {
@@ -254,9 +314,15 @@ export type WorkflowUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
   nodes?: Prisma.NodeUncheckedCreateNestedManyWithoutWorkflowInput
   connections?: Prisma.ConnectionUncheckedCreateNestedManyWithoutWorkflowInput
   executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutWorkflowInput
+  uiComponents?: Prisma.UIComponentUncheckedCreateNestedManyWithoutWorkflowInput
+  goldenMasters?: Prisma.GoldenMasterUncheckedCreateNestedManyWithoutWorkflowInput
 }
 
 export type WorkflowUpdateInput = {
@@ -264,10 +330,16 @@ export type WorkflowUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nodes?: Prisma.NodeUpdateManyWithoutWorkflowNestedInput
   connections?: Prisma.ConnectionUpdateManyWithoutWorkflowNestedInput
   executions?: Prisma.ExecutionUpdateManyWithoutWorkflowNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutWorkflowsNestedInput
+  uiComponents?: Prisma.UIComponentUpdateManyWithoutWorkflowNestedInput
+  goldenMasters?: Prisma.GoldenMasterUpdateManyWithoutWorkflowNestedInput
 }
 
 export type WorkflowUncheckedUpdateInput = {
@@ -276,9 +348,15 @@ export type WorkflowUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nodes?: Prisma.NodeUncheckedUpdateManyWithoutWorkflowNestedInput
   connections?: Prisma.ConnectionUncheckedUpdateManyWithoutWorkflowNestedInput
   executions?: Prisma.ExecutionUncheckedUpdateManyWithoutWorkflowNestedInput
+  uiComponents?: Prisma.UIComponentUncheckedUpdateManyWithoutWorkflowNestedInput
+  goldenMasters?: Prisma.GoldenMasterUncheckedUpdateManyWithoutWorkflowNestedInput
 }
 
 export type WorkflowCreateManyInput = {
@@ -287,6 +365,10 @@ export type WorkflowCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
 }
 
 export type WorkflowUpdateManyMutationInput = {
@@ -294,6 +376,10 @@ export type WorkflowUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type WorkflowUncheckedUpdateManyInput = {
@@ -302,6 +388,10 @@ export type WorkflowUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type WorkflowListRelationFilter = {
@@ -320,6 +410,10 @@ export type WorkflowCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  targetAppPath?: Prisma.SortOrder
+  bundleId?: Prisma.SortOrder
+  targetDeviceId?: Prisma.SortOrder
+  platform?: Prisma.SortOrder
 }
 
 export type WorkflowMaxOrderByAggregateInput = {
@@ -328,6 +422,10 @@ export type WorkflowMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  targetAppPath?: Prisma.SortOrder
+  bundleId?: Prisma.SortOrder
+  targetDeviceId?: Prisma.SortOrder
+  platform?: Prisma.SortOrder
 }
 
 export type WorkflowMinOrderByAggregateInput = {
@@ -336,6 +434,10 @@ export type WorkflowMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  targetAppPath?: Prisma.SortOrder
+  bundleId?: Prisma.SortOrder
+  targetDeviceId?: Prisma.SortOrder
+  platform?: Prisma.SortOrder
 }
 
 export type WorkflowScalarRelationFilter = {
@@ -427,14 +529,48 @@ export type WorkflowUpdateOneRequiredWithoutExecutionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkflowUpdateToOneWithWhereWithoutExecutionsInput, Prisma.WorkflowUpdateWithoutExecutionsInput>, Prisma.WorkflowUncheckedUpdateWithoutExecutionsInput>
 }
 
+export type WorkflowCreateNestedOneWithoutUiComponentsInput = {
+  create?: Prisma.XOR<Prisma.WorkflowCreateWithoutUiComponentsInput, Prisma.WorkflowUncheckedCreateWithoutUiComponentsInput>
+  connectOrCreate?: Prisma.WorkflowCreateOrConnectWithoutUiComponentsInput
+  connect?: Prisma.WorkflowWhereUniqueInput
+}
+
+export type WorkflowUpdateOneRequiredWithoutUiComponentsNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkflowCreateWithoutUiComponentsInput, Prisma.WorkflowUncheckedCreateWithoutUiComponentsInput>
+  connectOrCreate?: Prisma.WorkflowCreateOrConnectWithoutUiComponentsInput
+  upsert?: Prisma.WorkflowUpsertWithoutUiComponentsInput
+  connect?: Prisma.WorkflowWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WorkflowUpdateToOneWithWhereWithoutUiComponentsInput, Prisma.WorkflowUpdateWithoutUiComponentsInput>, Prisma.WorkflowUncheckedUpdateWithoutUiComponentsInput>
+}
+
+export type WorkflowCreateNestedOneWithoutGoldenMastersInput = {
+  create?: Prisma.XOR<Prisma.WorkflowCreateWithoutGoldenMastersInput, Prisma.WorkflowUncheckedCreateWithoutGoldenMastersInput>
+  connectOrCreate?: Prisma.WorkflowCreateOrConnectWithoutGoldenMastersInput
+  connect?: Prisma.WorkflowWhereUniqueInput
+}
+
+export type WorkflowUpdateOneRequiredWithoutGoldenMastersNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkflowCreateWithoutGoldenMastersInput, Prisma.WorkflowUncheckedCreateWithoutGoldenMastersInput>
+  connectOrCreate?: Prisma.WorkflowCreateOrConnectWithoutGoldenMastersInput
+  upsert?: Prisma.WorkflowUpsertWithoutGoldenMastersInput
+  connect?: Prisma.WorkflowWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WorkflowUpdateToOneWithWhereWithoutGoldenMastersInput, Prisma.WorkflowUpdateWithoutGoldenMastersInput>, Prisma.WorkflowUncheckedUpdateWithoutGoldenMastersInput>
+}
+
 export type WorkflowCreateWithoutUserInput = {
   id?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
   nodes?: Prisma.NodeCreateNestedManyWithoutWorkflowInput
   connections?: Prisma.ConnectionCreateNestedManyWithoutWorkflowInput
   executions?: Prisma.ExecutionCreateNestedManyWithoutWorkflowInput
+  uiComponents?: Prisma.UIComponentCreateNestedManyWithoutWorkflowInput
+  goldenMasters?: Prisma.GoldenMasterCreateNestedManyWithoutWorkflowInput
 }
 
 export type WorkflowUncheckedCreateWithoutUserInput = {
@@ -442,9 +578,15 @@ export type WorkflowUncheckedCreateWithoutUserInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
   nodes?: Prisma.NodeUncheckedCreateNestedManyWithoutWorkflowInput
   connections?: Prisma.ConnectionUncheckedCreateNestedManyWithoutWorkflowInput
   executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutWorkflowInput
+  uiComponents?: Prisma.UIComponentUncheckedCreateNestedManyWithoutWorkflowInput
+  goldenMasters?: Prisma.GoldenMasterUncheckedCreateNestedManyWithoutWorkflowInput
 }
 
 export type WorkflowCreateOrConnectWithoutUserInput = {
@@ -482,6 +624,10 @@ export type WorkflowScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Workflow"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Workflow"> | Date | string
   userId?: Prisma.StringFilter<"Workflow"> | string
+  targetAppPath?: Prisma.StringNullableFilter<"Workflow"> | string | null
+  bundleId?: Prisma.StringNullableFilter<"Workflow"> | string | null
+  targetDeviceId?: Prisma.StringNullableFilter<"Workflow"> | string | null
+  platform?: Prisma.StringNullableFilter<"Workflow"> | string | null
 }
 
 export type WorkflowCreateWithoutNodesInput = {
@@ -489,9 +635,15 @@ export type WorkflowCreateWithoutNodesInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
   connections?: Prisma.ConnectionCreateNestedManyWithoutWorkflowInput
   executions?: Prisma.ExecutionCreateNestedManyWithoutWorkflowInput
   user: Prisma.UserCreateNestedOneWithoutWorkflowsInput
+  uiComponents?: Prisma.UIComponentCreateNestedManyWithoutWorkflowInput
+  goldenMasters?: Prisma.GoldenMasterCreateNestedManyWithoutWorkflowInput
 }
 
 export type WorkflowUncheckedCreateWithoutNodesInput = {
@@ -500,8 +652,14 @@ export type WorkflowUncheckedCreateWithoutNodesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
   connections?: Prisma.ConnectionUncheckedCreateNestedManyWithoutWorkflowInput
   executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutWorkflowInput
+  uiComponents?: Prisma.UIComponentUncheckedCreateNestedManyWithoutWorkflowInput
+  goldenMasters?: Prisma.GoldenMasterUncheckedCreateNestedManyWithoutWorkflowInput
 }
 
 export type WorkflowCreateOrConnectWithoutNodesInput = {
@@ -525,9 +683,15 @@ export type WorkflowUpdateWithoutNodesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connections?: Prisma.ConnectionUpdateManyWithoutWorkflowNestedInput
   executions?: Prisma.ExecutionUpdateManyWithoutWorkflowNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutWorkflowsNestedInput
+  uiComponents?: Prisma.UIComponentUpdateManyWithoutWorkflowNestedInput
+  goldenMasters?: Prisma.GoldenMasterUpdateManyWithoutWorkflowNestedInput
 }
 
 export type WorkflowUncheckedUpdateWithoutNodesInput = {
@@ -536,8 +700,14 @@ export type WorkflowUncheckedUpdateWithoutNodesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connections?: Prisma.ConnectionUncheckedUpdateManyWithoutWorkflowNestedInput
   executions?: Prisma.ExecutionUncheckedUpdateManyWithoutWorkflowNestedInput
+  uiComponents?: Prisma.UIComponentUncheckedUpdateManyWithoutWorkflowNestedInput
+  goldenMasters?: Prisma.GoldenMasterUncheckedUpdateManyWithoutWorkflowNestedInput
 }
 
 export type WorkflowCreateWithoutConnectionsInput = {
@@ -545,9 +715,15 @@ export type WorkflowCreateWithoutConnectionsInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
   nodes?: Prisma.NodeCreateNestedManyWithoutWorkflowInput
   executions?: Prisma.ExecutionCreateNestedManyWithoutWorkflowInput
   user: Prisma.UserCreateNestedOneWithoutWorkflowsInput
+  uiComponents?: Prisma.UIComponentCreateNestedManyWithoutWorkflowInput
+  goldenMasters?: Prisma.GoldenMasterCreateNestedManyWithoutWorkflowInput
 }
 
 export type WorkflowUncheckedCreateWithoutConnectionsInput = {
@@ -556,8 +732,14 @@ export type WorkflowUncheckedCreateWithoutConnectionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
   nodes?: Prisma.NodeUncheckedCreateNestedManyWithoutWorkflowInput
   executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutWorkflowInput
+  uiComponents?: Prisma.UIComponentUncheckedCreateNestedManyWithoutWorkflowInput
+  goldenMasters?: Prisma.GoldenMasterUncheckedCreateNestedManyWithoutWorkflowInput
 }
 
 export type WorkflowCreateOrConnectWithoutConnectionsInput = {
@@ -581,9 +763,15 @@ export type WorkflowUpdateWithoutConnectionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nodes?: Prisma.NodeUpdateManyWithoutWorkflowNestedInput
   executions?: Prisma.ExecutionUpdateManyWithoutWorkflowNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutWorkflowsNestedInput
+  uiComponents?: Prisma.UIComponentUpdateManyWithoutWorkflowNestedInput
+  goldenMasters?: Prisma.GoldenMasterUpdateManyWithoutWorkflowNestedInput
 }
 
 export type WorkflowUncheckedUpdateWithoutConnectionsInput = {
@@ -592,8 +780,14 @@ export type WorkflowUncheckedUpdateWithoutConnectionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nodes?: Prisma.NodeUncheckedUpdateManyWithoutWorkflowNestedInput
   executions?: Prisma.ExecutionUncheckedUpdateManyWithoutWorkflowNestedInput
+  uiComponents?: Prisma.UIComponentUncheckedUpdateManyWithoutWorkflowNestedInput
+  goldenMasters?: Prisma.GoldenMasterUncheckedUpdateManyWithoutWorkflowNestedInput
 }
 
 export type WorkflowCreateWithoutExecutionsInput = {
@@ -601,9 +795,15 @@ export type WorkflowCreateWithoutExecutionsInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
   nodes?: Prisma.NodeCreateNestedManyWithoutWorkflowInput
   connections?: Prisma.ConnectionCreateNestedManyWithoutWorkflowInput
   user: Prisma.UserCreateNestedOneWithoutWorkflowsInput
+  uiComponents?: Prisma.UIComponentCreateNestedManyWithoutWorkflowInput
+  goldenMasters?: Prisma.GoldenMasterCreateNestedManyWithoutWorkflowInput
 }
 
 export type WorkflowUncheckedCreateWithoutExecutionsInput = {
@@ -612,8 +812,14 @@ export type WorkflowUncheckedCreateWithoutExecutionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
   nodes?: Prisma.NodeUncheckedCreateNestedManyWithoutWorkflowInput
   connections?: Prisma.ConnectionUncheckedCreateNestedManyWithoutWorkflowInput
+  uiComponents?: Prisma.UIComponentUncheckedCreateNestedManyWithoutWorkflowInput
+  goldenMasters?: Prisma.GoldenMasterUncheckedCreateNestedManyWithoutWorkflowInput
 }
 
 export type WorkflowCreateOrConnectWithoutExecutionsInput = {
@@ -637,9 +843,15 @@ export type WorkflowUpdateWithoutExecutionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nodes?: Prisma.NodeUpdateManyWithoutWorkflowNestedInput
   connections?: Prisma.ConnectionUpdateManyWithoutWorkflowNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutWorkflowsNestedInput
+  uiComponents?: Prisma.UIComponentUpdateManyWithoutWorkflowNestedInput
+  goldenMasters?: Prisma.GoldenMasterUpdateManyWithoutWorkflowNestedInput
 }
 
 export type WorkflowUncheckedUpdateWithoutExecutionsInput = {
@@ -648,8 +860,174 @@ export type WorkflowUncheckedUpdateWithoutExecutionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nodes?: Prisma.NodeUncheckedUpdateManyWithoutWorkflowNestedInput
   connections?: Prisma.ConnectionUncheckedUpdateManyWithoutWorkflowNestedInput
+  uiComponents?: Prisma.UIComponentUncheckedUpdateManyWithoutWorkflowNestedInput
+  goldenMasters?: Prisma.GoldenMasterUncheckedUpdateManyWithoutWorkflowNestedInput
+}
+
+export type WorkflowCreateWithoutUiComponentsInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
+  nodes?: Prisma.NodeCreateNestedManyWithoutWorkflowInput
+  connections?: Prisma.ConnectionCreateNestedManyWithoutWorkflowInput
+  executions?: Prisma.ExecutionCreateNestedManyWithoutWorkflowInput
+  user: Prisma.UserCreateNestedOneWithoutWorkflowsInput
+  goldenMasters?: Prisma.GoldenMasterCreateNestedManyWithoutWorkflowInput
+}
+
+export type WorkflowUncheckedCreateWithoutUiComponentsInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userId: string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
+  nodes?: Prisma.NodeUncheckedCreateNestedManyWithoutWorkflowInput
+  connections?: Prisma.ConnectionUncheckedCreateNestedManyWithoutWorkflowInput
+  executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutWorkflowInput
+  goldenMasters?: Prisma.GoldenMasterUncheckedCreateNestedManyWithoutWorkflowInput
+}
+
+export type WorkflowCreateOrConnectWithoutUiComponentsInput = {
+  where: Prisma.WorkflowWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkflowCreateWithoutUiComponentsInput, Prisma.WorkflowUncheckedCreateWithoutUiComponentsInput>
+}
+
+export type WorkflowUpsertWithoutUiComponentsInput = {
+  update: Prisma.XOR<Prisma.WorkflowUpdateWithoutUiComponentsInput, Prisma.WorkflowUncheckedUpdateWithoutUiComponentsInput>
+  create: Prisma.XOR<Prisma.WorkflowCreateWithoutUiComponentsInput, Prisma.WorkflowUncheckedCreateWithoutUiComponentsInput>
+  where?: Prisma.WorkflowWhereInput
+}
+
+export type WorkflowUpdateToOneWithWhereWithoutUiComponentsInput = {
+  where?: Prisma.WorkflowWhereInput
+  data: Prisma.XOR<Prisma.WorkflowUpdateWithoutUiComponentsInput, Prisma.WorkflowUncheckedUpdateWithoutUiComponentsInput>
+}
+
+export type WorkflowUpdateWithoutUiComponentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nodes?: Prisma.NodeUpdateManyWithoutWorkflowNestedInput
+  connections?: Prisma.ConnectionUpdateManyWithoutWorkflowNestedInput
+  executions?: Prisma.ExecutionUpdateManyWithoutWorkflowNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutWorkflowsNestedInput
+  goldenMasters?: Prisma.GoldenMasterUpdateManyWithoutWorkflowNestedInput
+}
+
+export type WorkflowUncheckedUpdateWithoutUiComponentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nodes?: Prisma.NodeUncheckedUpdateManyWithoutWorkflowNestedInput
+  connections?: Prisma.ConnectionUncheckedUpdateManyWithoutWorkflowNestedInput
+  executions?: Prisma.ExecutionUncheckedUpdateManyWithoutWorkflowNestedInput
+  goldenMasters?: Prisma.GoldenMasterUncheckedUpdateManyWithoutWorkflowNestedInput
+}
+
+export type WorkflowCreateWithoutGoldenMastersInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
+  nodes?: Prisma.NodeCreateNestedManyWithoutWorkflowInput
+  connections?: Prisma.ConnectionCreateNestedManyWithoutWorkflowInput
+  executions?: Prisma.ExecutionCreateNestedManyWithoutWorkflowInput
+  user: Prisma.UserCreateNestedOneWithoutWorkflowsInput
+  uiComponents?: Prisma.UIComponentCreateNestedManyWithoutWorkflowInput
+}
+
+export type WorkflowUncheckedCreateWithoutGoldenMastersInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userId: string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
+  nodes?: Prisma.NodeUncheckedCreateNestedManyWithoutWorkflowInput
+  connections?: Prisma.ConnectionUncheckedCreateNestedManyWithoutWorkflowInput
+  executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutWorkflowInput
+  uiComponents?: Prisma.UIComponentUncheckedCreateNestedManyWithoutWorkflowInput
+}
+
+export type WorkflowCreateOrConnectWithoutGoldenMastersInput = {
+  where: Prisma.WorkflowWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkflowCreateWithoutGoldenMastersInput, Prisma.WorkflowUncheckedCreateWithoutGoldenMastersInput>
+}
+
+export type WorkflowUpsertWithoutGoldenMastersInput = {
+  update: Prisma.XOR<Prisma.WorkflowUpdateWithoutGoldenMastersInput, Prisma.WorkflowUncheckedUpdateWithoutGoldenMastersInput>
+  create: Prisma.XOR<Prisma.WorkflowCreateWithoutGoldenMastersInput, Prisma.WorkflowUncheckedCreateWithoutGoldenMastersInput>
+  where?: Prisma.WorkflowWhereInput
+}
+
+export type WorkflowUpdateToOneWithWhereWithoutGoldenMastersInput = {
+  where?: Prisma.WorkflowWhereInput
+  data: Prisma.XOR<Prisma.WorkflowUpdateWithoutGoldenMastersInput, Prisma.WorkflowUncheckedUpdateWithoutGoldenMastersInput>
+}
+
+export type WorkflowUpdateWithoutGoldenMastersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nodes?: Prisma.NodeUpdateManyWithoutWorkflowNestedInput
+  connections?: Prisma.ConnectionUpdateManyWithoutWorkflowNestedInput
+  executions?: Prisma.ExecutionUpdateManyWithoutWorkflowNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutWorkflowsNestedInput
+  uiComponents?: Prisma.UIComponentUpdateManyWithoutWorkflowNestedInput
+}
+
+export type WorkflowUncheckedUpdateWithoutGoldenMastersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nodes?: Prisma.NodeUncheckedUpdateManyWithoutWorkflowNestedInput
+  connections?: Prisma.ConnectionUncheckedUpdateManyWithoutWorkflowNestedInput
+  executions?: Prisma.ExecutionUncheckedUpdateManyWithoutWorkflowNestedInput
+  uiComponents?: Prisma.UIComponentUncheckedUpdateManyWithoutWorkflowNestedInput
 }
 
 export type WorkflowCreateManyUserInput = {
@@ -657,6 +1035,10 @@ export type WorkflowCreateManyUserInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  targetAppPath?: string | null
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  platform?: string | null
 }
 
 export type WorkflowUpdateWithoutUserInput = {
@@ -664,9 +1046,15 @@ export type WorkflowUpdateWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nodes?: Prisma.NodeUpdateManyWithoutWorkflowNestedInput
   connections?: Prisma.ConnectionUpdateManyWithoutWorkflowNestedInput
   executions?: Prisma.ExecutionUpdateManyWithoutWorkflowNestedInput
+  uiComponents?: Prisma.UIComponentUpdateManyWithoutWorkflowNestedInput
+  goldenMasters?: Prisma.GoldenMasterUpdateManyWithoutWorkflowNestedInput
 }
 
 export type WorkflowUncheckedUpdateWithoutUserInput = {
@@ -674,9 +1062,15 @@ export type WorkflowUncheckedUpdateWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nodes?: Prisma.NodeUncheckedUpdateManyWithoutWorkflowNestedInput
   connections?: Prisma.ConnectionUncheckedUpdateManyWithoutWorkflowNestedInput
   executions?: Prisma.ExecutionUncheckedUpdateManyWithoutWorkflowNestedInput
+  uiComponents?: Prisma.UIComponentUncheckedUpdateManyWithoutWorkflowNestedInput
+  goldenMasters?: Prisma.GoldenMasterUncheckedUpdateManyWithoutWorkflowNestedInput
 }
 
 export type WorkflowUncheckedUpdateManyWithoutUserInput = {
@@ -684,6 +1078,10 @@ export type WorkflowUncheckedUpdateManyWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetAppPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -695,12 +1093,16 @@ export type WorkflowCountOutputType = {
   nodes: number
   connections: number
   executions: number
+  uiComponents: number
+  goldenMasters: number
 }
 
 export type WorkflowCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   nodes?: boolean | WorkflowCountOutputTypeCountNodesArgs
   connections?: boolean | WorkflowCountOutputTypeCountConnectionsArgs
   executions?: boolean | WorkflowCountOutputTypeCountExecutionsArgs
+  uiComponents?: boolean | WorkflowCountOutputTypeCountUiComponentsArgs
+  goldenMasters?: boolean | WorkflowCountOutputTypeCountGoldenMastersArgs
 }
 
 /**
@@ -734,6 +1136,20 @@ export type WorkflowCountOutputTypeCountExecutionsArgs<ExtArgs extends runtime.T
   where?: Prisma.ExecutionWhereInput
 }
 
+/**
+ * WorkflowCountOutputType without action
+ */
+export type WorkflowCountOutputTypeCountUiComponentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UIComponentWhereInput
+}
+
+/**
+ * WorkflowCountOutputType without action
+ */
+export type WorkflowCountOutputTypeCountGoldenMastersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GoldenMasterWhereInput
+}
+
 
 export type WorkflowSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -741,10 +1157,16 @@ export type WorkflowSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  targetAppPath?: boolean
+  bundleId?: boolean
+  targetDeviceId?: boolean
+  platform?: boolean
   nodes?: boolean | Prisma.Workflow$nodesArgs<ExtArgs>
   connections?: boolean | Prisma.Workflow$connectionsArgs<ExtArgs>
   executions?: boolean | Prisma.Workflow$executionsArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  uiComponents?: boolean | Prisma.Workflow$uiComponentsArgs<ExtArgs>
+  goldenMasters?: boolean | Prisma.Workflow$goldenMastersArgs<ExtArgs>
   _count?: boolean | Prisma.WorkflowCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["workflow"]>
 
@@ -754,6 +1176,10 @@ export type WorkflowSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  targetAppPath?: boolean
+  bundleId?: boolean
+  targetDeviceId?: boolean
+  platform?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["workflow"]>
 
@@ -763,6 +1189,10 @@ export type WorkflowSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  targetAppPath?: boolean
+  bundleId?: boolean
+  targetDeviceId?: boolean
+  platform?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["workflow"]>
 
@@ -772,14 +1202,20 @@ export type WorkflowSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  targetAppPath?: boolean
+  bundleId?: boolean
+  targetDeviceId?: boolean
+  platform?: boolean
 }
 
-export type WorkflowOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["workflow"]>
+export type WorkflowOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt" | "userId" | "targetAppPath" | "bundleId" | "targetDeviceId" | "platform", ExtArgs["result"]["workflow"]>
 export type WorkflowInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   nodes?: boolean | Prisma.Workflow$nodesArgs<ExtArgs>
   connections?: boolean | Prisma.Workflow$connectionsArgs<ExtArgs>
   executions?: boolean | Prisma.Workflow$executionsArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  uiComponents?: boolean | Prisma.Workflow$uiComponentsArgs<ExtArgs>
+  goldenMasters?: boolean | Prisma.Workflow$goldenMastersArgs<ExtArgs>
   _count?: boolean | Prisma.WorkflowCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type WorkflowIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -796,6 +1232,8 @@ export type $WorkflowPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     connections: Prisma.$ConnectionPayload<ExtArgs>[]
     executions: Prisma.$ExecutionPayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs>
+    uiComponents: Prisma.$UIComponentPayload<ExtArgs>[]
+    goldenMasters: Prisma.$GoldenMasterPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -803,6 +1241,10 @@ export type $WorkflowPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     createdAt: Date
     updatedAt: Date
     userId: string
+    targetAppPath: string | null
+    bundleId: string | null
+    targetDeviceId: string | null
+    platform: string | null
   }, ExtArgs["result"]["workflow"]>
   composites: {}
 }
@@ -1201,6 +1643,8 @@ export interface Prisma__WorkflowClient<T, Null = never, ExtArgs extends runtime
   connections<T extends Prisma.Workflow$connectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workflow$connectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConnectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   executions<T extends Prisma.Workflow$executionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workflow$executionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  uiComponents<T extends Prisma.Workflow$uiComponentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workflow$uiComponentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UIComponentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  goldenMasters<T extends Prisma.Workflow$goldenMastersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Workflow$goldenMastersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GoldenMasterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1235,6 +1679,10 @@ export interface WorkflowFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Workflow", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Workflow", 'DateTime'>
   readonly userId: Prisma.FieldRef<"Workflow", 'String'>
+  readonly targetAppPath: Prisma.FieldRef<"Workflow", 'String'>
+  readonly bundleId: Prisma.FieldRef<"Workflow", 'String'>
+  readonly targetDeviceId: Prisma.FieldRef<"Workflow", 'String'>
+  readonly platform: Prisma.FieldRef<"Workflow", 'String'>
 }
     
 
@@ -1700,6 +2148,54 @@ export type Workflow$executionsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.ExecutionScalarFieldEnum | Prisma.ExecutionScalarFieldEnum[]
+}
+
+/**
+ * Workflow.uiComponents
+ */
+export type Workflow$uiComponentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UIComponent
+   */
+  select?: Prisma.UIComponentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UIComponent
+   */
+  omit?: Prisma.UIComponentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UIComponentInclude<ExtArgs> | null
+  where?: Prisma.UIComponentWhereInput
+  orderBy?: Prisma.UIComponentOrderByWithRelationInput | Prisma.UIComponentOrderByWithRelationInput[]
+  cursor?: Prisma.UIComponentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UIComponentScalarFieldEnum | Prisma.UIComponentScalarFieldEnum[]
+}
+
+/**
+ * Workflow.goldenMasters
+ */
+export type Workflow$goldenMastersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GoldenMaster
+   */
+  select?: Prisma.GoldenMasterSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GoldenMaster
+   */
+  omit?: Prisma.GoldenMasterOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GoldenMasterInclude<ExtArgs> | null
+  where?: Prisma.GoldenMasterWhereInput
+  orderBy?: Prisma.GoldenMasterOrderByWithRelationInput | Prisma.GoldenMasterOrderByWithRelationInput[]
+  cursor?: Prisma.GoldenMasterWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GoldenMasterScalarFieldEnum | Prisma.GoldenMasterScalarFieldEnum[]
 }
 
 /**

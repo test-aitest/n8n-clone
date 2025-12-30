@@ -147,7 +147,7 @@ export const DiscordDialog = ({
                   <FormControl>
                     <Textarea
                       placeholder="Summary: {{myGemini.text}}"
-                      className="min-h-[80px] font-mono text-sm"
+                      className="min-h-20 font-mono text-sm"
                       {...field}
                     />
                   </FormControl>

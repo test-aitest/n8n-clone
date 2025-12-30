@@ -62,3 +62,13 @@ export type Connection = Prisma.ConnectionModel
  * 
  */
 export type Execution = Prisma.ExecutionModel
+/**
+ * Model UIComponent
+ * 
+ */
+export type UIComponent = Prisma.UIComponentModel
+/**
+ * Model GoldenMaster
+ * 
+ */
+export type GoldenMaster = Prisma.GoldenMasterModel

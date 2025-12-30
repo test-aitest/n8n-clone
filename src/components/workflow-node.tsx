@@ -39,7 +39,7 @@ export function WorkflowNode({
         <NodeToolbar
           position={Position.Bottom}
           isVisible
-          className="max-w-[200px] text-center"
+          className="max-w-50 text-center"
         >
           <p className="font-medium">{name}</p>
           {description && (

@@ -59,7 +59,9 @@ export const ModelName = {
   Workflow: 'Workflow',
   Node: 'Node',
   Connection: 'Connection',
-  Execution: 'Execution'
+  Execution: 'Execution',
+  UIComponent: 'UIComponent',
+  GoldenMaster: 'GoldenMaster'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -154,7 +156,11 @@ export const WorkflowScalarFieldEnum = {
   name: 'name',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  userId: 'userId'
+  userId: 'userId',
+  targetAppPath: 'targetAppPath',
+  bundleId: 'bundleId',
+  targetDeviceId: 'targetDeviceId',
+  platform: 'platform'
 } as const
 
 export type WorkflowScalarFieldEnum = (typeof WorkflowScalarFieldEnum)[keyof typeof WorkflowScalarFieldEnum]
@@ -198,10 +204,40 @@ export const ExecutionScalarFieldEnum = {
   startedAt: 'startedAt',
   completedAt: 'completedAt',
   inngestEventId: 'inngestEventId',
-  output: 'output'
+  output: 'output',
+  artifacts: 'artifacts',
+  videoUrl: 'videoUrl'
 } as const
 
 export type ExecutionScalarFieldEnum = (typeof ExecutionScalarFieldEnum)[keyof typeof ExecutionScalarFieldEnum]
+
+
+export const UIComponentScalarFieldEnum = {
+  id: 'id',
+  workflowId: 'workflowId',
+  accessibilityId: 'accessibilityId',
+  componentType: 'componentType',
+  label: 'label',
+  sourceFilePath: 'sourceFilePath',
+  sourceLineNumber: 'sourceLineNumber',
+  positionX: 'positionX',
+  positionY: 'positionY',
+  createdAt: 'createdAt'
+} as const
+
+export type UIComponentScalarFieldEnum = (typeof UIComponentScalarFieldEnum)[keyof typeof UIComponentScalarFieldEnum]
+
+
+export const GoldenMasterScalarFieldEnum = {
+  id: 'id',
+  workflowId: 'workflowId',
+  nodeId: 'nodeId',
+  name: 'name',
+  imageUrl: 'imageUrl',
+  createdAt: 'createdAt'
+} as const
+
+export type GoldenMasterScalarFieldEnum = (typeof GoldenMasterScalarFieldEnum)[keyof typeof GoldenMasterScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -392,7 +392,9 @@ export const ModelName = {
   Workflow: 'Workflow',
   Node: 'Node',
   Connection: 'Connection',
-  Execution: 'Execution'
+  Execution: 'Execution',
+  UIComponent: 'UIComponent',
+  GoldenMaster: 'GoldenMaster'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "credential" | "workflow" | "node" | "connection" | "execution"
+    modelProps: "user" | "session" | "account" | "verification" | "credential" | "workflow" | "node" | "connection" | "execution" | "uIComponent" | "goldenMaster"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1078,6 +1080,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    UIComponent: {
+      payload: Prisma.$UIComponentPayload<ExtArgs>
+      fields: Prisma.UIComponentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UIComponentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UIComponentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UIComponentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UIComponentPayload>
+        }
+        findFirst: {
+          args: Prisma.UIComponentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UIComponentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UIComponentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UIComponentPayload>
+        }
+        findMany: {
+          args: Prisma.UIComponentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UIComponentPayload>[]
+        }
+        create: {
+          args: Prisma.UIComponentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UIComponentPayload>
+        }
+        createMany: {
+          args: Prisma.UIComponentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UIComponentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UIComponentPayload>[]
+        }
+        delete: {
+          args: Prisma.UIComponentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UIComponentPayload>
+        }
+        update: {
+          args: Prisma.UIComponentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UIComponentPayload>
+        }
+        deleteMany: {
+          args: Prisma.UIComponentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UIComponentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UIComponentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UIComponentPayload>[]
+        }
+        upsert: {
+          args: Prisma.UIComponentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UIComponentPayload>
+        }
+        aggregate: {
+          args: Prisma.UIComponentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUIComponent>
+        }
+        groupBy: {
+          args: Prisma.UIComponentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UIComponentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UIComponentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UIComponentCountAggregateOutputType> | number
+        }
+      }
+    }
+    GoldenMaster: {
+      payload: Prisma.$GoldenMasterPayload<ExtArgs>
+      fields: Prisma.GoldenMasterFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GoldenMasterFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GoldenMasterPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GoldenMasterFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GoldenMasterPayload>
+        }
+        findFirst: {
+          args: Prisma.GoldenMasterFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GoldenMasterPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GoldenMasterFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GoldenMasterPayload>
+        }
+        findMany: {
+          args: Prisma.GoldenMasterFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GoldenMasterPayload>[]
+        }
+        create: {
+          args: Prisma.GoldenMasterCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GoldenMasterPayload>
+        }
+        createMany: {
+          args: Prisma.GoldenMasterCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GoldenMasterCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GoldenMasterPayload>[]
+        }
+        delete: {
+          args: Prisma.GoldenMasterDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GoldenMasterPayload>
+        }
+        update: {
+          args: Prisma.GoldenMasterUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GoldenMasterPayload>
+        }
+        deleteMany: {
+          args: Prisma.GoldenMasterDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GoldenMasterUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GoldenMasterUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GoldenMasterPayload>[]
+        }
+        upsert: {
+          args: Prisma.GoldenMasterUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GoldenMasterPayload>
+        }
+        aggregate: {
+          args: Prisma.GoldenMasterAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGoldenMaster>
+        }
+        groupBy: {
+          args: Prisma.GoldenMasterGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GoldenMasterGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GoldenMasterCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GoldenMasterCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1193,7 +1343,11 @@ export const WorkflowScalarFieldEnum = {
   name: 'name',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  userId: 'userId'
+  userId: 'userId',
+  targetAppPath: 'targetAppPath',
+  bundleId: 'bundleId',
+  targetDeviceId: 'targetDeviceId',
+  platform: 'platform'
 } as const
 
 export type WorkflowScalarFieldEnum = (typeof WorkflowScalarFieldEnum)[keyof typeof WorkflowScalarFieldEnum]
@@ -1237,10 +1391,40 @@ export const ExecutionScalarFieldEnum = {
   startedAt: 'startedAt',
   completedAt: 'completedAt',
   inngestEventId: 'inngestEventId',
-  output: 'output'
+  output: 'output',
+  artifacts: 'artifacts',
+  videoUrl: 'videoUrl'
 } as const
 
 export type ExecutionScalarFieldEnum = (typeof ExecutionScalarFieldEnum)[keyof typeof ExecutionScalarFieldEnum]
+
+
+export const UIComponentScalarFieldEnum = {
+  id: 'id',
+  workflowId: 'workflowId',
+  accessibilityId: 'accessibilityId',
+  componentType: 'componentType',
+  label: 'label',
+  sourceFilePath: 'sourceFilePath',
+  sourceLineNumber: 'sourceLineNumber',
+  positionX: 'positionX',
+  positionY: 'positionY',
+  createdAt: 'createdAt'
+} as const
+
+export type UIComponentScalarFieldEnum = (typeof UIComponentScalarFieldEnum)[keyof typeof UIComponentScalarFieldEnum]
+
+
+export const GoldenMasterScalarFieldEnum = {
+  id: 'id',
+  workflowId: 'workflowId',
+  nodeId: 'nodeId',
+  name: 'name',
+  imageUrl: 'imageUrl',
+  createdAt: 'createdAt'
+} as const
+
+export type GoldenMasterScalarFieldEnum = (typeof GoldenMasterScalarFieldEnum)[keyof typeof GoldenMasterScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1401,6 +1585,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -1505,6 +1703,8 @@ export type GlobalOmitConfig = {
   node?: Prisma.NodeOmit
   connection?: Prisma.ConnectionOmit
   execution?: Prisma.ExecutionOmit
+  uIComponent?: Prisma.UIComponentOmit
+  goldenMaster?: Prisma.GoldenMasterOmit
 }
 
 /* Types for Logging */
