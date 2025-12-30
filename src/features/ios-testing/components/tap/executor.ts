@@ -1,13 +1,22 @@
-import { NonRetriableError } from "inngest";
 import type { NodeExecutor } from "@/features/executions/types";
 import { iosTapChannel } from "@/inngest/channels/ios-testing";
 import * as idb from "@/lib/ios/idb";
+import {
+  validateRequired,
+  getDeviceIdFromContext,
+  parseTimeout,
+  createIOSError,
+  IOS_ERROR_CODES,
+  formatErrorForDisplay,
+} from "@/features/ios-testing/lib/errors";
 
 type TapData = {
   variableName?: string;
   accessibilityId?: string;
   timeout?: string;
 };
+
+const NODE_NAME = "Tap";
 
 export const tapExecutor: NodeExecutor<TapData> = async ({
   data,
@@ -25,35 +34,28 @@ export const tapExecutor: NodeExecutor<TapData> = async ({
 
   try {
     const result = await step.run("tap-element", async () => {
-      if (!data.accessibilityId) {
-        throw new NonRetriableError("Tap: Accessibility ID is required");
-      }
+      // Validate required fields
+      validateRequired(data, ["accessibilityId", "variableName"], NODE_NAME);
 
-      if (!data.variableName) {
-        throw new NonRetriableError("Tap: Variable name is required");
-      }
+      // Get device ID from context
+      const deviceId = getDeviceIdFromContext(context, NODE_NAME);
 
-      // Get the device ID from context (set by simulator-boot node)
-      const simulatorContext = context.simulator as { deviceId?: string } | undefined;
-      const deviceId = simulatorContext?.deviceId || (context.deviceId as string | undefined);
-      if (!deviceId) {
-        throw new NonRetriableError(
-          "Tap: No device ID found in context. Ensure Simulator Boot node runs first."
-        );
-      }
-
-      const timeout = data.timeout ? parseInt(data.timeout, 10) : 10000;
-      const tapResult = await idb.tap(deviceId, data.accessibilityId, timeout);
+      const timeout = parseTimeout(data.timeout, 10000);
+      const tapResult = await idb.tap(deviceId, data.accessibilityId!, timeout);
 
       if (!tapResult.success) {
-        throw new NonRetriableError(
-          `Tap failed: Element not found or tap failed for ${data.accessibilityId}`
+        throw createIOSError(
+          tapResult.elementFound
+            ? IOS_ERROR_CODES.ELEMENT_NOT_INTERACTABLE
+            : IOS_ERROR_CODES.ELEMENT_NOT_FOUND,
+          `${NODE_NAME} failed: Element "${data.accessibilityId}" ${tapResult.elementFound ? "found but tap failed" : "not found"}`,
+          { accessibilityId: data.accessibilityId, timeout }
         );
       }
 
       return {
         ...context,
-        [data.variableName]: {
+        [data.variableName!]: {
           success: true,
           accessibilityId: data.accessibilityId,
           elementFound: tapResult.elementFound,
@@ -70,10 +72,13 @@ export const tapExecutor: NodeExecutor<TapData> = async ({
 
     return result;
   } catch (error) {
+    const errorInfo = formatErrorForDisplay(error);
     await publish(
       iosTapChannel().status({
         nodeId,
         status: "error",
+        errorMessage: errorInfo.message,
+        errorCode: errorInfo.code,
       })
     );
     throw error;

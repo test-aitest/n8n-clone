@@ -67,7 +67,7 @@
     "MallocNanoZone" : "0",
     "NODE_PATH" : "/Users/yabetatuki/Library/pnpm/global/5/.pnpm/@anthropic-ai+claude-code@2.0.76/node_modules/@anthropic-ai/claude-code/node_modules:/Users/yabetatuki/Library/pnpm/global/5/.pnpm/@anthropic-ai+claude-code@2.0.76/node_modules/@anthropic-ai/node_modules:/Users/yabetatuki/Library/pnpm/global/5/.pnpm/@anthropic-ai+claude-code@2.0.76/node_modules:/Users/yabetatuki/Library/pnpm/global/5/.pnpm/node_modules",
     "NoDefaultCurrentDirectoryInExePath" : "1",
-    "OLDPWD" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer",
+    "OLDPWD" : "/Users/yabetatuki/lesson/n8n-clone",
     "OSLogRateLimit" : "64",
     "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE" : "delta",
     "PATH" : "/Users/yabetatuki/.antigravity/antigravity/bin:/Users/yabetatuki/Library/pnpm:/Users/yabetatuki/Library/pnpm:/opt/homebrew/opt/openjdk/bin:/opt/homebrew/lib/ruby/gems/3.3.0/bin:/usr/local/bin:/Users/yabetatuki/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand:/Users/yabetatuki/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/go/bin:/Users/yabetatuki/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand:/Users/yabetatuki/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli:/Users/yabetatuki/.antigravity/antigravity/bin:/Users/yabetatuki/Library/pnpm:/opt/homebrew/opt/openjdk/bin:/opt/homebrew/lib/ruby/gems/3.3.0/bin:/Users/yabetatuki/flutter/bin:/Users/yabetatuki/go/bin:/Users/yabetatuki/flutter/bin:/Users/yabetatuki/go/bin",
@@ -95,7 +95,7 @@
     "__CFBundleIdentifier" : "com.microsoft.VSCode",
     "__CF_USER_TEXT_ENCODING" : "0x1F5:0x1:0xE"
   },
-  "inputHash" : "4bcc51b2e7940d3334286093b69e36306b2443fab84ab199808b5fa6253d4993",
+  "inputHash" : "aa395c634c8308d87067780024a9c406eb2cdb283201d66376899c45ef4f2c79",
   "output" : "",
   "result" : {
     "exit" : {
