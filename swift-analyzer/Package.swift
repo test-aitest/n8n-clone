@@ -23,7 +23,6 @@ let package = Package(
                 .product(name: "ArgumentParser", package: "swift-argument-parser")
             ],
             path: "Sources/SwiftAnalyzer",
-            exclude: ["Package.swift"],
             swiftSettings: [
                 .unsafeFlags(["-parse-as-library"])
             ]
