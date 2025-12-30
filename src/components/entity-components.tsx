@@ -4,7 +4,6 @@ import {
   MoreVerticalIcon,
   PackageOpenIcon,
   PlusIcon,
-  SearchIcon,
   TrashIcon,
 } from "lucide-react";
 import { Button } from "./ui/button";
@@ -113,7 +112,6 @@ export const EntitySearch = ({
 }: EntitySearchProps) => {
   return (
     <div className="relative ml-auto">
-      {/* <SearchIcon className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" /> */}
       <Input
         className="w-64 bg-background shadow-none border-border pl-9 h-9"
         placeholder={placeholder}
