@@ -1,6 +1,4 @@
 // swift-tools-version: 5.9
-// SwiftSyntax Analyzer for UI Component Detection
-
 import PackageDescription
 
 let package = Package(
@@ -9,10 +7,7 @@ let package = Package(
         .macOS(.v13)
     ],
     products: [
-        .executable(
-            name: "swift-analyzer",
-            targets: ["SwiftAnalyzer"]
-        )
+        .executable(name: "swift-analyzer", targets: ["SwiftAnalyzer"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
@@ -26,11 +21,17 @@ let package = Package(
                 .product(name: "SwiftParser", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser")
+            ],
+            path: "Sources/SwiftAnalyzer",
+            exclude: ["Package.swift"],
+            swiftSettings: [
+                .unsafeFlags(["-parse-as-library"])
             ]
         ),
         .testTarget(
             name: "SwiftAnalyzerTests",
-            dependencies: ["SwiftAnalyzer"]
+            dependencies: ["SwiftAnalyzer"],
+            path: "Tests/SwiftAnalyzerTests"
         )
     ]
 )

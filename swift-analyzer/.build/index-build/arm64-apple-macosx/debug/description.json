@@ -1,6 +1,10 @@
 {
   "builtTestProducts" : [
-
+    {
+      "binaryPath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.xctest/Contents/MacOS/SwiftAnalyzerPackageTests",
+      "packagePath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer",
+      "productName" : "SwiftAnalyzerPackageTests"
+    }
   ],
   "copyCommands" : {
 
@@ -11,8 +15,8 @@
     }
   },
   "generatedSourceTargetSet" : [
-    "GenerateDoccReference",
-    "GenerateManual"
+    "GenerateManual",
+    "GenerateDoccReference"
   ],
   "pluginDescriptions" : [
     {
@@ -1340,6 +1344,7 @@
         "SwiftAnalyzer_main",
         "-swift-version",
         "5",
+        "-parse-as-library",
         "-Xfrontend",
         "-experimental-lazy-typecheck",
         "-Xfrontend",
@@ -1396,6 +1401,211 @@
         "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/Sources/SwiftAnalyzer/main.swift"
       ],
       "tempsPath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzer.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.SwiftAnalyzerPackageTests-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.build/sources",
+      "importPath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.derived/runner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/Modules/SwiftAnalyzerTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "SwiftAnalyzerPackageTests",
+      "moduleOutputPath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/Modules/SwiftAnalyzerPackageTests.swiftmodule",
+      "objects" : [
+        "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.build/runner.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx13.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j11",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.build/include/SwiftAnalyzerPackageTests-Swift.h",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "swift_analyzer"
+      ],
+      "outputFileMapPath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/Modules/SwiftAnalyzerPackageTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.derived/runner.swift"
+      ],
+      "tempsPath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.SwiftAnalyzerTests-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerTests.build/sources",
+      "importPath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/Tests/SwiftAnalyzerTests/SwiftAnalyzerTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/Modules/SwiftAnalyzer.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "SwiftAnalyzerTests",
+      "moduleOutputPath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/Modules/SwiftAnalyzerTests.swiftmodule",
+      "objects" : [
+        "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerTests.build/SwiftAnalyzerTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j11",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "swift_analyzer"
+      ],
+      "outputFileMapPath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/Modules/SwiftAnalyzerTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/Tests/SwiftAnalyzerTests/SwiftAnalyzerTests.swift"
+      ],
+      "tempsPath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerTests.build",
       "wholeModuleOptimization" : false
     },
     "C.SwiftBasicFormat-arm64-apple-macosx26.0-debug.module" : {
@@ -5351,6 +5561,150 @@
       "SwiftAnalyzer_main",
       "-swift-version",
       "5",
+      "-parse-as-library",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "swift_analyzer",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "SwiftAnalyzerPackageTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "SwiftAnalyzerPackageTests",
+      "-package-name",
+      "swift_analyzer",
+      "-c",
+      "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.derived/runner.swift",
+      "-I",
+      "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx13.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j11",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.build/include/SwiftAnalyzerPackageTests-Swift.h",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "swift_analyzer",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "SwiftAnalyzerTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "SwiftAnalyzerTests",
+      "-package-name",
+      "swift_analyzer",
+      "-c",
+      "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/Tests/SwiftAnalyzerTests/SwiftAnalyzerTests.swift",
+      "-I",
+      "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j11",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "5",
       "-Xfrontend",
       "-experimental-lazy-typecheck",
       "-Xfrontend",
@@ -6849,6 +7203,31 @@
       "SwiftSyntax",
       "SwiftSyntax509"
     ],
+    "SwiftAnalyzerPackageTests" : [
+      "SwiftAnalyzerTests",
+      "SwiftAnalyzer",
+      "ArgumentParser",
+      "ArgumentParserToolInfo",
+      "SwiftSyntaxBuilder",
+      "SwiftParserDiagnostics",
+      "SwiftDiagnostics",
+      "SwiftBasicFormat",
+      "SwiftParser",
+      "SwiftSyntax",
+      "SwiftSyntax509"
+    ],
+    "SwiftAnalyzerTests" : [
+      "SwiftAnalyzer",
+      "ArgumentParser",
+      "ArgumentParserToolInfo",
+      "SwiftSyntaxBuilder",
+      "SwiftParserDiagnostics",
+      "SwiftDiagnostics",
+      "SwiftBasicFormat",
+      "SwiftParser",
+      "SwiftSyntax",
+      "SwiftSyntax509"
+    ],
     "SwiftBasicFormat" : [
       "SwiftSyntax",
       "SwiftSyntax509"
@@ -7474,6 +7853,34 @@
         }
       ],
       "outputFilePath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzer.build/sources"
+    },
+    "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.derived/runner.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerPackageTests.build/sources"
+    },
+    "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/Tests/SwiftAnalyzerTests/SwiftAnalyzerTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerTests.build/sources"
     },
     "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftBasicFormat.build/sources" : {
       "alwaysOutOfDate" : false,

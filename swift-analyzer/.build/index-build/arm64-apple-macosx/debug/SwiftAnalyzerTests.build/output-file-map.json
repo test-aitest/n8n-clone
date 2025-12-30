@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerTests.build/master.swiftdeps"
+  },
+  "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/Tests/SwiftAnalyzerTests/SwiftAnalyzerTests.swift": {
+    "dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerTests.build/SwiftAnalyzerTests.d",
+    "object": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerTests.build/SwiftAnalyzerTests.swift.o",
+    "swiftmodule": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerTests.build/SwiftAnalyzerTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerTests.build/SwiftAnalyzerTests.swiftdeps",
+    "diagnostics": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftAnalyzerTests.build/SwiftAnalyzerTests.dia"
+  }
+}

@@ -1,0 +1,3 @@
+module SwiftDiagnostics {
+    header "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftDiagnostics.build/include/SwiftDiagnostics-Swift.h"
+}

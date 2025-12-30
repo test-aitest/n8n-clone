@@ -1,0 +1,33 @@
+{
+  "": {
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/master.swiftdeps"
+  },
+  "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/checkouts/swift-syntax/Sources/SwiftIDEUtils/SwiftIDEUtilsCompatibility.swift": {
+    "dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SwiftIDEUtilsCompatibility.d",
+    "object": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SwiftIDEUtilsCompatibility.swift.o",
+    "swiftmodule": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SwiftIDEUtilsCompatibility~partial.swiftmodule",
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SwiftIDEUtilsCompatibility.swiftdeps",
+    "diagnostics": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SwiftIDEUtilsCompatibility.dia"
+  },
+  "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/checkouts/swift-syntax/Sources/SwiftIDEUtils/Syntax+Classifications.swift": {
+    "dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/Syntax+Classifications.d",
+    "object": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/Syntax+Classifications.swift.o",
+    "swiftmodule": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/Syntax+Classifications~partial.swiftmodule",
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/Syntax+Classifications.swiftdeps",
+    "diagnostics": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/Syntax+Classifications.dia"
+  },
+  "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/checkouts/swift-syntax/Sources/SwiftIDEUtils/SyntaxClassification.swift": {
+    "dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SyntaxClassification.d",
+    "object": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SyntaxClassification.swift.o",
+    "swiftmodule": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SyntaxClassification~partial.swiftmodule",
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SyntaxClassification.swiftdeps",
+    "diagnostics": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SyntaxClassification.dia"
+  },
+  "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/checkouts/swift-syntax/Sources/SwiftIDEUtils/SyntaxClassifier.swift": {
+    "dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SyntaxClassifier.d",
+    "object": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SyntaxClassifier.swift.o",
+    "swiftmodule": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SyntaxClassifier~partial.swiftmodule",
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SyntaxClassifier.swiftdeps",
+    "diagnostics": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/arm64-apple-macosx/debug/SwiftIDEUtils.build/SyntaxClassifier.dia"
+  }
+}
