@@ -1,0 +1,47 @@
+{
+  "": {
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/master.swiftdeps"
+  },
+  "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/checkouts/swift-syntax/Sources/SwiftCompilerPluginMessageHandling/CompilerPluginMessageHandler.swift": {
+    "dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/CompilerPluginMessageHandler.d",
+    "object": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/CompilerPluginMessageHandler.swift.o",
+    "swiftmodule": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/CompilerPluginMessageHandler~partial.swiftmodule",
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/CompilerPluginMessageHandler.swiftdeps",
+    "diagnostics": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/CompilerPluginMessageHandler.dia"
+  },
+  "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/checkouts/swift-syntax/Sources/SwiftCompilerPluginMessageHandling/Diagnostics.swift": {
+    "dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/Diagnostics.d",
+    "object": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/Diagnostics.swift.o",
+    "swiftmodule": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/Diagnostics~partial.swiftmodule",
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/Diagnostics.swiftdeps",
+    "diagnostics": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/Diagnostics.dia"
+  },
+  "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/checkouts/swift-syntax/Sources/SwiftCompilerPluginMessageHandling/Macros.swift": {
+    "dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/Macros.d",
+    "object": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/Macros.swift.o",
+    "swiftmodule": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/Macros~partial.swiftmodule",
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/Macros.swiftdeps",
+    "diagnostics": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/Macros.dia"
+  },
+  "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/checkouts/swift-syntax/Sources/SwiftCompilerPluginMessageHandling/PluginMacroExpansionContext.swift": {
+    "dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMacroExpansionContext.d",
+    "object": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMacroExpansionContext.swift.o",
+    "swiftmodule": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMacroExpansionContext~partial.swiftmodule",
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMacroExpansionContext.swiftdeps",
+    "diagnostics": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMacroExpansionContext.dia"
+  },
+  "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/checkouts/swift-syntax/Sources/SwiftCompilerPluginMessageHandling/PluginMessageCompatibility.swift": {
+    "dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMessageCompatibility.d",
+    "object": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMessageCompatibility.swift.o",
+    "swiftmodule": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMessageCompatibility~partial.swiftmodule",
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMessageCompatibility.swiftdeps",
+    "diagnostics": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMessageCompatibility.dia"
+  },
+  "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/checkouts/swift-syntax/Sources/SwiftCompilerPluginMessageHandling/PluginMessages.swift": {
+    "dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMessages.d",
+    "object": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMessages.swift.o",
+    "swiftmodule": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMessages~partial.swiftmodule",
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMessages.swiftdeps",
+    "diagnostics": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/SwiftCompilerPluginMessageHandling.build/PluginMessages.dia"
+  }
+}

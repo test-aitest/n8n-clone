@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/ArgumentParserToolInfo-tool.build/master.swiftdeps"
+  },
+  "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/checkouts/swift-argument-parser/Sources/ArgumentParserToolInfo/ToolInfo.swift": {
+    "dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/ArgumentParserToolInfo-tool.build/ToolInfo.d",
+    "object": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/ArgumentParserToolInfo-tool.build/ToolInfo.swift.o",
+    "swiftmodule": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/ArgumentParserToolInfo-tool.build/ToolInfo~partial.swiftmodule",
+    "swift-dependencies": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/ArgumentParserToolInfo-tool.build/ToolInfo.swiftdeps",
+    "diagnostics": "/Users/yabetatuki/lesson/n8n-clone/swift-analyzer/.build/index-build/arm64-apple-macosx/debug/ArgumentParserToolInfo-tool.build/ToolInfo.dia"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "type": "swift",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:n8n-clone}/swift-analyzer",
+      "name": "Debug swift-analyzer (swift-analyzer)",
+      "target": "swift-analyzer",
+      "configuration": "debug",
+      "preLaunchTask": "swift: Build Debug swift-analyzer (swift-analyzer)"
+    },
+    {
+      "type": "swift",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:n8n-clone}/swift-analyzer",
+      "name": "Release swift-analyzer (swift-analyzer)",
+      "target": "swift-analyzer",
+      "configuration": "release",
+      "preLaunchTask": "swift: Build Release swift-analyzer (swift-analyzer)"
+    }
+  ]
+}
