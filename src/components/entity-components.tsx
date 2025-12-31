@@ -1,5 +1,6 @@
 import {
   AlertTriangleIcon,
+  FileIcon,
   Loader2Icon,
   MoreVerticalIcon,
   PackageOpenIcon,
@@ -251,6 +252,8 @@ interface EntityItemProps {
   actions?: React.ReactNode;
   onRemove?: () => void | Promise<void>;
   isRemoving?: boolean;
+  onMakeTemplate?: () => void | Promise<void>;
+  isMakingTemplate?: boolean;
   className?: string;
 }
 
@@ -262,6 +265,8 @@ export const EntityItem = ({
   actions,
   onRemove,
   isRemoving,
+  onMakeTemplate,
+  isMakingTemplate,
   className,
 }: EntityItemProps) => {
   const handleRemove = async (e: React.MouseEvent) => {
@@ -274,6 +279,19 @@ export const EntityItem = ({
 
     if (onRemove) {
       await onRemove();
+    }
+  };
+
+  const handleMakeTemplate = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isMakingTemplate) {
+      return;
+    }
+
+    if (onMakeTemplate) {
+      await onMakeTemplate();
     }
   };
 
@@ -299,10 +317,10 @@ export const EntityItem = ({
             )}
           </div>
         </div>
-        {(actions || onRemove) && (
+        {(actions || onRemove || onMakeTemplate) && (
           <div className="flex gap-x-2 items-center shrink-0 ml-4">
             {actions}
-            {onRemove && (
+            {(onRemove || onMakeTemplate) && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -318,13 +336,24 @@ export const EntityItem = ({
                   align="end"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <DropdownMenuItem
-                    onClick={handleRemove}
-                    className="text-destructive focus:text-destructive"
-                  >
-                    <TrashIcon className="size-4" />
-                    Delete
-                  </DropdownMenuItem>
+                  {onMakeTemplate && (
+                    <DropdownMenuItem
+                      onClick={handleMakeTemplate}
+                      disabled={isMakingTemplate}
+                    >
+                      <FileIcon className="size-4" />
+                      Make Template
+                    </DropdownMenuItem>
+                  )}
+                  {onRemove && (
+                    <DropdownMenuItem
+                      onClick={handleRemove}
+                      className="text-destructive focus:text-destructive"
+                    >
+                      <TrashIcon className="size-4" />
+                      Delete
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             )}

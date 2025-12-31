@@ -17,6 +17,8 @@ import {
   useRemoveWorkflow,
   useSuspenseWorkflows,
 } from "../hooks/use-workflows";
+import { useCreateTemplateFromWorkflow } from "@/features/templates/hooks/use-templates";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useWorkflowsParams } from "../hooks/use-workflows-params";
 import { useEntitySearch } from "@/hooks/use-entity-search";
@@ -136,9 +138,28 @@ export const WorkflowsEmpty = () => {
 
 export const WorkflowItem = ({ data }: { data: Workflow }) => {
   const removeWorkflow = useRemoveWorkflow();
+  const createTemplate = useCreateTemplateFromWorkflow();
 
   const handleRemove = () => {
     removeWorkflow.mutate({ id: data.id });
+  };
+
+  const handleMakeTemplate = () => {
+    createTemplate.mutate(
+      {
+        workflowId: data.id,
+        name: `${data.name} Template`,
+        description: `Template created from workflow: ${data.name}`,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Template created successfully");
+        },
+        onError: (error) => {
+          toast.error(error.message || "Failed to create template");
+        },
+      }
+    );
   };
 
   return (
@@ -159,6 +180,8 @@ export const WorkflowItem = ({ data }: { data: Workflow }) => {
       }
       onRemove={handleRemove}
       isRemoving={removeWorkflow.isPending}
+      onMakeTemplate={handleMakeTemplate}
+      isMakingTemplate={createTemplate.isPending}
     />
   );
 };
