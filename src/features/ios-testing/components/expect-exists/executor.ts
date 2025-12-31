@@ -1,6 +1,7 @@
 import type { NodeExecutor } from "@/features/executions/types";
 import {
   createIOSError,
+  formatErrorForDisplay,
   getBundleIdFromContext,
   getDeviceIdFromContext,
   IOS_ERROR_CODES,
@@ -12,7 +13,8 @@ import * as wda from "@/lib/ios/wda";
 
 type ExpectExistsData = {
   variableName?: string;
-  accessibilityId?: string;
+  elementType?: string;
+  labelMatch?: string;
   timeout?: string;
 };
 
@@ -35,12 +37,13 @@ export const expectExistsExecutor: NodeExecutor<ExpectExistsData> = async ({
   try {
     const result = await step.run("expect-exists", async () => {
       // Validate required fields
-      validateRequired(data, ["accessibilityId", "variableName"], NODE_NAME);
+      validateRequired(data, ["elementType", "variableName"], NODE_NAME);
 
       // Get device ID and bundle ID from context
       const deviceId = getDeviceIdFromContext(context, NODE_NAME);
       const bundleId = getBundleIdFromContext(context, NODE_NAME);
       const timeout = parseTimeout(data.timeout, 10000);
+      const labelMatch = data.labelMatch?.trim() || undefined;
 
       // Ensure Appium is running
       const appiumRunning = await wda.isAppiumRunning();
@@ -68,17 +71,44 @@ export const expectExistsExecutor: NodeExecutor<ExpectExistsData> = async ({
         );
       }
 
-      // Wait for element to appear
-      const elementResult = await wda.waitForElement(
-        deviceId,
-        data.accessibilityId!,
-        timeout,
-      );
+      // Set implicit wait timeout
+      const startTime = Date.now();
+      let elementFound = false;
 
-      if (!elementResult.success) {
+      // Poll for element existence within timeout
+      while (Date.now() - startTime < timeout) {
+        let elementResult;
+        if (labelMatch) {
+          elementResult = await wda.findElementByTypeAndLabel(
+            deviceId,
+            data.elementType!,
+            labelMatch,
+            0,
+          );
+        } else {
+          elementResult = await wda.findElementByType(
+            deviceId,
+            data.elementType!,
+            0,
+          );
+        }
+
+        if (elementResult.success) {
+          elementFound = true;
+          break;
+        }
+
+        // Wait before next attempt
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
+
+      if (!elementFound) {
+        const selector = labelMatch
+          ? `${data.elementType} with label "${labelMatch}"`
+          : data.elementType;
         throw createIOSError(
           IOS_ERROR_CODES.ELEMENT_NOT_FOUND,
-          `${NODE_NAME} failed: Element '${data.accessibilityId}' not found within ${timeout}ms`,
+          `${NODE_NAME} failed: ${selector} not found within ${timeout}ms`,
         );
       }
 
@@ -87,7 +117,8 @@ export const expectExistsExecutor: NodeExecutor<ExpectExistsData> = async ({
         [data.variableName!]: {
           success: true,
           exists: true,
-          accessibilityId: data.accessibilityId,
+          elementType: data.elementType,
+          labelMatch,
         },
       };
     });
@@ -101,10 +132,13 @@ export const expectExistsExecutor: NodeExecutor<ExpectExistsData> = async ({
 
     return result;
   } catch (error) {
+    const errorInfo = formatErrorForDisplay(error);
     await publish(
       iosExpectExistsChannel().status({
         nodeId,
         status: "error",
+        errorMessage: errorInfo.message,
+        errorCode: errorInfo.code,
       }),
     );
     throw error;

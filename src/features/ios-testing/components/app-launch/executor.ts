@@ -2,6 +2,7 @@ import { NonRetriableError } from "inngest";
 import type { NodeExecutor } from "@/features/executions/types";
 import { iosAppLaunchChannel } from "@/inngest/channels/ios-testing";
 import * as simulator from "@/lib/ios/simulator";
+import * as wda from "@/lib/ios/wda";
 
 type AppLaunchData = {
   variableName?: string;
@@ -42,6 +43,15 @@ export const appLaunchExecutor: NodeExecutor<AppLaunchData> = async ({
       const argsArray = data.args
         ? data.args.split(/\s+/).filter((arg) => arg.length > 0)
         : [];
+
+      // Clear any existing WDA session to ensure clean state
+      await wda.deleteSession(data.deviceId);
+
+      // Terminate the app first to ensure clean state
+      await simulator.terminateApp(data.deviceId, data.bundleId);
+
+      // Wait a moment for app to fully terminate
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
       const launchResult = await simulator.launchApp(
         data.deviceId,

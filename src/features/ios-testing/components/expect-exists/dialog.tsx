@@ -4,10 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { useAtomValue } from "jotai";
 import { Button } from "@/components/ui/button";
-import { UIComponentSelector } from "@/features/templates/components/ui-component-selector";
-import { workflowContextAtom } from "@/features/editor/store/atoms";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +23,29 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const ELEMENT_TYPES = [
+  { value: "Button", label: "Button" },
+  { value: "TextField", label: "TextField (Text Input)" },
+  { value: "SecureTextField", label: "SecureTextField (Password)" },
+  { value: "TextView", label: "TextView (TextEditor)" },
+  { value: "Switch", label: "Switch (Toggle)" },
+  { value: "Slider", label: "Slider" },
+  { value: "Stepper", label: "Stepper" },
+  { value: "Picker", label: "Picker" },
+  { value: "DatePicker", label: "DatePicker" },
+  { value: "StaticText", label: "StaticText (Text/Label)" },
+  { value: "Image", label: "Image" },
+  { value: "Link", label: "Link" },
+  { value: "Cell", label: "Cell (List Item)" },
+] as const;
 
 const formSchema = z.object({
   variableName: z
@@ -34,9 +54,10 @@ const formSchema = z.object({
     .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
       message: "Variable name must start with a letter or underscore",
     }),
-  accessibilityId: z
+  elementType: z
     .string()
-    .min(1, { message: "Accessibility ID is required" }),
+    .min(1, { message: "Element type is required" }),
+  labelMatch: z.string().optional(),
   timeout: z.string().optional(),
 });
 
@@ -55,12 +76,12 @@ export const ExpectExistsDialog = ({
   onSubmit,
   defaultValues = {},
 }: Props) => {
-  const workflowContext = useAtomValue(workflowContextAtom);
   const form = useForm<ExpectExistsFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       variableName: defaultValues.variableName || "expectExists",
-      accessibilityId: defaultValues.accessibilityId || "",
+      elementType: defaultValues.elementType || "",
+      labelMatch: defaultValues.labelMatch || "",
       timeout: defaultValues.timeout || "10000",
     },
   });
@@ -69,7 +90,8 @@ export const ExpectExistsDialog = ({
     if (open) {
       form.reset({
         variableName: defaultValues.variableName || "expectExists",
-        accessibilityId: defaultValues.accessibilityId || "",
+        elementType: defaultValues.elementType || "",
+        labelMatch: defaultValues.labelMatch || "",
         timeout: defaultValues.timeout || "10000",
       });
     }
@@ -82,7 +104,7 @@ export const ExpectExistsDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Expect Element Exists</DialogTitle>
           <DialogDescription>
@@ -112,20 +134,42 @@ export const ExpectExistsDialog = ({
             />
             <FormField
               control={form.control}
-              name="accessibilityId"
+              name="elementType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Accessibility ID</FormLabel>
+                  <FormLabel>Element Type</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select element type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {ELEMENT_TYPES.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    The type of UI element to check
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="labelMatch"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Label Match</FormLabel>
                   <FormControl>
-                    <UIComponentSelector
-                      value={field.value}
-                      onChange={field.onChange}
-                      projectId={workflowContext?.projectId || null}
-                      placeholder="loginButton"
-                    />
+                    <Input placeholder="ログイン" {...field} />
                   </FormControl>
                   <FormDescription>
-                    The accessibility identifier of the element to check
+                    Text to match in label/placeholder (partial match)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
