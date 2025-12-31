@@ -2,12 +2,14 @@ import { NonRetriableError } from "inngest";
 import { inngest } from "./client";
 import prisma from "@/lib/db";
 import { topologicalSort } from "./utils";
+import { sendWorkflowExecution } from "./utils";
 import { ExecutionStatus, NodeType } from "@/generated/prisma/client";
 import { getExecutor } from "@/features/executions/lib/executor-registry";
+import { CronExpressionParser } from "cron-parser";
 import { httpRequestChannel } from "./channels/http-request";
 import { manualTriggerChannel } from "./channels/manual-trigger";
-import { googleFormTriggerChannel } from "./channels/google-form-trigger";
-import { stripeTriggerChannel } from "./channels/stripe-trigger";
+import { scheduleTriggerChannel } from "./channels/schedule-trigger";
+import { intervalTriggerChannel } from "./channels/interval-trigger";
 import { geminiChannel } from "./channels/gemini";
 import { openAiChannel } from "./channels/openai";
 import { anthropicChannel } from "./channels/anthropic";
@@ -55,8 +57,8 @@ export const executeWorkflow = inngest.createFunction(
     channels: [
       httpRequestChannel(),
       manualTriggerChannel(),
-      googleFormTriggerChannel(),
-      stripeTriggerChannel(),
+      scheduleTriggerChannel(),
+      intervalTriggerChannel(),
       geminiChannel(),
       openAiChannel(),
       anthropicChannel(),
@@ -155,5 +157,77 @@ export const executeWorkflow = inngest.createFunction(
       workflowId,
       result: context,
     };
+  }
+);
+
+// Scheduled workflow checker - runs every minute
+export const scheduledWorkflowChecker = inngest.createFunction(
+  {
+    id: "scheduled-workflow-checker",
+  },
+  {
+    cron: "* * * * *", // Every minute
+  },
+  async ({ step }) => {
+    const now = new Date();
+    const currentMinute = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      now.getHours(),
+      now.getMinutes(),
+      0,
+      0
+    );
+
+    // Find all workflows with SCHEDULE_TRIGGER nodes
+    const scheduledWorkflows = await step.run(
+      "find-scheduled-workflows",
+      async () => {
+        const nodes = await prisma.node.findMany({
+          where: {
+            type: NodeType.SCHEDULE_TRIGGER,
+          },
+          include: {
+            workflow: true,
+          },
+        });
+
+        return nodes;
+      }
+    );
+
+    // Check each scheduled workflow
+    for (const node of scheduledWorkflows) {
+      const data = node.data as { preset?: string; cronExpression?: string };
+      const cronExpr =
+        data.preset === "custom" ? data.cronExpression : data.preset;
+
+      if (!cronExpr) continue;
+
+      try {
+        const cron = CronExpressionParser.parse(cronExpr);
+        const prevDate = cron.prev();
+
+        // Check if the cron matches current minute
+        if (
+          prevDate.getFullYear() === currentMinute.getFullYear() &&
+          prevDate.getMonth() === currentMinute.getMonth() &&
+          prevDate.getDate() === currentMinute.getDate() &&
+          prevDate.getHours() === currentMinute.getHours() &&
+          prevDate.getMinutes() === currentMinute.getMinutes()
+        ) {
+          // Execute this workflow
+          await step.run(`execute-${node.workflowId}`, async () => {
+            await sendWorkflowExecution({ workflowId: node.workflowId });
+          });
+        }
+      } catch {
+        // Invalid cron expression, skip
+        console.error(`Invalid cron expression for workflow ${node.workflowId}: ${cronExpr}`);
+      }
+    }
+
+    return { checked: scheduledWorkflows.length };
   }
 );

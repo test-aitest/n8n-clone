@@ -24,6 +24,8 @@ import {
   Hash,
   Image,
   Scan,
+  Calendar,
+  Timer,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -54,16 +56,16 @@ const triggerNodes: NodeTypeOption[] = [
     icon: MousePointerIcon,
   },
   {
-    type: NodeType.GOOGLE_FORM_TRIGGER,
-    label: "Google Form",
-    description: "Runs the flow when a Google Form is submitted",
-    icon: "/logos/googleform.svg",
+    type: NodeType.SCHEDULE_TRIGGER,
+    label: "Schedule (Cron)",
+    description: "Runs the flow on a schedule using cron expression",
+    icon: Calendar,
   },
   {
-    type: NodeType.STRIPE_TRIGGER,
-    label: "Stripe Event",
-    description: "Runs the flow when a Stripe Event is captured",
-    icon: "/logos/stripe.svg",
+    type: NodeType.INTERVAL_TRIGGER,
+    label: "Delay Trigger",
+    description: "Runs the flow after a specified delay (one-time execution)",
+    icon: Timer,
   },
 ];
 

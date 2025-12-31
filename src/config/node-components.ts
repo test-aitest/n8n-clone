@@ -4,8 +4,8 @@ import type { NodeTypes } from "@xyflow/react";
 
 // Trigger nodes
 import { ManualTriggerNode } from "@/features/triggers/components/manual-trigger";
-import { GoogleFormTriggerNode } from "@/features/triggers/components/google-form-trigger";
-import { StripeTriggerNode } from "@/features/triggers/components/stripe-trigger";
+import { ScheduleTriggerNode } from "@/features/triggers/components/schedule-trigger";
+import { IntervalTriggerNode } from "@/features/triggers/components/interval-trigger";
 
 // Execution nodes
 import { HttpRequestNode } from "@/features/executions/components/http-request";
@@ -46,8 +46,8 @@ export const nodeComponents = {
   [NodeType.INITIAL]: InitialNode,
   [NodeType.HTTP_REQUEST]: HttpRequestNode,
   [NodeType.MANUAL_TRIGGER]: ManualTriggerNode,
-  [NodeType.GOOGLE_FORM_TRIGGER]: GoogleFormTriggerNode,
-  [NodeType.STRIPE_TRIGGER]: StripeTriggerNode,
+  [NodeType.SCHEDULE_TRIGGER]: ScheduleTriggerNode,
+  [NodeType.INTERVAL_TRIGGER]: IntervalTriggerNode,
   [NodeType.GEMINI]: GeminiNode,
   [NodeType.OPENAI]: OpenAiNode,
   [NodeType.ANTHROPIC]: AnthropicNode,

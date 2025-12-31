@@ -1,9 +1,9 @@
 import { NodeType } from "@/generated/prisma/client";
 import { NodeExecutor } from "../types";
 import { manualTriggerExecutor } from "@/features/triggers/components/manual-trigger/executor";
+import { scheduleTriggerExecutor } from "@/features/triggers/components/schedule-trigger/executor";
+import { intervalTriggerExecutor } from "@/features/triggers/components/interval-trigger/executor";
 import { httpRequestExecutor } from "../components/http-request/executor";
-import { googleFormTriggerExecutor } from "@/features/triggers/components/google-form-trigger/executor";
-import { stripeTriggerExecutor } from "@/features/triggers/components/stripe-trigger/executor";
 import { geminiExecutor } from "../components/gemini/executor";
 import { openAiExecutor } from "../components/openai/executor";
 import { anthropicExecutor } from "../components/anthropic/executor";
@@ -40,9 +40,9 @@ import { uiScanExecutor } from "@/features/ios-testing/components/ui-scan/execut
 export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.INITIAL]: manualTriggerExecutor,
   [NodeType.MANUAL_TRIGGER]: manualTriggerExecutor,
+  [NodeType.SCHEDULE_TRIGGER]: scheduleTriggerExecutor,
+  [NodeType.INTERVAL_TRIGGER]: intervalTriggerExecutor,
   [NodeType.HTTP_REQUEST]: httpRequestExecutor,
-  [NodeType.GOOGLE_FORM_TRIGGER]: googleFormTriggerExecutor,
-  [NodeType.STRIPE_TRIGGER]: stripeTriggerExecutor,
   [NodeType.GEMINI]: geminiExecutor,
   [NodeType.ANTHROPIC]: anthropicExecutor,
   [NodeType.OPENAI]: openAiExecutor,

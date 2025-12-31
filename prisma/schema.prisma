@@ -136,9 +136,9 @@ enum NodeType {
   // 既存のノードタイプ
   INITIAL
   MANUAL_TRIGGER
+  SCHEDULE_TRIGGER    // 定期実行（Cron）
+  INTERVAL_TRIGGER    // タイマー実行（一定間隔）
   HTTP_REQUEST
-  GOOGLE_FORM_TRIGGER
-  STRIPE_TRIGGER
   ANTHROPIC
   GEMINI
   OPENAI
