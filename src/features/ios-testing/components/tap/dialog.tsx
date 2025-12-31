@@ -23,6 +23,29 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const ELEMENT_TYPES = [
+  { value: "Button", label: "Button" },
+  { value: "TextField", label: "TextField (Text Input)" },
+  { value: "SecureTextField", label: "SecureTextField (Password)" },
+  { value: "TextView", label: "TextView (TextEditor)" },
+  { value: "Switch", label: "Switch (Toggle)" },
+  { value: "Slider", label: "Slider" },
+  { value: "Stepper", label: "Stepper" },
+  { value: "Picker", label: "Picker" },
+  { value: "DatePicker", label: "DatePicker" },
+  { value: "StaticText", label: "StaticText (Text/Label)" },
+  { value: "Image", label: "Image" },
+  { value: "Link", label: "Link" },
+  { value: "Cell", label: "Cell (List Item)" },
+] as const;
 
 const formSchema = z.object({
   variableName: z
@@ -31,10 +54,10 @@ const formSchema = z.object({
     .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
       message: "Variable name must start with a letter or underscore",
     }),
-  accessibilityId: z
+  elementType: z
     .string()
-    .min(1, { message: "Accessibility ID is required" }),
-  timeout: z.string().optional(),
+    .min(1, { message: "Element type is required" }),
+  labelMatch: z.string().optional(),
 });
 
 export type TapFormValues = z.infer<typeof formSchema>;
@@ -56,8 +79,8 @@ export const TapDialog = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       variableName: defaultValues.variableName || "tapResult",
-      accessibilityId: defaultValues.accessibilityId || "",
-      timeout: defaultValues.timeout || "10000",
+      elementType: defaultValues.elementType || "",
+      labelMatch: defaultValues.labelMatch || "",
     },
   });
 
@@ -65,8 +88,8 @@ export const TapDialog = ({
     if (open) {
       form.reset({
         variableName: defaultValues.variableName || "tapResult",
-        accessibilityId: defaultValues.accessibilityId || "",
-        timeout: defaultValues.timeout || "10000",
+        elementType: defaultValues.elementType || "",
+        labelMatch: defaultValues.labelMatch || "",
       });
     }
   }, [open, defaultValues, form]);
@@ -78,7 +101,7 @@ export const TapDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Tap Element</DialogTitle>
           <DialogDescription>
@@ -108,15 +131,26 @@ export const TapDialog = ({
             />
             <FormField
               control={form.control}
-              name="accessibilityId"
+              name="elementType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Accessibility ID</FormLabel>
-                  <FormControl>
-                    <Input placeholder="loginButton" {...field} />
-                  </FormControl>
+                  <FormLabel>Element Type</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select element type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {ELEMENT_TYPES.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormDescription>
-                    The accessibility identifier of the element to tap
+                    The type of UI element to tap
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -124,15 +158,15 @@ export const TapDialog = ({
             />
             <FormField
               control={form.control}
-              name="timeout"
+              name="labelMatch"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Timeout (ms)</FormLabel>
+                  <FormLabel>Label Match</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="10000" {...field} />
+                    <Input placeholder="メールアドレス" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Maximum time to wait for element to appear (default: 10s)
+                    Text to match in label/placeholder (partial match)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

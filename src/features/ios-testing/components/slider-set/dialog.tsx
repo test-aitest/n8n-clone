@@ -32,9 +32,6 @@ const formSchema = z.object({
     .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
       message: "Variable name must start with a letter or underscore",
     }),
-  accessibilityId: z
-    .string()
-    .min(1, { message: "Accessibility ID is required" }),
   value: z.number().min(0).max(1),
 });
 
@@ -57,7 +54,6 @@ export const SliderSetDialog = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       variableName: defaultValues.variableName || "sliderResult",
-      accessibilityId: defaultValues.accessibilityId || "",
       value: defaultValues.value ?? 0.5,
     },
   });
@@ -66,7 +62,6 @@ export const SliderSetDialog = ({
     if (open) {
       form.reset({
         variableName: defaultValues.variableName || "sliderResult",
-        accessibilityId: defaultValues.accessibilityId || "",
         value: defaultValues.value ?? 0.5,
       });
     }
@@ -104,22 +99,6 @@ export const SliderSetDialog = ({
                   </FormControl>
                   <FormDescription>
                     Reference this result in other nodes
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="accessibilityId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Accessibility ID</FormLabel>
-                  <FormControl>
-                    <Input placeholder="volumeSlider" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    The accessibility identifier of the slider element
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

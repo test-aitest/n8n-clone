@@ -4,20 +4,15 @@ import {
   EmptyView,
   EntityContainer,
   EntityHeader,
-  EntityItem,
   EntityList,
   EntitySearch,
   ErrorView,
   LoadingView,
 } from "@/components/entity-components";
-import {
-  useRemoveTemplate,
-  useSuspenseTemplates,
-} from "../hooks/use-templates";
+import { useSuspenseTemplates } from "../hooks/use-templates";
 import { useTemplatesParams } from "../hooks/use-templates-params";
 import { useEntitySearch } from "@/hooks/use-entity-search";
 import { FileTextIcon, SparklesIcon } from "lucide-react";
-import { useState } from "react";
 import { TemplateSelectDialog } from "./template-select-dialog";
 import { Badge } from "@/components/ui/badge";
 
@@ -49,31 +44,37 @@ export const TemplatesSearch = () => {
 
 export const TemplatesList = () => {
   const templates = useSuspenseTemplates();
+  const [params, setParams] = useTemplatesParams();
 
-  return (
-    <EntityList
-      items={templates.data as TemplateData[]}
-      getKey={(template) => template.id}
-      renderItem={(template) => <TemplateItem data={template} />}
-      emptyView={<TemplatesEmpty />}
-    />
-  );
-};
-
-export const TemplatesHeader = ({ disabled }: { disabled?: boolean }) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const handleCloseDialog = () => {
+    setParams({ ...params, selected: "" });
+  };
 
   return (
     <>
-      <EntityHeader
-        title="Templates"
-        description="Reusable workflow templates for iOS testing"
-        onNew={() => setIsDialogOpen(true)}
-        newButtonLabel="Use template"
-        disabled={disabled}
+      <EntityList
+        items={templates.data as TemplateData[]}
+        getKey={(template) => template.id}
+        renderItem={(template) => <TemplateItem data={template} />}
+        emptyView={<TemplatesEmpty />}
       />
-      <TemplateSelectDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
+      <TemplateSelectDialog
+        open={!!params.selected}
+        onOpenChange={(open) => {
+          if (!open) handleCloseDialog();
+        }}
+        preSelectedTemplateId={params.selected || undefined}
+      />
     </>
+  );
+};
+
+export const TemplatesHeader = () => {
+  return (
+    <EntityHeader
+      title="Templates"
+      description="Reusable workflow templates for iOS testing"
+    />
   );
 };
 
@@ -109,22 +110,33 @@ export const TemplatesEmpty = () => {
 };
 
 export const TemplateItem = ({ data }: { data: TemplateData }) => {
-  const removeTemplate = useRemoveTemplate();
+  return <TemplateItemCard data={data} />;
+};
 
-  const handleRemove = () => {
-    // Only allow removing custom templates
-    if (!data.isDefault) {
-      removeTemplate.mutate({ id: data.id });
-    }
+// Custom template item that navigates via URL
+const TemplateItemCard = ({
+  data,
+}: {
+  data: TemplateData;
+}) => {
+  const [, setParams] = useTemplatesParams();
+
+  const handleClick = () => {
+    setParams((prev) => ({ ...prev, selected: data.id }));
   };
 
   return (
-    <EntityItem
-      href={`/templates?selected=${data.id}`}
-      title={data.name}
-      subtitle={
-        <div className="flex flex-col gap-1">
+    <div
+      onClick={handleClick}
+      className="flex items-center justify-between px-4 py-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors cursor-pointer"
+    >
+      <div className="flex items-center gap-3 min-w-0">
+        <div className="shrink-0 size-9 flex items-center justify-center rounded-md bg-muted">
+          <FileTextIcon className="size-4 text-muted-foreground" />
+        </div>
+        <div className="min-w-0">
           <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">{data.name}</span>
             {data.isDefault && (
               <Badge variant="secondary" className="text-xs">
                 <SparklesIcon className="size-3 mr-1" />
@@ -132,25 +144,25 @@ export const TemplateItem = ({ data }: { data: TemplateData }) => {
               </Badge>
             )}
           </div>
-          <span>{data.description || "No description"}</span>
+          <div className="text-xs text-muted-foreground">
+            {data.description || "No description"}
+          </div>
           {data.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-1">
-              {data.tags.map((tag) => (
+              {data.tags.slice(0, 3).map((tag) => (
                 <Badge key={tag} variant="outline" className="text-xs">
                   {tag}
                 </Badge>
               ))}
+              {data.tags.length > 3 && (
+                <Badge variant="outline" className="text-xs">
+                  +{data.tags.length - 3}
+                </Badge>
+              )}
             </div>
           )}
         </div>
-      }
-      image={
-        <div className="size-8 flex items-center justify-center">
-          <FileTextIcon className="size-5 text-muted-foreground" />
-        </div>
-      }
-      onRemove={data.isDefault ? undefined : handleRemove}
-      isRemoving={removeTemplate.isPending}
-    />
+      </div>
+    </div>
   );
 };

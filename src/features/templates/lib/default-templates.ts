@@ -36,6 +36,10 @@ export interface DefaultTemplate {
   includesSimulatorConfig: boolean;
 }
 
+// Node spacing for horizontal layout
+const NODE_SPACING_X = 250;
+const NODE_Y = 200;
+
 // Helper to create unique IDs
 let nodeCounter = 0;
 function createNodeId(prefix: string): string {
@@ -52,6 +56,7 @@ function resetNodeCounter(): void {
  */
 const buttonTapNavigationTemplate: DefaultTemplate = (() => {
   resetNodeCounter();
+  const triggerId = createNodeId("trigger");
   const bootId = createNodeId("boot");
   const launchId = createNodeId("launch");
   const tapId = createNodeId("tap");
@@ -75,9 +80,17 @@ const buttonTapNavigationTemplate: DefaultTemplate = (() => {
     definition: {
       nodes: [
         {
+          id: triggerId,
+          type: NodeType.MANUAL_TRIGGER,
+          position: { x: 0, y: NODE_Y },
+          data: {
+            variableName: "trigger",
+          },
+        },
+        {
           id: bootId,
           type: NodeType.IOS_SIMULATOR_BOOT,
-          position: { x: 250, y: 0 },
+          position: { x: NODE_SPACING_X, y: NODE_Y },
           data: {
             variableName: "simulatorBoot",
             deviceId: "{{deviceId}}",
@@ -86,16 +99,17 @@ const buttonTapNavigationTemplate: DefaultTemplate = (() => {
         {
           id: launchId,
           type: NodeType.IOS_APP_LAUNCH,
-          position: { x: 250, y: 120 },
+          position: { x: NODE_SPACING_X * 2, y: NODE_Y },
           data: {
             variableName: "appLaunch",
+            deviceId: "{{deviceId}}",
             bundleId: "{{bundleId}}",
           },
         },
         {
           id: tapId,
           type: NodeType.IOS_TAP,
-          position: { x: 250, y: 240 },
+          position: { x: NODE_SPACING_X * 3, y: NODE_Y },
           data: {
             variableName: "buttonTap",
             accessibilityId: "{{buttonId}}",
@@ -105,7 +119,7 @@ const buttonTapNavigationTemplate: DefaultTemplate = (() => {
         {
           id: expectId,
           type: NodeType.IOS_EXPECT_EXISTS,
-          position: { x: 250, y: 360 },
+          position: { x: NODE_SPACING_X * 4, y: NODE_Y },
           data: {
             variableName: "screenExists",
             accessibilityId: "{{targetScreenId}}",
@@ -115,7 +129,7 @@ const buttonTapNavigationTemplate: DefaultTemplate = (() => {
         {
           id: screenshotId,
           type: NodeType.IOS_SCREENSHOT,
-          position: { x: 250, y: 480 },
+          position: { x: NODE_SPACING_X * 5, y: NODE_Y },
           data: {
             variableName: "screenshot",
             filename: "navigation_result",
@@ -123,10 +137,11 @@ const buttonTapNavigationTemplate: DefaultTemplate = (() => {
         },
       ],
       edges: [
-        { id: `e1`, source: bootId, target: launchId },
-        { id: `e2`, source: launchId, target: tapId },
-        { id: `e3`, source: tapId, target: expectId },
-        { id: `e4`, source: expectId, target: screenshotId },
+        { id: "e1", source: triggerId, target: bootId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e2", source: bootId, target: launchId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e3", source: launchId, target: tapId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e4", source: tapId, target: expectId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e5", source: expectId, target: screenshotId, sourceHandle: "source-1", targetHandle: "target-1" },
       ],
     },
   };
@@ -137,6 +152,7 @@ const buttonTapNavigationTemplate: DefaultTemplate = (() => {
  */
 const textInputActionTemplate: DefaultTemplate = (() => {
   resetNodeCounter();
+  const triggerId = createNodeId("trigger");
   const bootId = createNodeId("boot");
   const launchId = createNodeId("launch");
   const tapFieldId = createNodeId("tapField");
@@ -163,9 +179,17 @@ const textInputActionTemplate: DefaultTemplate = (() => {
     definition: {
       nodes: [
         {
+          id: triggerId,
+          type: NodeType.MANUAL_TRIGGER,
+          position: { x: 0, y: NODE_Y },
+          data: {
+            variableName: "trigger",
+          },
+        },
+        {
           id: bootId,
           type: NodeType.IOS_SIMULATOR_BOOT,
-          position: { x: 250, y: 0 },
+          position: { x: NODE_SPACING_X, y: NODE_Y },
           data: {
             variableName: "simulatorBoot",
             deviceId: "{{deviceId}}",
@@ -174,16 +198,17 @@ const textInputActionTemplate: DefaultTemplate = (() => {
         {
           id: launchId,
           type: NodeType.IOS_APP_LAUNCH,
-          position: { x: 250, y: 120 },
+          position: { x: NODE_SPACING_X * 2, y: NODE_Y },
           data: {
             variableName: "appLaunch",
+            deviceId: "{{deviceId}}",
             bundleId: "{{bundleId}}",
           },
         },
         {
           id: tapFieldId,
           type: NodeType.IOS_TAP,
-          position: { x: 250, y: 240 },
+          position: { x: NODE_SPACING_X * 3, y: NODE_Y },
           data: {
             variableName: "fieldTap",
             accessibilityId: "{{textFieldId}}",
@@ -192,7 +217,7 @@ const textInputActionTemplate: DefaultTemplate = (() => {
         {
           id: inputId,
           type: NodeType.IOS_TEXT_INPUT,
-          position: { x: 250, y: 360 },
+          position: { x: NODE_SPACING_X * 4, y: NODE_Y },
           data: {
             variableName: "textInput",
             accessibilityId: "{{textFieldId}}",
@@ -202,7 +227,7 @@ const textInputActionTemplate: DefaultTemplate = (() => {
         {
           id: tapSubmitId,
           type: NodeType.IOS_TAP,
-          position: { x: 250, y: 480 },
+          position: { x: NODE_SPACING_X * 5, y: NODE_Y },
           data: {
             variableName: "submitTap",
             accessibilityId: "{{submitButtonId}}",
@@ -211,7 +236,7 @@ const textInputActionTemplate: DefaultTemplate = (() => {
         {
           id: expectId,
           type: NodeType.IOS_EXPECT_EXISTS,
-          position: { x: 250, y: 600 },
+          position: { x: NODE_SPACING_X * 6, y: NODE_Y },
           data: {
             variableName: "resultExists",
             accessibilityId: "{{resultId}}",
@@ -220,11 +245,12 @@ const textInputActionTemplate: DefaultTemplate = (() => {
         },
       ],
       edges: [
-        { id: `e1`, source: bootId, target: launchId },
-        { id: `e2`, source: launchId, target: tapFieldId },
-        { id: `e3`, source: tapFieldId, target: inputId },
-        { id: `e4`, source: inputId, target: tapSubmitId },
-        { id: `e5`, source: tapSubmitId, target: expectId },
+        { id: "e1", source: triggerId, target: bootId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e2", source: bootId, target: launchId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e3", source: launchId, target: tapFieldId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e4", source: tapFieldId, target: inputId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e5", source: inputId, target: tapSubmitId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e6", source: tapSubmitId, target: expectId, sourceHandle: "source-1", targetHandle: "target-1" },
       ],
     },
   };
@@ -235,6 +261,7 @@ const textInputActionTemplate: DefaultTemplate = (() => {
  */
 const loginFlowTemplate: DefaultTemplate = (() => {
   resetNodeCounter();
+  const triggerId = createNodeId("trigger");
   const bootId = createNodeId("boot");
   const launchId = createNodeId("launch");
   const tapEmailId = createNodeId("tapEmail");
@@ -266,9 +293,17 @@ const loginFlowTemplate: DefaultTemplate = (() => {
     definition: {
       nodes: [
         {
+          id: triggerId,
+          type: NodeType.MANUAL_TRIGGER,
+          position: { x: 0, y: NODE_Y },
+          data: {
+            variableName: "trigger",
+          },
+        },
+        {
           id: bootId,
           type: NodeType.IOS_SIMULATOR_BOOT,
-          position: { x: 250, y: 0 },
+          position: { x: NODE_SPACING_X, y: NODE_Y },
           data: {
             variableName: "simulatorBoot",
             deviceId: "{{deviceId}}",
@@ -277,16 +312,17 @@ const loginFlowTemplate: DefaultTemplate = (() => {
         {
           id: launchId,
           type: NodeType.IOS_APP_LAUNCH,
-          position: { x: 250, y: 120 },
+          position: { x: NODE_SPACING_X * 2, y: NODE_Y },
           data: {
             variableName: "appLaunch",
+            deviceId: "{{deviceId}}",
             bundleId: "{{bundleId}}",
           },
         },
         {
           id: tapEmailId,
           type: NodeType.IOS_TAP,
-          position: { x: 250, y: 240 },
+          position: { x: NODE_SPACING_X * 3, y: NODE_Y },
           data: {
             variableName: "emailFieldTap",
             accessibilityId: "{{emailFieldId}}",
@@ -295,7 +331,7 @@ const loginFlowTemplate: DefaultTemplate = (() => {
         {
           id: inputEmailId,
           type: NodeType.IOS_TEXT_INPUT,
-          position: { x: 250, y: 360 },
+          position: { x: NODE_SPACING_X * 4, y: NODE_Y },
           data: {
             variableName: "emailInput",
             accessibilityId: "{{emailFieldId}}",
@@ -305,7 +341,7 @@ const loginFlowTemplate: DefaultTemplate = (() => {
         {
           id: tapPasswordId,
           type: NodeType.IOS_TAP,
-          position: { x: 250, y: 480 },
+          position: { x: NODE_SPACING_X * 5, y: NODE_Y },
           data: {
             variableName: "passwordFieldTap",
             accessibilityId: "{{passwordFieldId}}",
@@ -314,7 +350,7 @@ const loginFlowTemplate: DefaultTemplate = (() => {
         {
           id: inputPasswordId,
           type: NodeType.IOS_TEXT_INPUT,
-          position: { x: 250, y: 600 },
+          position: { x: NODE_SPACING_X * 6, y: NODE_Y },
           data: {
             variableName: "passwordInput",
             accessibilityId: "{{passwordFieldId}}",
@@ -324,7 +360,7 @@ const loginFlowTemplate: DefaultTemplate = (() => {
         {
           id: tapLoginId,
           type: NodeType.IOS_TAP,
-          position: { x: 250, y: 720 },
+          position: { x: NODE_SPACING_X * 7, y: NODE_Y },
           data: {
             variableName: "loginButtonTap",
             accessibilityId: "{{loginButtonId}}",
@@ -333,7 +369,7 @@ const loginFlowTemplate: DefaultTemplate = (() => {
         {
           id: expectHomeId,
           type: NodeType.IOS_EXPECT_EXISTS,
-          position: { x: 250, y: 840 },
+          position: { x: NODE_SPACING_X * 8, y: NODE_Y },
           data: {
             variableName: "homeScreenExists",
             accessibilityId: "{{homeScreenId}}",
@@ -343,7 +379,7 @@ const loginFlowTemplate: DefaultTemplate = (() => {
         {
           id: screenshotId,
           type: NodeType.IOS_SCREENSHOT,
-          position: { x: 250, y: 960 },
+          position: { x: NODE_SPACING_X * 9, y: NODE_Y },
           data: {
             variableName: "screenshot",
             filename: "login_success",
@@ -351,14 +387,15 @@ const loginFlowTemplate: DefaultTemplate = (() => {
         },
       ],
       edges: [
-        { id: `e1`, source: bootId, target: launchId },
-        { id: `e2`, source: launchId, target: tapEmailId },
-        { id: `e3`, source: tapEmailId, target: inputEmailId },
-        { id: `e4`, source: inputEmailId, target: tapPasswordId },
-        { id: `e5`, source: tapPasswordId, target: inputPasswordId },
-        { id: `e6`, source: inputPasswordId, target: tapLoginId },
-        { id: `e7`, source: tapLoginId, target: expectHomeId },
-        { id: `e8`, source: expectHomeId, target: screenshotId },
+        { id: "e1", source: triggerId, target: bootId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e2", source: bootId, target: launchId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e3", source: launchId, target: tapEmailId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e4", source: tapEmailId, target: inputEmailId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e5", source: inputEmailId, target: tapPasswordId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e6", source: tapPasswordId, target: inputPasswordId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e7", source: inputPasswordId, target: tapLoginId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e8", source: tapLoginId, target: expectHomeId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e9", source: expectHomeId, target: screenshotId, sourceHandle: "source-1", targetHandle: "target-1" },
       ],
     },
   };
@@ -369,6 +406,7 @@ const loginFlowTemplate: DefaultTemplate = (() => {
  */
 const formValidationTemplate: DefaultTemplate = (() => {
   resetNodeCounter();
+  const triggerId = createNodeId("trigger");
   const bootId = createNodeId("boot");
   const launchId = createNodeId("launch");
   const tapFieldId = createNodeId("tapField");
@@ -396,9 +434,17 @@ const formValidationTemplate: DefaultTemplate = (() => {
     definition: {
       nodes: [
         {
+          id: triggerId,
+          type: NodeType.MANUAL_TRIGGER,
+          position: { x: 0, y: NODE_Y },
+          data: {
+            variableName: "trigger",
+          },
+        },
+        {
           id: bootId,
           type: NodeType.IOS_SIMULATOR_BOOT,
-          position: { x: 250, y: 0 },
+          position: { x: NODE_SPACING_X, y: NODE_Y },
           data: {
             variableName: "simulatorBoot",
             deviceId: "{{deviceId}}",
@@ -407,16 +453,17 @@ const formValidationTemplate: DefaultTemplate = (() => {
         {
           id: launchId,
           type: NodeType.IOS_APP_LAUNCH,
-          position: { x: 250, y: 120 },
+          position: { x: NODE_SPACING_X * 2, y: NODE_Y },
           data: {
             variableName: "appLaunch",
+            deviceId: "{{deviceId}}",
             bundleId: "{{bundleId}}",
           },
         },
         {
           id: tapFieldId,
           type: NodeType.IOS_TAP,
-          position: { x: 250, y: 240 },
+          position: { x: NODE_SPACING_X * 3, y: NODE_Y },
           data: {
             variableName: "fieldTap",
             accessibilityId: "{{inputFieldId}}",
@@ -425,7 +472,7 @@ const formValidationTemplate: DefaultTemplate = (() => {
         {
           id: inputInvalidId,
           type: NodeType.IOS_TEXT_INPUT,
-          position: { x: 250, y: 360 },
+          position: { x: NODE_SPACING_X * 4, y: NODE_Y },
           data: {
             variableName: "invalidInput",
             accessibilityId: "{{inputFieldId}}",
@@ -435,7 +482,7 @@ const formValidationTemplate: DefaultTemplate = (() => {
         {
           id: tapSubmitId,
           type: NodeType.IOS_TAP,
-          position: { x: 250, y: 480 },
+          position: { x: NODE_SPACING_X * 5, y: NODE_Y },
           data: {
             variableName: "submitTap",
             accessibilityId: "{{submitButtonId}}",
@@ -444,7 +491,7 @@ const formValidationTemplate: DefaultTemplate = (() => {
         {
           id: expectErrorId,
           type: NodeType.IOS_EXPECT_EXISTS,
-          position: { x: 250, y: 600 },
+          position: { x: NODE_SPACING_X * 6, y: NODE_Y },
           data: {
             variableName: "errorExists",
             accessibilityId: "{{errorMessageId}}",
@@ -454,7 +501,7 @@ const formValidationTemplate: DefaultTemplate = (() => {
         {
           id: screenshotId,
           type: NodeType.IOS_SCREENSHOT,
-          position: { x: 250, y: 720 },
+          position: { x: NODE_SPACING_X * 7, y: NODE_Y },
           data: {
             variableName: "screenshot",
             filename: "validation_error",
@@ -462,12 +509,13 @@ const formValidationTemplate: DefaultTemplate = (() => {
         },
       ],
       edges: [
-        { id: `e1`, source: bootId, target: launchId },
-        { id: `e2`, source: launchId, target: tapFieldId },
-        { id: `e3`, source: tapFieldId, target: inputInvalidId },
-        { id: `e4`, source: inputInvalidId, target: tapSubmitId },
-        { id: `e5`, source: tapSubmitId, target: expectErrorId },
-        { id: `e6`, source: expectErrorId, target: screenshotId },
+        { id: "e1", source: triggerId, target: bootId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e2", source: bootId, target: launchId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e3", source: launchId, target: tapFieldId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e4", source: tapFieldId, target: inputInvalidId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e5", source: inputInvalidId, target: tapSubmitId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e6", source: tapSubmitId, target: expectErrorId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e7", source: expectErrorId, target: screenshotId, sourceHandle: "source-1", targetHandle: "target-1" },
       ],
     },
   };
@@ -478,6 +526,7 @@ const formValidationTemplate: DefaultTemplate = (() => {
  */
 const listScrollTapTemplate: DefaultTemplate = (() => {
   resetNodeCounter();
+  const triggerId = createNodeId("trigger");
   const bootId = createNodeId("boot");
   const launchId = createNodeId("launch");
   const scrollId = createNodeId("scroll");
@@ -502,9 +551,17 @@ const listScrollTapTemplate: DefaultTemplate = (() => {
     definition: {
       nodes: [
         {
+          id: triggerId,
+          type: NodeType.MANUAL_TRIGGER,
+          position: { x: 0, y: NODE_Y },
+          data: {
+            variableName: "trigger",
+          },
+        },
+        {
           id: bootId,
           type: NodeType.IOS_SIMULATOR_BOOT,
-          position: { x: 250, y: 0 },
+          position: { x: NODE_SPACING_X, y: NODE_Y },
           data: {
             variableName: "simulatorBoot",
             deviceId: "{{deviceId}}",
@@ -513,16 +570,17 @@ const listScrollTapTemplate: DefaultTemplate = (() => {
         {
           id: launchId,
           type: NodeType.IOS_APP_LAUNCH,
-          position: { x: 250, y: 120 },
+          position: { x: NODE_SPACING_X * 2, y: NODE_Y },
           data: {
             variableName: "appLaunch",
+            deviceId: "{{deviceId}}",
             bundleId: "{{bundleId}}",
           },
         },
         {
           id: scrollId,
           type: NodeType.IOS_SCROLL_UNTIL_VISIBLE,
-          position: { x: 250, y: 240 },
+          position: { x: NODE_SPACING_X * 3, y: NODE_Y },
           data: {
             variableName: "scrollResult",
             accessibilityId: "{{targetItemId}}",
@@ -533,7 +591,7 @@ const listScrollTapTemplate: DefaultTemplate = (() => {
         {
           id: tapItemId,
           type: NodeType.IOS_TAP,
-          position: { x: 250, y: 360 },
+          position: { x: NODE_SPACING_X * 4, y: NODE_Y },
           data: {
             variableName: "itemTap",
             accessibilityId: "{{targetItemId}}",
@@ -542,7 +600,7 @@ const listScrollTapTemplate: DefaultTemplate = (() => {
         {
           id: expectDetailId,
           type: NodeType.IOS_EXPECT_EXISTS,
-          position: { x: 250, y: 480 },
+          position: { x: NODE_SPACING_X * 5, y: NODE_Y },
           data: {
             variableName: "detailExists",
             accessibilityId: "{{detailScreenId}}",
@@ -552,7 +610,7 @@ const listScrollTapTemplate: DefaultTemplate = (() => {
         {
           id: screenshotId,
           type: NodeType.IOS_SCREENSHOT,
-          position: { x: 250, y: 600 },
+          position: { x: NODE_SPACING_X * 6, y: NODE_Y },
           data: {
             variableName: "screenshot",
             filename: "detail_screen",
@@ -560,11 +618,12 @@ const listScrollTapTemplate: DefaultTemplate = (() => {
         },
       ],
       edges: [
-        { id: `e1`, source: bootId, target: launchId },
-        { id: `e2`, source: launchId, target: scrollId },
-        { id: `e3`, source: scrollId, target: tapItemId },
-        { id: `e4`, source: tapItemId, target: expectDetailId },
-        { id: `e5`, source: expectDetailId, target: screenshotId },
+        { id: "e1", source: triggerId, target: bootId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e2", source: bootId, target: launchId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e3", source: launchId, target: scrollId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e4", source: scrollId, target: tapItemId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e5", source: tapItemId, target: expectDetailId, sourceHandle: "source-1", targetHandle: "target-1" },
+        { id: "e6", source: expectDetailId, target: screenshotId, sourceHandle: "source-1", targetHandle: "target-1" },
       ],
     },
   };

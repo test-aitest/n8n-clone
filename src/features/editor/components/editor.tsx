@@ -23,7 +23,8 @@ import "@xyflow/react/dist/style.css";
 import { nodeComponents } from "@/config/node-components";
 import { AddNodeButton } from "./add-node-button";
 import { useSetAtom } from "jotai";
-import { editorAtom } from "../store/atoms";
+import { useEffect } from "react";
+import { editorAtom, workflowContextAtom } from "../store/atoms";
 import { NodeType } from "@/generated/prisma/browser";
 import { ExecuteWorkflowButton } from "./execute-workflow-button";
 
@@ -39,6 +40,16 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
   const { data: workflow } = useSuspenseWorkflow(workflowId);
 
   const setEditor = useSetAtom(editorAtom);
+  const setWorkflowContext = useSetAtom(workflowContextAtom);
+
+  // Set workflow context for node dialogs to access projectId
+  useEffect(() => {
+    setWorkflowContext({
+      workflowId,
+      projectId: workflow.projectId,
+    });
+    return () => setWorkflowContext(null);
+  }, [workflowId, workflow.projectId, setWorkflowContext]);
 
   const [nodes, setNodes] = useState<Node[]>(workflow.nodes);
   const [edges, setEdges] = useState<Edge[]>(workflow.edges);

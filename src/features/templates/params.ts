@@ -5,6 +5,7 @@ export const templatesParams = {
   page: parseAsInteger.withDefault(1),
   category: parseAsString.withDefault(""),
   projectId: parseAsString.withDefault(""),
+  selected: parseAsString.withDefault(""),
 };
 
 export const templatesParamsCache = createSearchParamsCache(templatesParams);

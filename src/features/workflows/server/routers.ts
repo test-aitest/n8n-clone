@@ -144,6 +144,7 @@ export const workflowsRouter = createTRPCRouter({
       return {
         id: workflow.id,
         name: workflow.name,
+        projectId: workflow.projectId,
         nodes,
         edges,
       };

@@ -38,9 +38,6 @@ const formSchema = z.object({
     .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
       message: "Variable name must start with a letter or underscore",
     }),
-  accessibilityId: z
-    .string()
-    .min(1, { message: "Accessibility ID is required" }),
   targetState: z.enum(["toggle", "on", "off"]),
 });
 
@@ -63,7 +60,6 @@ export const ToggleSwitchDialog = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       variableName: defaultValues.variableName || "toggleResult",
-      accessibilityId: defaultValues.accessibilityId || "",
       targetState: defaultValues.targetState || "toggle",
     },
   });
@@ -72,7 +68,6 @@ export const ToggleSwitchDialog = ({
     if (open) {
       form.reset({
         variableName: defaultValues.variableName || "toggleResult",
-        accessibilityId: defaultValues.accessibilityId || "",
         targetState: defaultValues.targetState || "toggle",
       });
     }
@@ -108,22 +103,6 @@ export const ToggleSwitchDialog = ({
                   </FormControl>
                   <FormDescription>
                     Reference this result in other nodes
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="accessibilityId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Accessibility ID</FormLabel>
-                  <FormControl>
-                    <Input placeholder="notificationsSwitch" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    The accessibility identifier of the switch element
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

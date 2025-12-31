@@ -1,7 +1,15 @@
 import { NonRetriableError } from "inngest";
 import type { NodeExecutor } from "@/features/executions/types";
+import {
+  createIOSError,
+  getBundleIdFromContext,
+  getDeviceIdFromContext,
+  IOS_ERROR_CODES,
+  parseTimeout,
+  validateRequired,
+} from "@/features/ios-testing/lib/errors";
 import { iosExpectValueChannel } from "@/inngest/channels/ios-testing";
-import * as idb from "@/lib/ios/idb";
+import * as wda from "@/lib/ios/wda";
 
 type ExpectValueData = {
   variableName?: string;
@@ -9,6 +17,8 @@ type ExpectValueData = {
   expectedValue?: string;
   timeout?: string;
 };
+
+const NODE_NAME = "Expect Value";
 
 export const expectValueExecutor: NodeExecutor<ExpectValueData> = async ({
   data,
@@ -26,60 +36,74 @@ export const expectValueExecutor: NodeExecutor<ExpectValueData> = async ({
 
   try {
     const result = await step.run("expect-value", async () => {
-      if (!data.accessibilityId) {
-        throw new NonRetriableError(
-          "Expect Value: Accessibility ID is required",
+      // Validate required fields
+      validateRequired(
+        data,
+        ["accessibilityId", "expectedValue", "variableName"],
+        NODE_NAME,
+      );
+
+      // Get device ID and bundle ID from context
+      const deviceId = getDeviceIdFromContext(context, NODE_NAME);
+      const bundleId = getBundleIdFromContext(context, NODE_NAME);
+      const timeout = parseTimeout(data.timeout, 10000);
+
+      // Ensure Appium is running
+      const appiumRunning = await wda.isAppiumRunning();
+      if (!appiumRunning) {
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Appium server is not running. Start Appium with 'appium' command.`,
         );
       }
 
-      if (!data.expectedValue) {
-        throw new NonRetriableError("Expect Value: Expected value is required");
-      }
-
-      if (!data.variableName) {
-        throw new NonRetriableError("Expect Value: Variable name is required");
-      }
-
-      // Get device ID from context (should be set by simulator boot node)
-      const simulator = context.simulator as { deviceId?: string } | undefined;
-      const deviceId =
-        simulator?.deviceId || (context.deviceId as string | undefined);
-      if (!deviceId) {
-        throw new NonRetriableError(
-          "Expect Value: No device ID found. Make sure simulator is booted first.",
+      // Ensure we have bundleId
+      if (!bundleId) {
+        throw createIOSError(
+          IOS_ERROR_CODES.MISSING_REQUIRED_FIELD,
+          `${NODE_NAME} failed: No bundle ID found. Ensure App Launch node runs first.`,
         );
       }
 
-      const timeout = data.timeout ? parseInt(data.timeout, 10) : 10000;
+      // Create or reuse WDA session
+      const sessionResult = await wda.createSession(deviceId, bundleId);
+      if (!sessionResult.success) {
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Could not create WDA session: ${sessionResult.error}`,
+        );
+      }
 
       // Wait for element to appear
-      const element = await idb.waitForElement(
+      const elementResult = await wda.waitForElement(
         deviceId,
-        data.accessibilityId,
+        data.accessibilityId!,
         timeout,
       );
 
-      if (!element) {
-        throw new NonRetriableError(
-          `Expect Value failed: Element '${data.accessibilityId}' not found within ${timeout}ms`,
+      if (!elementResult.success) {
+        throw createIOSError(
+          IOS_ERROR_CODES.ELEMENT_NOT_FOUND,
+          `${NODE_NAME} failed: Element '${data.accessibilityId}' not found within ${timeout}ms`,
         );
       }
 
-      // Get the value content (AXValue)
-      const actualValue = element.AXValue || "";
+      // Get the value content
+      const actualValue =
+        (await wda.getElementValue(deviceId, data.accessibilityId!)) || "";
 
       // Check if value matches (exact match)
       const matches = actualValue === data.expectedValue;
 
       if (!matches) {
         throw new NonRetriableError(
-          `Expect Value failed: Expected "${data.expectedValue}" but got "${actualValue}"`,
+          `${NODE_NAME} failed: Expected "${data.expectedValue}" but got "${actualValue}"`,
         );
       }
 
       return {
         ...context,
-        [data.variableName]: {
+        [data.variableName!]: {
           success: true,
           matches: true,
           accessibilityId: data.accessibilityId,

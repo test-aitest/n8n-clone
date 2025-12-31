@@ -1,7 +1,15 @@
 import { NonRetriableError } from "inngest";
 import type { NodeExecutor } from "@/features/executions/types";
+import {
+  createIOSError,
+  getBundleIdFromContext,
+  getDeviceIdFromContext,
+  IOS_ERROR_CODES,
+  parseTimeout,
+  validateRequired,
+} from "@/features/ios-testing/lib/errors";
 import { iosExpectTextChannel } from "@/inngest/channels/ios-testing";
-import * as idb from "@/lib/ios/idb";
+import * as wda from "@/lib/ios/wda";
 
 type ExpectTextData = {
   variableName?: string;
@@ -10,6 +18,8 @@ type ExpectTextData = {
   matchType?: "exact" | "contains" | "regex";
   timeout?: string;
 };
+
+const NODE_NAME = "Expect Text";
 
 export const expectTextExecutor: NodeExecutor<ExpectTextData> = async ({
   data,
@@ -27,48 +37,62 @@ export const expectTextExecutor: NodeExecutor<ExpectTextData> = async ({
 
   try {
     const result = await step.run("expect-text", async () => {
-      if (!data.accessibilityId) {
-        throw new NonRetriableError(
-          "Expect Text: Accessibility ID is required",
-        );
-      }
+      // Validate required fields
+      validateRequired(
+        data,
+        ["accessibilityId", "expectedText", "variableName"],
+        NODE_NAME,
+      );
 
-      if (!data.expectedText) {
-        throw new NonRetriableError("Expect Text: Expected text is required");
-      }
-
-      if (!data.variableName) {
-        throw new NonRetriableError("Expect Text: Variable name is required");
-      }
-
-      // Get device ID from context (should be set by simulator boot node)
-      const simulator = context.simulator as { deviceId?: string } | undefined;
-      const deviceId =
-        simulator?.deviceId || (context.deviceId as string | undefined);
-      if (!deviceId) {
-        throw new NonRetriableError(
-          "Expect Text: No device ID found. Make sure simulator is booted first.",
-        );
-      }
-
-      const timeout = data.timeout ? parseInt(data.timeout, 10) : 10000;
+      // Get device ID and bundle ID from context
+      const deviceId = getDeviceIdFromContext(context, NODE_NAME);
+      const bundleId = getBundleIdFromContext(context, NODE_NAME);
+      const timeout = parseTimeout(data.timeout, 10000);
       const matchType = data.matchType || "exact";
 
+      // Ensure Appium is running
+      const appiumRunning = await wda.isAppiumRunning();
+      if (!appiumRunning) {
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Appium server is not running. Start Appium with 'appium' command.`,
+        );
+      }
+
+      // Ensure we have bundleId
+      if (!bundleId) {
+        throw createIOSError(
+          IOS_ERROR_CODES.MISSING_REQUIRED_FIELD,
+          `${NODE_NAME} failed: No bundle ID found. Ensure App Launch node runs first.`,
+        );
+      }
+
+      // Create or reuse WDA session
+      const sessionResult = await wda.createSession(deviceId, bundleId);
+      if (!sessionResult.success) {
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Could not create WDA session: ${sessionResult.error}`,
+        );
+      }
+
       // Wait for element to appear
-      const element = await idb.waitForElement(
+      const elementResult = await wda.waitForElement(
         deviceId,
-        data.accessibilityId,
+        data.accessibilityId!,
         timeout,
       );
 
-      if (!element) {
-        throw new NonRetriableError(
-          `Expect Text failed: Element '${data.accessibilityId}' not found within ${timeout}ms`,
+      if (!elementResult.success) {
+        throw createIOSError(
+          IOS_ERROR_CODES.ELEMENT_NOT_FOUND,
+          `${NODE_NAME} failed: Element '${data.accessibilityId}' not found within ${timeout}ms`,
         );
       }
 
-      // Get the text content (AXLabel)
-      const actualText = element.AXLabel || "";
+      // Get the text content
+      const actualText =
+        (await wda.getElementText(deviceId, data.accessibilityId!)) || "";
 
       // Check if text matches based on match type
       let matches = false;
@@ -77,15 +101,15 @@ export const expectTextExecutor: NodeExecutor<ExpectTextData> = async ({
           matches = actualText === data.expectedText;
           break;
         case "contains":
-          matches = actualText.includes(data.expectedText);
+          matches = actualText.includes(data.expectedText!);
           break;
         case "regex":
           try {
-            const regex = new RegExp(data.expectedText);
+            const regex = new RegExp(data.expectedText!);
             matches = regex.test(actualText);
           } catch {
             throw new NonRetriableError(
-              `Expect Text: Invalid regular expression: ${data.expectedText}`,
+              `${NODE_NAME}: Invalid regular expression: ${data.expectedText}`,
             );
           }
           break;
@@ -93,13 +117,13 @@ export const expectTextExecutor: NodeExecutor<ExpectTextData> = async ({
 
       if (!matches) {
         throw new NonRetriableError(
-          `Expect Text failed: Expected "${data.expectedText}" (${matchType}) but got "${actualText}"`,
+          `${NODE_NAME} failed: Expected "${data.expectedText}" (${matchType}) but got "${actualText}"`,
         );
       }
 
       return {
         ...context,
-        [data.variableName]: {
+        [data.variableName!]: {
           success: true,
           matches: true,
           accessibilityId: data.accessibilityId,

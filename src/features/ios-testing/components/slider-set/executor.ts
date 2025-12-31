@@ -1,13 +1,20 @@
-import { NonRetriableError } from "inngest";
 import type { NodeExecutor } from "@/features/executions/types";
+import {
+  createIOSError,
+  getBundleIdFromContext,
+  getDeviceIdFromContext,
+  IOS_ERROR_CODES,
+  validateRequired,
+} from "@/features/ios-testing/lib/errors";
 import { iosSliderSetChannel } from "@/inngest/channels/ios-testing";
-import * as idb from "@/lib/ios/idb";
+import * as wda from "@/lib/ios/wda";
 
 type SliderSetData = {
   variableName?: string;
-  accessibilityId?: string;
   value?: number;
 };
+
+const NODE_NAME = "Slider Set";
 
 export const sliderSetExecutor: NodeExecutor<SliderSetData> = async ({
   data,
@@ -25,47 +32,63 @@ export const sliderSetExecutor: NodeExecutor<SliderSetData> = async ({
 
   try {
     const result = await step.run("slider-set", async () => {
-      if (!data.accessibilityId) {
-        throw new NonRetriableError("Slider Set: Accessibility ID is required");
-      }
+      // Validate required fields
+      validateRequired(data, ["variableName"], NODE_NAME);
 
       if (data.value === undefined || data.value === null) {
-        throw new NonRetriableError("Slider Set: Value is required");
-      }
-
-      if (!data.variableName) {
-        throw new NonRetriableError("Slider Set: Variable name is required");
-      }
-
-      // Get the device ID from context (set by simulator-boot node)
-      const simulatorContext = context.simulator as
-        | { deviceId?: string }
-        | undefined;
-      const deviceId =
-        simulatorContext?.deviceId || (context.deviceId as string | undefined);
-      if (!deviceId) {
-        throw new NonRetriableError(
-          "Slider Set: No device ID found in context. Ensure Simulator Boot node runs first.",
+        throw createIOSError(
+          IOS_ERROR_CODES.MISSING_REQUIRED_FIELD,
+          `${NODE_NAME}: Value is required`,
         );
       }
 
-      const sliderResult = await idb.setSliderValue(
+      // Get device ID and bundle ID from context
+      const deviceId = getDeviceIdFromContext(context, NODE_NAME);
+      const bundleId = getBundleIdFromContext(context, NODE_NAME);
+
+      // Ensure Appium is running
+      const appiumRunning = await wda.isAppiumRunning();
+      if (!appiumRunning) {
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Appium server is not running. Start Appium with 'appium' command.`,
+        );
+      }
+
+      // Ensure we have bundleId
+      if (!bundleId) {
+        throw createIOSError(
+          IOS_ERROR_CODES.MISSING_REQUIRED_FIELD,
+          `${NODE_NAME} failed: No bundle ID found. Ensure App Launch node runs first.`,
+        );
+      }
+
+      // Create or reuse WDA session
+      const sessionResult = await wda.createSession(deviceId, bundleId);
+      if (!sessionResult.success) {
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Could not create WDA session: ${sessionResult.error}`,
+        );
+      }
+
+      const sliderResult = await wda.setSliderValue(
         deviceId,
-        data.accessibilityId,
         data.value,
+        0, // elementIndex defaults to 0
       );
 
       if (!sliderResult.success) {
-        throw new NonRetriableError(
-          `Slider Set failed: Could not set slider ${data.accessibilityId} to ${data.value}. ${sliderResult.error || ""}`,
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Could not set slider to ${data.value}. ${sliderResult.error || ""}`,
         );
       }
 
       return {
         ...context,
-        [data.variableName]: {
+        [data.variableName!]: {
           success: true,
-          accessibilityId: data.accessibilityId,
           value: data.value,
         },
       };

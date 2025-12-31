@@ -1,7 +1,13 @@
 import { NonRetriableError } from "inngest";
 import type { NodeExecutor } from "@/features/executions/types";
+import {
+  createIOSError,
+  getBundleIdFromContext,
+  getDeviceIdFromContext,
+  IOS_ERROR_CODES,
+} from "@/features/ios-testing/lib/errors";
 import { iosWaitChannel } from "@/inngest/channels/ios-testing";
-import * as idb from "@/lib/ios/idb";
+import * as wda from "@/lib/ios/wda";
 import { sleep } from "@/lib/ios/utils";
 
 type WaitData = {
@@ -11,6 +17,8 @@ type WaitData = {
   accessibilityId?: string;
   timeout?: string;
 };
+
+const NODE_NAME = "Wait";
 
 export const waitExecutor: NodeExecutor<WaitData> = async ({
   data,
@@ -64,26 +72,43 @@ export const waitExecutor: NodeExecutor<WaitData> = async ({
         );
       }
 
-      // Get the device ID from context (set by simulator-boot node)
-      const simulatorContext = context.simulator as
-        | { deviceId?: string }
-        | undefined;
-      const deviceId =
-        simulatorContext?.deviceId || (context.deviceId as string | undefined);
-      if (!deviceId) {
-        throw new NonRetriableError(
-          "Wait: No device ID found in context. Ensure Simulator Boot node runs first.",
+      // Get the device ID and bundle ID from context
+      const deviceId = getDeviceIdFromContext(context, NODE_NAME);
+      const bundleId = getBundleIdFromContext(context, NODE_NAME);
+
+      // Ensure Appium is running
+      const appiumRunning = await wda.isAppiumRunning();
+      if (!appiumRunning) {
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Appium server is not running. Start Appium with 'appium' command.`,
+        );
+      }
+
+      if (!bundleId) {
+        throw createIOSError(
+          IOS_ERROR_CODES.MISSING_REQUIRED_FIELD,
+          `${NODE_NAME} failed: No bundle ID found. Ensure App Launch node runs first.`,
+        );
+      }
+
+      // Create or reuse WDA session
+      const sessionResult = await wda.createSession(deviceId, bundleId);
+      if (!sessionResult.success) {
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Could not create WDA session: ${sessionResult.error}`,
         );
       }
 
       const timeout = data.timeout ? parseInt(data.timeout, 10) : 10000;
-      const element = await idb.waitForElement(
+      const elementResult = await wda.waitForElement(
         deviceId,
         data.accessibilityId,
         timeout,
       );
 
-      if (!element) {
+      if (!elementResult.success) {
         throw new NonRetriableError(
           `Wait failed: Element ${data.accessibilityId} did not appear within ${timeout}ms`,
         );

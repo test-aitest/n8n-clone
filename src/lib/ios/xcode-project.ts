@@ -489,3 +489,138 @@ export function getProjectDirectory(projectPath: string): string {
   }
   return projectPath;
 }
+
+// ============================================
+// Accessibility Identifier Extraction
+// ============================================
+
+export interface ExtractedUIComponent {
+  accessibilityId: string;
+  componentType: string;
+  sourceFilePath: string;
+  sourceLineNumber: number;
+  label?: string;
+}
+
+/**
+ * Extract accessibilityIdentifier values from Swift files
+ */
+export async function extractAccessibilityIdentifiers(
+  swiftFiles: string[],
+): Promise<ExtractedUIComponent[]> {
+  const components: ExtractedUIComponent[] = [];
+
+  for (const filePath of swiftFiles) {
+    try {
+      const content = await readFile(filePath, "utf-8");
+      const lines = content.split("\n");
+
+      // Match patterns like .accessibilityIdentifier("identifier")
+      const accessibilityPattern =
+        /\.accessibilityIdentifier\s*\(\s*["']([^"']+)["']\s*\)/g;
+
+      for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+        const line = lines[lineIndex];
+        let match;
+
+        while ((match = accessibilityPattern.exec(line)) !== null) {
+          const accessibilityId = match[1];
+
+          // Try to determine component type from context
+          const componentType = detectComponentType(lines, lineIndex);
+
+          // Try to extract label from nearby code
+          const label = extractLabel(lines, lineIndex);
+
+          components.push({
+            accessibilityId,
+            componentType,
+            sourceFilePath: filePath,
+            sourceLineNumber: lineIndex + 1,
+            label,
+          });
+        }
+
+        // Reset lastIndex for next line
+        accessibilityPattern.lastIndex = 0;
+      }
+    } catch {
+      // Ignore read errors for individual files
+    }
+  }
+
+  return components;
+}
+
+/**
+ * Detect SwiftUI component type from surrounding code
+ */
+function detectComponentType(lines: string[], currentLine: number): string {
+  // Look back up to 10 lines to find component type
+  const searchStart = Math.max(0, currentLine - 10);
+  const contextLines = lines.slice(searchStart, currentLine + 1).join("\n");
+
+  // Component detection patterns (order matters - more specific first)
+  const componentPatterns: { pattern: RegExp; type: string }[] = [
+    { pattern: /SecureField\s*\(/i, type: "SecureField" },
+    { pattern: /TextField\s*\(/i, type: "TextField" },
+    { pattern: /TextEditor\s*\(/i, type: "TextEditor" },
+    { pattern: /Button\s*\{/i, type: "Button" },
+    { pattern: /Button\s*\(/i, type: "Button" },
+    { pattern: /Toggle\s*\(/i, type: "Toggle" },
+    { pattern: /Slider\s*\(/i, type: "Slider" },
+    { pattern: /Picker\s*\(/i, type: "Picker" },
+    { pattern: /Stepper\s*\(/i, type: "Stepper" },
+    { pattern: /DatePicker\s*\(/i, type: "DatePicker" },
+    { pattern: /ColorPicker\s*\(/i, type: "ColorPicker" },
+    { pattern: /NavigationLink\s*\(/i, type: "NavigationLink" },
+    { pattern: /Link\s*\(/i, type: "Link" },
+    { pattern: /Menu\s*\(/i, type: "Menu" },
+    { pattern: /List\s*\{/i, type: "List" },
+    { pattern: /ScrollView\s*\{/i, type: "ScrollView" },
+    { pattern: /LazyVStack/i, type: "LazyVStack" },
+    { pattern: /LazyHStack/i, type: "LazyHStack" },
+    { pattern: /VStack\s*\{/i, type: "VStack" },
+    { pattern: /HStack\s*\{/i, type: "HStack" },
+    { pattern: /ZStack\s*\{/i, type: "ZStack" },
+    { pattern: /Image\s*\(/i, type: "Image" },
+    { pattern: /Text\s*\(/i, type: "Text" },
+    { pattern: /Label\s*\(/i, type: "Label" },
+  ];
+
+  for (const { pattern, type } of componentPatterns) {
+    if (pattern.test(contextLines)) {
+      return type;
+    }
+  }
+
+  return "Unknown";
+}
+
+/**
+ * Extract label from nearby code (placeholder text, button label, etc.)
+ */
+function extractLabel(lines: string[], currentLine: number): string | undefined {
+  const searchStart = Math.max(0, currentLine - 5);
+  const searchEnd = Math.min(lines.length, currentLine + 1);
+  const contextLines = lines.slice(searchStart, searchEnd).join("\n");
+
+  // Try to find text in quotes that might be a label
+  // Look for patterns like Text("Label"), Button("Label"), TextField("placeholder", ...)
+  const labelPatterns = [
+    /Text\s*\(\s*["']([^"']+)["']\s*\)/,
+    /Button\s*\(\s*["']([^"']+)["']/,
+    /TextField\s*\(\s*["']([^"']+)["']/,
+    /SecureField\s*\(\s*["']([^"']+)["']/,
+    /Label\s*\(\s*["']([^"']+)["']/,
+  ];
+
+  for (const pattern of labelPatterns) {
+    const match = contextLines.match(pattern);
+    if (match && match[1]) {
+      return match[1];
+    }
+  }
+
+  return undefined;
+}

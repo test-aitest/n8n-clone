@@ -113,14 +113,15 @@ export function findElementByAccessibilityId(
     if (element.AXIdentifier === accessibilityId) {
       return element;
     }
+    if (element.AXUniqueId === accessibilityId) {
+      return element;
+    }
     if (element.AXChildren) {
       const found = findElementByAccessibilityId(
         element.AXChildren,
         accessibilityId,
       );
-      if (found) {
-        return found;
-      }
+      if (found) return found;
     }
   }
   return undefined;
@@ -156,13 +157,14 @@ export function findElements(
 export function getElementCenter(
   element: UIElement,
 ): { x: number; y: number } | null {
-  if (!element.AXFrame) {
+  const frame = element.AXFrame || element.frame;
+  if (!frame) {
     return null;
   }
 
   return {
-    x: element.AXFrame.x + element.AXFrame.width / 2,
-    y: element.AXFrame.y + element.AXFrame.height / 2,
+    x: frame.x + frame.width / 2,
+    y: frame.y + frame.height / 2,
   };
 }
 

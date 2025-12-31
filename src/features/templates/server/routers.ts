@@ -17,6 +17,7 @@ import {
   applyProjectSettings,
   generateUniqueNodeIds,
   extractVariables,
+  getVariablesWithUsage,
 } from "../lib/template-variables";
 
 export const templatesRouter = createTRPCRouter({
@@ -357,16 +358,18 @@ export const templatesRouter = createTRPCRouter({
     }),
 
   /**
-   * Get template variables
+   * Get template variables with usage information
    */
   getVariables: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const defaultTemplate = getDefaultTemplateById(input.id);
       if (defaultTemplate) {
+        const variablesWithUsage = getVariablesWithUsage(defaultTemplate.definition);
         return {
           variables: Object.keys(defaultTemplate.defaultVariables),
           defaults: defaultTemplate.defaultVariables,
+          variablesWithUsage,
         };
       }
 
@@ -379,10 +382,12 @@ export const templatesRouter = createTRPCRouter({
 
       const definition = template.definition as unknown as TemplateDefinition;
       const variables = extractVariables(definition);
+      const variablesWithUsage = getVariablesWithUsage(definition);
 
       return {
         variables,
         defaults: (template.defaultVariables as Record<string, string>) || {},
+        variablesWithUsage,
       };
     }),
 

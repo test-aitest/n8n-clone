@@ -37,16 +37,27 @@ export interface SimulatorDevice {
 export interface UIElement {
   AXLabel?: string;
   AXIdentifier?: string;
+  AXUniqueId?: string | null;
   AXValue?: string;
   AXRole?: string;
+  role?: string;
   AXRoleDescription?: string;
+  role_description?: string;
+  type?: string; // e.g., "TextField", "Button"
   AXFrame?: {
     x: number;
     y: number;
     width: number;
     height: number;
   };
+  frame?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
   AXEnabled?: boolean;
+  enabled?: boolean;
   AXFocused?: boolean;
   AXChildren?: UIElement[];
 }

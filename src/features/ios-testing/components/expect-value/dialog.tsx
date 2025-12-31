@@ -4,7 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { useAtomValue } from "jotai";
 import { Button } from "@/components/ui/button";
+import { UIComponentSelector } from "@/features/templates/components/ui-component-selector";
+import { workflowContextAtom } from "@/features/editor/store/atoms";
 import {
   Dialog,
   DialogContent,
@@ -53,6 +56,7 @@ export const ExpectValueDialog = ({
   onSubmit,
   defaultValues = {},
 }: Props) => {
+  const workflowContext = useAtomValue(workflowContextAtom);
   const form = useForm<ExpectValueFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -117,7 +121,12 @@ export const ExpectValueDialog = ({
                 <FormItem>
                   <FormLabel>Accessibility ID</FormLabel>
                   <FormControl>
-                    <Input placeholder="usernameField" {...field} />
+                    <UIComponentSelector
+                      value={field.value}
+                      onChange={field.onChange}
+                      projectId={workflowContext?.projectId || null}
+                      placeholder="usernameField"
+                    />
                   </FormControl>
                   <FormDescription>
                     The accessibility identifier of the element to check

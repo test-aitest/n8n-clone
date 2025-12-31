@@ -13,6 +13,27 @@ import { openAiChannel } from "./channels/openai";
 import { anthropicChannel } from "./channels/anthropic";
 import { discordChannel } from "./channels/discord";
 import { slackChannel } from "./channels/slack";
+import {
+  iosSimulatorBootChannel,
+  iosSimulatorShutdownChannel,
+  iosAppInstallChannel,
+  iosAppLaunchChannel,
+  iosAppTerminateChannel,
+  iosTapChannel,
+  iosTextInputChannel,
+  iosSwipeChannel,
+  iosScrollUntilVisibleChannel,
+  iosPickerSelectChannel,
+  iosSliderSetChannel,
+  iosToggleSwitchChannel,
+  iosScreenshotChannel,
+  iosWaitChannel,
+  iosExpectExistsChannel,
+  iosExpectTextChannel,
+  iosExpectValueChannel,
+  iosExpectVisualChannel,
+  iosUiScanChannel,
+} from "./channels/ios-testing";
 
 export const executeWorkflow = inngest.createFunction(
   {
@@ -41,6 +62,26 @@ export const executeWorkflow = inngest.createFunction(
       anthropicChannel(),
       discordChannel(),
       slackChannel(),
+      // iOS Testing channels
+      iosSimulatorBootChannel(),
+      iosSimulatorShutdownChannel(),
+      iosAppInstallChannel(),
+      iosAppLaunchChannel(),
+      iosAppTerminateChannel(),
+      iosTapChannel(),
+      iosTextInputChannel(),
+      iosSwipeChannel(),
+      iosScrollUntilVisibleChannel(),
+      iosPickerSelectChannel(),
+      iosSliderSetChannel(),
+      iosToggleSwitchChannel(),
+      iosScreenshotChannel(),
+      iosWaitChannel(),
+      iosExpectExistsChannel(),
+      iosExpectTextChannel(),
+      iosExpectValueChannel(),
+      iosExpectVisualChannel(),
+      iosUiScanChannel(),
     ],
   },
   async ({ event, step, publish }) => {

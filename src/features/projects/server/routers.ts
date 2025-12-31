@@ -15,6 +15,7 @@ import {
   getProjectInfo,
   validateXcodeProject,
   getProjectDirectory,
+  extractAccessibilityIdentifiers,
 } from "@/lib/ios/xcode-project";
 import { listSimulators } from "@/lib/ios/simulator";
 
@@ -154,12 +155,28 @@ export const projectsRouter = createTRPCRouter({
         },
       });
 
-      // Auto-detect SwiftUI files and create UIComponents
+      // Auto-detect SwiftUI files and extract UI components
       const projectDir = getProjectDirectory(projectPath);
       const swiftUIFiles = await findSwiftUIFiles(projectDir);
 
-      // Note: Full UIComponent analysis would be done by swift-analyzer
-      // For now, just store the file paths
+      // Extract accessibility identifiers from Swift files
+      const extractedComponents = await extractAccessibilityIdentifiers(swiftUIFiles);
+
+      // Save extracted UI components
+      if (extractedComponents.length > 0) {
+        await prisma.uIComponent.createMany({
+          data: extractedComponents.map((comp) => ({
+            projectId: project.id,
+            accessibilityId: comp.accessibilityId,
+            componentType: comp.componentType,
+            sourceFilePath: comp.sourceFilePath,
+            sourceLineNumber: comp.sourceLineNumber,
+            label: comp.label,
+          })),
+        });
+      }
+
+      // Also store SwiftUI file paths for reference
       if (swiftUIFiles.length > 0) {
         await prisma.uIComponent.createMany({
           data: swiftUIFiles.slice(0, 100).map((filePath) => ({
@@ -282,17 +299,38 @@ export const projectsRouter = createTRPCRouter({
 
       // Re-detect SwiftUI files
       const projectDir = getProjectDirectory(project.projectPath);
-      const swiftUIFiles = await findSwiftUIFiles(projectDir);
+      console.log("[rescan] projectDir:", projectDir);
 
-      // Remove old SwiftUI file entries
+      const swiftUIFiles = await findSwiftUIFiles(projectDir);
+      console.log("[rescan] swiftUIFiles found:", swiftUIFiles.length);
+      console.log("[rescan] swiftUIFiles:", swiftUIFiles.slice(0, 5));
+
+      // Remove all old UI component entries
       await prisma.uIComponent.deleteMany({
         where: {
           projectId: project.id,
-          componentType: "SwiftUIFile",
         },
       });
 
-      // Create new entries
+      // Extract and save accessibility identifiers
+      const extractedComponents = await extractAccessibilityIdentifiers(swiftUIFiles);
+      console.log("[rescan] extractedComponents:", extractedComponents.length);
+      console.log("[rescan] extractedComponents details:", extractedComponents);
+
+      if (extractedComponents.length > 0) {
+        await prisma.uIComponent.createMany({
+          data: extractedComponents.map((comp) => ({
+            projectId: project.id,
+            accessibilityId: comp.accessibilityId,
+            componentType: comp.componentType,
+            sourceFilePath: comp.sourceFilePath,
+            sourceLineNumber: comp.sourceLineNumber,
+            label: comp.label,
+          })),
+        });
+      }
+
+      // Also store SwiftUI file paths for reference
       if (swiftUIFiles.length > 0) {
         await prisma.uIComponent.createMany({
           data: swiftUIFiles.slice(0, 100).map((filePath) => ({
@@ -309,6 +347,7 @@ export const projectsRouter = createTRPCRouter({
         bundleId,
         appPath,
         swiftUIFileCount: swiftUIFiles.length,
+        uiComponentCount: extractedComponents.length,
       };
     }),
 
@@ -391,19 +430,26 @@ export const projectsRouter = createTRPCRouter({
       const { projectId, componentType } = input;
 
       // Verify project ownership
-      await prisma.project.findUniqueOrThrow({
+      const project = await prisma.project.findUniqueOrThrow({
         where: {
           id: projectId,
           userId: ctx.auth.user.id,
         },
       });
 
-      return prisma.uIComponent.findMany({
+      console.log("[getUIComponents] projectId:", projectId);
+      console.log("[getUIComponents] projectPath:", project.projectPath);
+
+      const components = await prisma.uIComponent.findMany({
         where: {
           projectId,
           ...(componentType && { componentType }),
         },
         orderBy: { createdAt: "desc" },
       });
+
+      console.log("[getUIComponents] found components:", components.length);
+
+      return components;
     }),
 });

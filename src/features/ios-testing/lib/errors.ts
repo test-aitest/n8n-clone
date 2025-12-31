@@ -97,6 +97,33 @@ export function getDeviceIdFromContext(
 }
 
 /**
+ * Extract bundle ID from execution context (from app launch step)
+ */
+export function getBundleIdFromContext(
+  context: Record<string, unknown>,
+  nodeName: string,
+): string | undefined {
+  // Search through context values to find bundleId
+  for (const value of Object.values(context)) {
+    if (
+      value &&
+      typeof value === "object" &&
+      "bundleId" in value &&
+      typeof (value as { bundleId: unknown }).bundleId === "string"
+    ) {
+      return (value as { bundleId: string }).bundleId;
+    }
+  }
+
+  // Also check direct bundleId
+  if (typeof context.bundleId === "string") {
+    return context.bundleId;
+  }
+
+  return undefined;
+}
+
+/**
  * Parse timeout value with default
  */
 export function parseTimeout(

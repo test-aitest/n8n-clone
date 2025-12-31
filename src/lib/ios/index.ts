@@ -3,8 +3,8 @@
  * Re-exports all iOS automation functionality
  */
 
-// IDB UI automation (idb wrapper)
-export * as idb from "./idb";
+// WebDriverAgent UI automation (Appium) - full SwiftUI accessibilityIdentifier support
+export * as wda from "./wda";
 // Simulator control (simctl wrapper)
 export * as simulator from "./simulator";
 // Xcode project detection

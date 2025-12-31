@@ -1,12 +1,20 @@
-import { NonRetriableError } from "inngest";
 import type { NodeExecutor } from "@/features/executions/types";
+import {
+  createIOSError,
+  getBundleIdFromContext,
+  getDeviceIdFromContext,
+  IOS_ERROR_CODES,
+  validateRequired,
+} from "@/features/ios-testing/lib/errors";
 import { iosUiScanChannel } from "@/inngest/channels/ios-testing";
-import * as idb from "@/lib/ios/idb";
+import * as wda from "@/lib/ios/wda";
 
 type UiScanData = {
   variableName?: string;
   timeout?: string;
 };
+
+const NODE_NAME = "UI Scan";
 
 export const uiScanExecutor: NodeExecutor<UiScanData> = async ({
   data,
@@ -24,79 +32,84 @@ export const uiScanExecutor: NodeExecutor<UiScanData> = async ({
 
   try {
     const result = await step.run("ui-scan", async () => {
-      if (!data.variableName) {
-        throw new NonRetriableError("UI Scan: Variable name is required");
-      }
+      // Validate required fields
+      validateRequired(data, ["variableName"], NODE_NAME);
 
-      // Get device ID from context (should be set by simulator boot node)
-      const simulator = context.simulator as { deviceId?: string } | undefined;
-      const deviceId =
-        simulator?.deviceId || (context.deviceId as string | undefined);
-      if (!deviceId) {
-        throw new NonRetriableError(
-          "UI Scan: No device ID found. Make sure simulator is booted first.",
+      // Get device ID and bundle ID from context
+      const deviceId = getDeviceIdFromContext(context, NODE_NAME);
+      const bundleId = getBundleIdFromContext(context, NODE_NAME);
+
+      // Ensure Appium is running
+      const appiumRunning = await wda.isAppiumRunning();
+      if (!appiumRunning) {
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Appium server is not running. Start Appium with 'appium' command.`,
         );
       }
 
-      // Get the complete UI hierarchy
-      const hierarchy = await idb.describeAll(deviceId);
+      // Ensure we have bundleId
+      if (!bundleId) {
+        throw createIOSError(
+          IOS_ERROR_CODES.MISSING_REQUIRED_FIELD,
+          `${NODE_NAME} failed: No bundle ID found. Ensure App Launch node runs first.`,
+        );
+      }
 
-      // Count elements for summary
-      const countElements = (
-        elements: typeof hierarchy.elements,
-      ): { total: number; byRole: Record<string, number> } => {
-        let total = 0;
-        const byRole: Record<string, number> = {};
+      // Create or reuse WDA session
+      const sessionResult = await wda.createSession(deviceId, bundleId);
+      if (!sessionResult.success) {
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Could not create WDA session: ${sessionResult.error}`,
+        );
+      }
 
-        const traverse = (els: typeof hierarchy.elements) => {
-          for (const el of els) {
-            total++;
-            const role = el.AXRole || "Unknown";
-            byRole[role] = (byRole[role] || 0) + 1;
-            if (el.AXChildren) {
-              traverse(el.AXChildren);
-            }
-          }
-        };
+      // Get the complete UI hierarchy (page source XML)
+      const pageSourceResult = await wda.getPageSource(deviceId);
 
-        traverse(elements);
-        return { total, byRole };
-      };
+      if (!pageSourceResult.success || !pageSourceResult.data) {
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Could not get page source: ${pageSourceResult.error}`,
+        );
+      }
 
-      const stats = countElements(hierarchy.elements);
+      // Parse XML to extract accessibility identifiers
+      const pageSource = pageSourceResult.data;
 
-      // Extract accessibility identifiers for easy reference
-      const extractAccessibilityIds = (
-        elements: typeof hierarchy.elements,
-      ): string[] => {
-        const ids: string[] = [];
+      // Extract accessibility identifiers from XML
+      const accessibilityIds: string[] = [];
+      const nameMatches = pageSource.matchAll(/name="([^"]+)"/g);
+      for (const match of nameMatches) {
+        if (match[1] && !accessibilityIds.includes(match[1])) {
+          accessibilityIds.push(match[1]);
+        }
+      }
 
-        const traverse = (els: typeof hierarchy.elements) => {
-          for (const el of els) {
-            if (el.AXIdentifier) {
-              ids.push(el.AXIdentifier);
-            }
-            if (el.AXChildren) {
-              traverse(el.AXChildren);
-            }
-          }
-        };
+      // Count elements by type
+      const elementCounts: Record<string, number> = {};
+      const typeMatches = pageSource.matchAll(/<XCUIElementType(\w+)/g);
+      for (const match of typeMatches) {
+        const type = match[1];
+        elementCounts[type] = (elementCounts[type] || 0) + 1;
+      }
 
-        traverse(elements);
-        return ids;
-      };
-
-      const accessibilityIds = extractAccessibilityIds(hierarchy.elements);
+      // Calculate total
+      const totalElements = Object.values(elementCounts).reduce(
+        (sum, count) => sum + count,
+        0,
+      );
 
       return {
         ...context,
-        [data.variableName]: {
+        [data.variableName!]: {
           success: true,
-          hierarchy: hierarchy.elements,
-          timestamp: hierarchy.timestamp,
+          pageSource,
+          timestamp: new Date().toISOString(),
           stats: {
-            totalElements: stats.total,
-            elementsByRole: stats.byRole,
+            totalElements,
+            elementsByType: elementCounts,
             accessibilityIds,
           },
         },

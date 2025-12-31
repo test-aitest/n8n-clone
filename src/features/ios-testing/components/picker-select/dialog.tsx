@@ -4,7 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { useAtomValue } from "jotai";
 import { Button } from "@/components/ui/button";
+import { UIComponentSelector } from "@/features/templates/components/ui-component-selector";
+import { workflowContextAtom } from "@/features/editor/store/atoms";
 import {
   Dialog,
   DialogContent,
@@ -52,6 +55,7 @@ export const PickerSelectDialog = ({
   onSubmit,
   defaultValues = {},
 }: Props) => {
+  const workflowContext = useAtomValue(workflowContextAtom);
   const form = useForm<PickerSelectFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -113,7 +117,12 @@ export const PickerSelectDialog = ({
                 <FormItem>
                   <FormLabel>Accessibility ID</FormLabel>
                   <FormControl>
-                    <Input placeholder="countryPicker" {...field} />
+                    <UIComponentSelector
+                      value={field.value}
+                      onChange={field.onChange}
+                      projectId={workflowContext?.projectId || null}
+                      placeholder="countryPicker"
+                    />
                   </FormControl>
                   <FormDescription>
                     The accessibility identifier of the picker element

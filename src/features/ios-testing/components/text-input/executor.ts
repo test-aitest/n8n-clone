@@ -1,14 +1,23 @@
 import { NonRetriableError } from "inngest";
 import type { NodeExecutor } from "@/features/executions/types";
+import {
+  createIOSError,
+  getBundleIdFromContext,
+  getDeviceIdFromContext,
+  IOS_ERROR_CODES,
+} from "@/features/ios-testing/lib/errors";
 import { iosTextInputChannel } from "@/inngest/channels/ios-testing";
-import * as idb from "@/lib/ios/idb";
+import * as wda from "@/lib/ios/wda";
 
 type TextInputData = {
   variableName?: string;
-  accessibilityId?: string;
+  elementType?: string;
+  labelMatch?: string;
   text?: string;
   clearFirst?: boolean;
 };
+
+const NODE_NAME = "Text Input";
 
 export const textInputExecutor: NodeExecutor<TextInputData> = async ({
   data,
@@ -34,36 +43,58 @@ export const textInputExecutor: NodeExecutor<TextInputData> = async ({
         throw new NonRetriableError("Text Input: Variable name is required");
       }
 
-      // Get the device ID from context (set by simulator-boot node)
-      const simulatorContext = context.simulator as
-        | { deviceId?: string }
-        | undefined;
-      const deviceId =
-        simulatorContext?.deviceId || (context.deviceId as string | undefined);
-      if (!deviceId) {
-        throw new NonRetriableError(
-          "Text Input: No device ID found in context. Ensure Simulator Boot node runs first.",
+      // Get the device ID and bundle ID from context
+      const deviceId = getDeviceIdFromContext(context, NODE_NAME);
+      const bundleId = getBundleIdFromContext(context, NODE_NAME);
+
+      // Ensure Appium is running
+      const appiumRunning = await wda.isAppiumRunning();
+      if (!appiumRunning) {
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Appium server is not running. Start Appium with 'appium' command.`,
         );
       }
 
-      let inputResult: { success: boolean; textEntered: string };
-
-      if (data.accessibilityId) {
-        // Type into a specific field
-        inputResult = await idb.typeTextInField(
-          deviceId,
-          data.accessibilityId,
-          data.text,
-          data.clearFirst ?? true,
+      // Ensure we have bundleId
+      if (!bundleId) {
+        throw createIOSError(
+          IOS_ERROR_CODES.MISSING_REQUIRED_FIELD,
+          `${NODE_NAME} failed: No bundle ID found. Ensure App Launch node runs first.`,
         );
-      } else {
-        // Type into the currently focused field
-        inputResult = await idb.typeText(deviceId, data.text);
       }
+
+      // Create or reuse WDA session
+      const sessionResult = await wda.createSession(deviceId, bundleId);
+      if (!sessionResult.success) {
+        throw createIOSError(
+          IOS_ERROR_CODES.COMMAND_FAILED,
+          `${NODE_NAME} failed: Could not create WDA session: ${sessionResult.error}`,
+        );
+      }
+
+      const labelMatch = data.labelMatch?.trim() || undefined;
+
+      if (!data.elementType) {
+        throw new NonRetriableError("Text Input: Element type is required");
+      }
+
+      // Use WDA for text input - tap element by type first, then type
+      const inputResult = await wda.typeText(
+        deviceId,
+        data.elementType,
+        data.text,
+        0,
+        data.clearFirst ?? true,
+        labelMatch,
+      );
 
       if (!inputResult.success) {
+        const selector = labelMatch
+          ? `${data.elementType} with label "${labelMatch}"`
+          : data.elementType;
         throw new NonRetriableError(
-          `Text Input failed: Could not type text${data.accessibilityId ? ` into ${data.accessibilityId}` : ""}`,
+          `Text Input failed: Could not type text into ${selector}`,
         );
       }
 
@@ -72,7 +103,8 @@ export const textInputExecutor: NodeExecutor<TextInputData> = async ({
         [data.variableName]: {
           success: true,
           text: data.text,
-          accessibilityId: data.accessibilityId,
+          elementType: data.elementType,
+          labelMatch,
           textEntered: inputResult.textEntered,
         },
       };

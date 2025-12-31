@@ -24,6 +24,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const ELEMENT_TYPES = [
+  { value: "TextField", label: "TextField (Text Input)" },
+  { value: "SecureTextField", label: "SecureTextField (Password)" },
+  { value: "TextView", label: "TextView (TextEditor)" },
+] as const;
 
 const formSchema = z.object({
   variableName: z
@@ -32,7 +45,8 @@ const formSchema = z.object({
     .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
       message: "Variable name must start with a letter or underscore",
     }),
-  accessibilityId: z.string().optional(),
+  elementType: z.string().min(1, { message: "Element type is required" }),
+  labelMatch: z.string().optional(),
   text: z.string().min(1, { message: "Text is required" }),
   clearFirst: z.boolean().optional(),
 });
@@ -56,7 +70,8 @@ export const TextInputDialog = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       variableName: defaultValues.variableName || "textInputResult",
-      accessibilityId: defaultValues.accessibilityId || "",
+      elementType: defaultValues.elementType || "TextField",
+      labelMatch: defaultValues.labelMatch || "",
       text: defaultValues.text || "",
       clearFirst: defaultValues.clearFirst ?? true,
     },
@@ -66,7 +81,8 @@ export const TextInputDialog = ({
     if (open) {
       form.reset({
         variableName: defaultValues.variableName || "textInputResult",
-        accessibilityId: defaultValues.accessibilityId || "",
+        elementType: defaultValues.elementType || "TextField",
+        labelMatch: defaultValues.labelMatch || "",
         text: defaultValues.text || "",
         clearFirst: defaultValues.clearFirst ?? true,
       });
@@ -80,7 +96,7 @@ export const TextInputDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Text Input</DialogTitle>
           <DialogDescription>
@@ -110,16 +126,42 @@ export const TextInputDialog = ({
             />
             <FormField
               control={form.control}
-              name="accessibilityId"
+              name="elementType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Accessibility ID (optional)</FormLabel>
+                  <FormLabel>Target Element</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select element type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {ELEMENT_TYPES.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Element type to tap and focus, or use currently focused field
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="labelMatch"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Label Match</FormLabel>
                   <FormControl>
-                    <Input placeholder="usernameField" {...field} />
+                    <Input placeholder="メールアドレス" {...field} />
                   </FormControl>
                   <FormDescription>
-                    If provided, taps the element first to focus it. Leave empty
-                    to type in the currently focused field.
+                    Text to match in label/placeholder (partial match)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

@@ -4,7 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { useAtomValue } from "jotai";
 import { Button } from "@/components/ui/button";
+import { UIComponentSelector } from "@/features/templates/components/ui-component-selector";
+import { workflowContextAtom } from "@/features/editor/store/atoms";
 import {
   Dialog,
   DialogContent,
@@ -76,6 +79,7 @@ export const WaitDialog = ({
   onSubmit,
   defaultValues = {},
 }: Props) => {
+  const workflowContext = useAtomValue(workflowContextAtom);
   const form = useForm<WaitFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -194,7 +198,12 @@ export const WaitDialog = ({
                     <FormItem>
                       <FormLabel>Accessibility ID</FormLabel>
                       <FormControl>
-                        <Input placeholder="loadingSpinner" {...field} />
+                        <UIComponentSelector
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          projectId={workflowContext?.projectId || null}
+                          placeholder="loadingSpinner"
+                        />
                       </FormControl>
                       <FormDescription>
                         Wait until this element appears on screen

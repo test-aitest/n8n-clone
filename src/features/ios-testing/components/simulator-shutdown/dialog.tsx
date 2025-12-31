@@ -23,6 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { DeviceSelector } from "../device-selector";
 
 const formSchema = z.object({
   variableName: z
@@ -108,13 +109,14 @@ export const SimulatorShutdownDialog = ({
                 <FormItem>
                   <FormLabel>Device ID (UDID)</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
-                      {...field}
+                    <DeviceSelector
+                      value={field.value}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormDescription>
-                    Simulator UDID. Use `xcrun simctl list devices` to find.
+                    Simulator UDID. Click the search button to find available
+                    simulators.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

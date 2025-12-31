@@ -25,7 +25,7 @@ import {
   Image,
   Scan,
 } from "lucide-react";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -248,6 +248,12 @@ export function NodeSelector({
   children,
 }: NodeSelectorProps) {
   const { setNodes, getNodes, screenToFlowPosition } = useReactFlow();
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch by only rendering Sheet after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleNodeSelect = useCallback(
     (selection: NodeTypeOption) => {
@@ -294,6 +300,11 @@ export function NodeSelector({
     },
     [setNodes, getNodes, onOpenChange, screenToFlowPosition]
   );
+
+  // Return children without Sheet wrapper during SSR to prevent hydration mismatch
+  if (!mounted) {
+    return <>{children}</>;
+  }
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>

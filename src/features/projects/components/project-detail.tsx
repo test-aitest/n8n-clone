@@ -1,6 +1,6 @@
 "use client";
 
-import { useSuspenseProject, useRemoveProject } from "../hooks/use-projects";
+import { useSuspenseProject, useRemoveProject, useRescanProject } from "../hooks/use-projects";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +13,9 @@ import {
   WorkflowIcon,
   LayoutTemplateIcon,
   ComponentIcon,
+  RefreshCwIcon,
 } from "lucide-react";
+import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 
 interface ProjectDetailProps {
@@ -24,6 +26,23 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const router = useRouter();
   const { data: project } = useSuspenseProject(projectId);
   const removeProject = useRemoveProject();
+  const rescanProject = useRescanProject();
+
+  const handleRescan = () => {
+    rescanProject.mutate(
+      { id: projectId },
+      {
+        onSuccess: (data) => {
+          toast.success(
+            `Rescan complete: ${data.uiComponentCount} UI components found, ${data.swiftUIFileCount} SwiftUI files`
+          );
+        },
+        onError: (error) => {
+          toast.error(`Rescan failed: ${error.message}`);
+        },
+      }
+    );
+  };
 
   const handleDelete = () => {
     if (confirm("Are you sure you want to delete this project?")) {
@@ -54,19 +73,34 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
               </p>
             </div>
           </div>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={handleDelete}
-            disabled={removeProject.isPending}
-          >
-            {removeProject.isPending ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <TrashIcon className="size-4" />
-            )}
-            Delete
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRescan}
+              disabled={rescanProject.isPending}
+            >
+              {rescanProject.isPending ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <RefreshCwIcon className="size-4" />
+              )}
+              Rescan
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleDelete}
+              disabled={removeProject.isPending}
+            >
+              {removeProject.isPending ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <TrashIcon className="size-4" />
+              )}
+              Delete
+            </Button>
+          </div>
         </div>
 
         {/* Project Info */}

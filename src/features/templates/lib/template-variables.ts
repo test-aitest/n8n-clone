@@ -222,3 +222,106 @@ export function getVariablePreview(
 
   return preview;
 }
+
+/**
+ * Variable usage information with node details
+ */
+export interface VariableUsage {
+  variableName: string;
+  usedInNodes: Array<{
+    nodeType: string;
+    field: string;
+  }>;
+  nodeCount: number;
+}
+
+/**
+ * Get variables with their usage across nodes
+ * Groups variables by name and shows which nodes use them
+ */
+export function getVariablesWithUsage(
+  definition: TemplateDefinition,
+): VariableUsage[] {
+  const variableMap = new Map<string, VariableUsage>();
+
+  definition.nodes.forEach((node) => {
+    const nodeType = node.type;
+
+    function checkValue(value: unknown, fieldPath: string): void {
+      if (typeof value === "string") {
+        const matches = value.matchAll(VARIABLE_PATTERN);
+        for (const match of matches) {
+          const varName = match[1];
+
+          if (!variableMap.has(varName)) {
+            variableMap.set(varName, {
+              variableName: varName,
+              usedInNodes: [],
+              nodeCount: 0,
+            });
+          }
+
+          const usage = variableMap.get(varName)!;
+          // Check if this node type + field combination already exists
+          const exists = usage.usedInNodes.some(
+            (u) => u.nodeType === nodeType && u.field === fieldPath
+          );
+          if (!exists) {
+            usage.usedInNodes.push({
+              nodeType,
+              field: fieldPath,
+            });
+            usage.nodeCount = usage.usedInNodes.length;
+          }
+        }
+      } else if (typeof value === "object" && value !== null) {
+        if (Array.isArray(value)) {
+          value.forEach((item, index) => checkValue(item, `${fieldPath}[${index}]`));
+        } else {
+          Object.entries(value).forEach(([key, val]) =>
+            checkValue(val, fieldPath ? `${fieldPath}.${key}` : key),
+          );
+        }
+      }
+    }
+
+    checkValue(node.data, "");
+  });
+
+  return Array.from(variableMap.values());
+}
+
+/**
+ * Get human-readable node type label
+ */
+export function getNodeTypeLabel(nodeType: string): string {
+  const labels: Record<string, string> = {
+    MANUAL_TRIGGER: "Manual Trigger",
+    IOS_SIMULATOR_BOOT: "Simulator Boot",
+    IOS_SIMULATOR_SHUTDOWN: "Simulator Shutdown",
+    IOS_APP_INSTALL: "App Install",
+    IOS_APP_LAUNCH: "App Launch",
+    IOS_APP_TERMINATE: "App Terminate",
+    IOS_TAP: "Tap",
+    IOS_TEXT_INPUT: "Text Input",
+    IOS_SWIPE: "Swipe",
+    IOS_SCROLL_UNTIL_VISIBLE: "Scroll Until Visible",
+    IOS_PICKER_SELECT: "Picker Select",
+    IOS_SLIDER_SET: "Slider Set",
+    IOS_TOGGLE_SWITCH: "Toggle Switch",
+    IOS_SCREENSHOT: "Screenshot",
+    IOS_WAIT: "Wait",
+    IOS_EXPECT_EXISTS: "Expect Exists",
+    IOS_EXPECT_TEXT: "Expect Text",
+    IOS_EXPECT_VALUE: "Expect Value",
+    IOS_EXPECT_VISUAL: "Expect Visual",
+    IOS_UI_SCAN: "UI Scan",
+    HTTP_REQUEST: "HTTP Request",
+    GEMINI: "Gemini",
+    OPENAI: "OpenAI",
+    ANTHROPIC: "Anthropic",
+    DISCORD: "Discord",
+    SLACK: "Slack",
+  };
+  return labels[nodeType] || nodeType;
+}
