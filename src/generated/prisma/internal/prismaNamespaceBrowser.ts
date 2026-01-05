@@ -61,6 +61,7 @@ export const ModelName = {
   Connection: 'Connection',
   Execution: 'Execution',
   UIComponent: 'UIComponent',
+  ProjectScreen: 'ProjectScreen',
   GoldenMaster: 'GoldenMaster',
   Project: 'Project',
   Template: 'Template',
@@ -230,10 +231,23 @@ export const UIComponentScalarFieldEnum = {
   sourceLineNumber: 'sourceLineNumber',
   positionX: 'positionX',
   positionY: 'positionY',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type UIComponentScalarFieldEnum = (typeof UIComponentScalarFieldEnum)[keyof typeof UIComponentScalarFieldEnum]
+
+
+export const ProjectScreenScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  filePath: 'filePath',
+  screenName: 'screenName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProjectScreenScalarFieldEnum = (typeof ProjectScreenScalarFieldEnum)[keyof typeof ProjectScreenScalarFieldEnum]
 
 
 export const GoldenMasterScalarFieldEnum = {

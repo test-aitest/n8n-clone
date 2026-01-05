@@ -339,7 +339,9 @@ export function NodeSelector({
                     <Icon className="size-5" />
                   )}
                   <div className="flex flex-col items-start text-left">
-                    <span className="font-medium text-sm">{nodeType.label}</span>
+                    <span className="font-medium text-sm">
+                      {nodeType.label}
+                    </span>
                     <span className="text-xs text-muted-foreground">
                       {nodeType.description}
                     </span>
@@ -371,7 +373,9 @@ export function NodeSelector({
                     <Icon className="size-5" />
                   )}
                   <div className="flex flex-col items-start text-left">
-                    <span className="font-medium text-sm">{nodeType.label}</span>
+                    <span className="font-medium text-sm">
+                      {nodeType.label}
+                    </span>
                     <span className="text-xs text-muted-foreground">
                       {nodeType.description}
                     </span>
@@ -396,13 +400,21 @@ export function NodeSelector({
               >
                 <div className="flex items-center gap-6 w-full overflow-hidden">
                   {typeof Icon === "string" ? (
-                    <img src={Icon} alt={nodeType.label} className="size-5 object-contain rounded-sm" />
+                    <img
+                      src={Icon}
+                      alt={nodeType.label}
+                      className="size-5 object-contain rounded-sm"
+                    />
                   ) : (
                     <Icon className="size-5 text-blue-500" />
                   )}
                   <div className="flex flex-col items-start text-left">
-                    <span className="font-medium text-sm">{nodeType.label}</span>
-                    <span className="text-xs text-muted-foreground">{nodeType.description}</span>
+                    <span className="font-medium text-sm">
+                      {nodeType.label}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {nodeType.description}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -411,7 +423,9 @@ export function NodeSelector({
         </div>
         <Separator />
         <SheetHeader className="px-4 pt-4">
-          <SheetTitle className="text-base">iOS Testing - Interaction</SheetTitle>
+          <SheetTitle className="text-base">
+            iOS Testing - Interaction
+          </SheetTitle>
         </SheetHeader>
         <div>
           {iosInteractionNodes.map((nodeType) => {
@@ -424,13 +438,21 @@ export function NodeSelector({
               >
                 <div className="flex items-center gap-6 w-full overflow-hidden">
                   {typeof Icon === "string" ? (
-                    <img src={Icon} alt={nodeType.label} className="size-5 object-contain rounded-sm" />
+                    <img
+                      src={Icon}
+                      alt={nodeType.label}
+                      className="size-5 object-contain rounded-sm"
+                    />
                   ) : (
                     <Icon className="size-5 text-green-500" />
                   )}
                   <div className="flex flex-col items-start text-left">
-                    <span className="font-medium text-sm">{nodeType.label}</span>
-                    <span className="text-xs text-muted-foreground">{nodeType.description}</span>
+                    <span className="font-medium text-sm">
+                      {nodeType.label}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {nodeType.description}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -439,7 +461,9 @@ export function NodeSelector({
         </div>
         <Separator />
         <SheetHeader className="px-4 pt-4">
-          <SheetTitle className="text-base">iOS Testing - Validation</SheetTitle>
+          <SheetTitle className="text-base">
+            iOS Testing - Validation
+          </SheetTitle>
         </SheetHeader>
         <div>
           {iosExpectNodes.map((nodeType) => {
@@ -452,13 +476,21 @@ export function NodeSelector({
               >
                 <div className="flex items-center gap-6 w-full overflow-hidden">
                   {typeof Icon === "string" ? (
-                    <img src={Icon} alt={nodeType.label} className="size-5 object-contain rounded-sm" />
+                    <img
+                      src={Icon}
+                      alt={nodeType.label}
+                      className="size-5 object-contain rounded-sm"
+                    />
                   ) : (
                     <Icon className="size-5 text-purple-500" />
                   )}
                   <div className="flex flex-col items-start text-left">
-                    <span className="font-medium text-sm">{nodeType.label}</span>
-                    <span className="text-xs text-muted-foreground">{nodeType.description}</span>
+                    <span className="font-medium text-sm">
+                      {nodeType.label}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {nodeType.description}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -480,13 +512,21 @@ export function NodeSelector({
               >
                 <div className="flex items-center gap-6 w-full overflow-hidden">
                   {typeof Icon === "string" ? (
-                    <img src={Icon} alt={nodeType.label} className="size-5 object-contain rounded-sm" />
+                    <img
+                      src={Icon}
+                      alt={nodeType.label}
+                      className="size-5 object-contain rounded-sm"
+                    />
                   ) : (
                     <Icon className="size-5 text-orange-500" />
                   )}
                   <div className="flex flex-col items-start text-left">
-                    <span className="font-medium text-sm">{nodeType.label}</span>
-                    <span className="text-xs text-muted-foreground">{nodeType.description}</span>
+                    <span className="font-medium text-sm">
+                      {nodeType.label}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {nodeType.description}
+                    </span>
                   </div>
                 </div>
               </div>

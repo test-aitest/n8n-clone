@@ -247,13 +247,33 @@ model UIComponent {
   accessibilityId String
   componentType   String // "Button", "TextField", "Toggle", etc.
   label           String?
-  sourceFilePath  String?
+  sourceFilePath  String?  // 画面名として使用
   sourceLineNumber Int?
   positionX       Float?
   positionY       Float?
   createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
 
+  @@unique([projectId, accessibilityId])
   @@index([workflowId])
+  @@index([projectId])
+  @@index([sourceFilePath])
+}
+
+// ============================================
+// iOS Testing: Screen Name Management
+// ============================================
+
+model ProjectScreen {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  filePath    String   // 元のファイルパス or スキャン時の識別子
+  screenName  String   // ユーザーが設定する画面名
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  @@unique([projectId, filePath])
   @@index([projectId])
 }
 
@@ -296,6 +316,7 @@ model Project {
   templates      Template[]
   uiComponents   UIComponent[]
   packages       Package[]
+  screens        ProjectScreen[]
 
   @@index([userId])
 }

@@ -6,12 +6,18 @@ import {
   IOS_ERROR_CODES,
   validateRequired,
 } from "@/features/ios-testing/lib/errors";
+import {
+  getElementCountsByType,
+  parsePageSourceXML,
+} from "@/features/ios-testing/lib/xml-parser";
+import { saveUIComponentsFromScan } from "@/features/ios-testing/lib/ui-component-service";
 import { iosUiScanChannel } from "@/inngest/channels/ios-testing";
 import * as wda from "@/lib/ios/wda";
 
 type UiScanData = {
   variableName?: string;
   timeout?: string;
+  screenName?: string; // 画面名（UIComponentの分類に使用）
 };
 
 const NODE_NAME = "UI Scan";
@@ -19,6 +25,7 @@ const NODE_NAME = "UI Scan";
 export const uiScanExecutor: NodeExecutor<UiScanData> = async ({
   data,
   nodeId,
+  projectId,
   context,
   step,
   publish,
@@ -75,31 +82,22 @@ export const uiScanExecutor: NodeExecutor<UiScanData> = async ({
         );
       }
 
-      // Parse XML to extract accessibility identifiers
       const pageSource = pageSourceResult.data;
 
-      // Extract accessibility identifiers from XML
-      const accessibilityIds: string[] = [];
-      const nameMatches = pageSource.matchAll(/name="([^"]+)"/g);
-      for (const match of nameMatches) {
-        if (match[1] && !accessibilityIds.includes(match[1])) {
-          accessibilityIds.push(match[1]);
-        }
-      }
+      // Parse XML using the new parser
+      const parsedElements = parsePageSourceXML(pageSource);
+      const elementCounts = getElementCountsByType(parsedElements);
+      const accessibilityIds = parsedElements.map((e) => e.accessibilityId);
 
-      // Count elements by type
-      const elementCounts: Record<string, number> = {};
-      const typeMatches = pageSource.matchAll(/<XCUIElementType(\w+)/g);
-      for (const match of typeMatches) {
-        const type = match[1];
-        elementCounts[type] = (elementCounts[type] || 0) + 1;
+      // Save to database if projectId is available
+      let savedCount = 0;
+      if (projectId) {
+        savedCount = await saveUIComponentsFromScan({
+          projectId,
+          elements: parsedElements,
+          screenName: data.screenName,
+        });
       }
-
-      // Calculate total
-      const totalElements = Object.values(elementCounts).reduce(
-        (sum, count) => sum + count,
-        0,
-      );
 
       return {
         ...context,
@@ -108,10 +106,14 @@ export const uiScanExecutor: NodeExecutor<UiScanData> = async ({
           pageSource,
           timestamp: new Date().toISOString(),
           stats: {
-            totalElements,
+            totalElements: parsedElements.length,
             elementsByType: elementCounts,
             accessibilityIds,
           },
+          // 保存結果のメタデータ
+          savedToProject: projectId ? true : false,
+          savedCount,
+          screenName: data.screenName || null,
         },
       };
     });

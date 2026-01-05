@@ -50,6 +50,7 @@ export type UIComponentMinAggregateOutputType = {
   positionX: number | null
   positionY: number | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type UIComponentMaxAggregateOutputType = {
@@ -64,6 +65,7 @@ export type UIComponentMaxAggregateOutputType = {
   positionX: number | null
   positionY: number | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type UIComponentCountAggregateOutputType = {
@@ -78,6 +80,7 @@ export type UIComponentCountAggregateOutputType = {
   positionX: number
   positionY: number
   createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -106,6 +109,7 @@ export type UIComponentMinAggregateInputType = {
   positionX?: true
   positionY?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type UIComponentMaxAggregateInputType = {
@@ -120,6 +124,7 @@ export type UIComponentMaxAggregateInputType = {
   positionX?: true
   positionY?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type UIComponentCountAggregateInputType = {
@@ -134,6 +139,7 @@ export type UIComponentCountAggregateInputType = {
   positionX?: true
   positionY?: true
   createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -235,6 +241,7 @@ export type UIComponentGroupByOutputType = {
   positionX: number | null
   positionY: number | null
   createdAt: Date
+  updatedAt: Date
   _count: UIComponentCountAggregateOutputType | null
   _avg: UIComponentAvgAggregateOutputType | null
   _sum: UIComponentSumAggregateOutputType | null
@@ -272,6 +279,7 @@ export type UIComponentWhereInput = {
   positionX?: Prisma.FloatNullableFilter<"UIComponent"> | number | null
   positionY?: Prisma.FloatNullableFilter<"UIComponent"> | number | null
   createdAt?: Prisma.DateTimeFilter<"UIComponent"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"UIComponent"> | Date | string
   workflow?: Prisma.XOR<Prisma.WorkflowNullableScalarRelationFilter, Prisma.WorkflowWhereInput> | null
   project?: Prisma.XOR<Prisma.ProjectNullableScalarRelationFilter, Prisma.ProjectWhereInput> | null
 }
@@ -288,12 +296,14 @@ export type UIComponentOrderByWithRelationInput = {
   positionX?: Prisma.SortOrderInput | Prisma.SortOrder
   positionY?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   workflow?: Prisma.WorkflowOrderByWithRelationInput
   project?: Prisma.ProjectOrderByWithRelationInput
 }
 
 export type UIComponentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  projectId_accessibilityId?: Prisma.UIComponentProjectIdAccessibilityIdCompoundUniqueInput
   AND?: Prisma.UIComponentWhereInput | Prisma.UIComponentWhereInput[]
   OR?: Prisma.UIComponentWhereInput[]
   NOT?: Prisma.UIComponentWhereInput | Prisma.UIComponentWhereInput[]
@@ -307,9 +317,10 @@ export type UIComponentWhereUniqueInput = Prisma.AtLeast<{
   positionX?: Prisma.FloatNullableFilter<"UIComponent"> | number | null
   positionY?: Prisma.FloatNullableFilter<"UIComponent"> | number | null
   createdAt?: Prisma.DateTimeFilter<"UIComponent"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"UIComponent"> | Date | string
   workflow?: Prisma.XOR<Prisma.WorkflowNullableScalarRelationFilter, Prisma.WorkflowWhereInput> | null
   project?: Prisma.XOR<Prisma.ProjectNullableScalarRelationFilter, Prisma.ProjectWhereInput> | null
-}, "id">
+}, "id" | "projectId_accessibilityId">
 
 export type UIComponentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -323,6 +334,7 @@ export type UIComponentOrderByWithAggregationInput = {
   positionX?: Prisma.SortOrderInput | Prisma.SortOrder
   positionY?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.UIComponentCountOrderByAggregateInput
   _avg?: Prisma.UIComponentAvgOrderByAggregateInput
   _max?: Prisma.UIComponentMaxOrderByAggregateInput
@@ -345,6 +357,7 @@ export type UIComponentScalarWhereWithAggregatesInput = {
   positionX?: Prisma.FloatNullableWithAggregatesFilter<"UIComponent"> | number | null
   positionY?: Prisma.FloatNullableWithAggregatesFilter<"UIComponent"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UIComponent"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UIComponent"> | Date | string
 }
 
 export type UIComponentCreateInput = {
@@ -357,6 +370,7 @@ export type UIComponentCreateInput = {
   positionX?: number | null
   positionY?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   workflow?: Prisma.WorkflowCreateNestedOneWithoutUiComponentsInput
   project?: Prisma.ProjectCreateNestedOneWithoutUiComponentsInput
 }
@@ -373,6 +387,7 @@ export type UIComponentUncheckedCreateInput = {
   positionX?: number | null
   positionY?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UIComponentUpdateInput = {
@@ -385,6 +400,7 @@ export type UIComponentUpdateInput = {
   positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workflow?: Prisma.WorkflowUpdateOneWithoutUiComponentsNestedInput
   project?: Prisma.ProjectUpdateOneWithoutUiComponentsNestedInput
 }
@@ -401,6 +417,7 @@ export type UIComponentUncheckedUpdateInput = {
   positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UIComponentCreateManyInput = {
@@ -415,6 +432,7 @@ export type UIComponentCreateManyInput = {
   positionX?: number | null
   positionY?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UIComponentUpdateManyMutationInput = {
@@ -427,6 +445,7 @@ export type UIComponentUpdateManyMutationInput = {
   positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UIComponentUncheckedUpdateManyInput = {
@@ -441,6 +460,7 @@ export type UIComponentUncheckedUpdateManyInput = {
   positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UIComponentListRelationFilter = {
@@ -451,6 +471,11 @@ export type UIComponentListRelationFilter = {
 
 export type UIComponentOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type UIComponentProjectIdAccessibilityIdCompoundUniqueInput = {
+  projectId: string
+  accessibilityId: string
 }
 
 export type UIComponentCountOrderByAggregateInput = {
@@ -465,6 +490,7 @@ export type UIComponentCountOrderByAggregateInput = {
   positionX?: Prisma.SortOrder
   positionY?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type UIComponentAvgOrderByAggregateInput = {
@@ -485,6 +511,7 @@ export type UIComponentMaxOrderByAggregateInput = {
   positionX?: Prisma.SortOrder
   positionY?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type UIComponentMinOrderByAggregateInput = {
@@ -499,6 +526,7 @@ export type UIComponentMinOrderByAggregateInput = {
   positionX?: Prisma.SortOrder
   positionY?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type UIComponentSumOrderByAggregateInput = {
@@ -617,6 +645,7 @@ export type UIComponentCreateWithoutWorkflowInput = {
   positionX?: number | null
   positionY?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   project?: Prisma.ProjectCreateNestedOneWithoutUiComponentsInput
 }
 
@@ -631,6 +660,7 @@ export type UIComponentUncheckedCreateWithoutWorkflowInput = {
   positionX?: number | null
   positionY?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UIComponentCreateOrConnectWithoutWorkflowInput = {
@@ -674,6 +704,7 @@ export type UIComponentScalarWhereInput = {
   positionX?: Prisma.FloatNullableFilter<"UIComponent"> | number | null
   positionY?: Prisma.FloatNullableFilter<"UIComponent"> | number | null
   createdAt?: Prisma.DateTimeFilter<"UIComponent"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"UIComponent"> | Date | string
 }
 
 export type UIComponentCreateWithoutProjectInput = {
@@ -686,6 +717,7 @@ export type UIComponentCreateWithoutProjectInput = {
   positionX?: number | null
   positionY?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   workflow?: Prisma.WorkflowCreateNestedOneWithoutUiComponentsInput
 }
 
@@ -700,6 +732,7 @@ export type UIComponentUncheckedCreateWithoutProjectInput = {
   positionX?: number | null
   positionY?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UIComponentCreateOrConnectWithoutProjectInput = {
@@ -739,6 +772,7 @@ export type UIComponentCreateManyWorkflowInput = {
   positionX?: number | null
   positionY?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UIComponentUpdateWithoutWorkflowInput = {
@@ -751,6 +785,7 @@ export type UIComponentUpdateWithoutWorkflowInput = {
   positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   project?: Prisma.ProjectUpdateOneWithoutUiComponentsNestedInput
 }
 
@@ -765,6 +800,7 @@ export type UIComponentUncheckedUpdateWithoutWorkflowInput = {
   positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UIComponentUncheckedUpdateManyWithoutWorkflowInput = {
@@ -778,6 +814,7 @@ export type UIComponentUncheckedUpdateManyWithoutWorkflowInput = {
   positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UIComponentCreateManyProjectInput = {
@@ -791,6 +828,7 @@ export type UIComponentCreateManyProjectInput = {
   positionX?: number | null
   positionY?: number | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UIComponentUpdateWithoutProjectInput = {
@@ -803,6 +841,7 @@ export type UIComponentUpdateWithoutProjectInput = {
   positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workflow?: Prisma.WorkflowUpdateOneWithoutUiComponentsNestedInput
 }
 
@@ -817,6 +856,7 @@ export type UIComponentUncheckedUpdateWithoutProjectInput = {
   positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UIComponentUncheckedUpdateManyWithoutProjectInput = {
@@ -830,6 +870,7 @@ export type UIComponentUncheckedUpdateManyWithoutProjectInput = {
   positionX?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   positionY?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -846,6 +887,7 @@ export type UIComponentSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   positionX?: boolean
   positionY?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   workflow?: boolean | Prisma.UIComponent$workflowArgs<ExtArgs>
   project?: boolean | Prisma.UIComponent$projectArgs<ExtArgs>
 }, ExtArgs["result"]["uIComponent"]>
@@ -862,6 +904,7 @@ export type UIComponentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   positionX?: boolean
   positionY?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   workflow?: boolean | Prisma.UIComponent$workflowArgs<ExtArgs>
   project?: boolean | Prisma.UIComponent$projectArgs<ExtArgs>
 }, ExtArgs["result"]["uIComponent"]>
@@ -878,6 +921,7 @@ export type UIComponentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   positionX?: boolean
   positionY?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   workflow?: boolean | Prisma.UIComponent$workflowArgs<ExtArgs>
   project?: boolean | Prisma.UIComponent$projectArgs<ExtArgs>
 }, ExtArgs["result"]["uIComponent"]>
@@ -894,9 +938,10 @@ export type UIComponentSelectScalar = {
   positionX?: boolean
   positionY?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type UIComponentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workflowId" | "projectId" | "accessibilityId" | "componentType" | "label" | "sourceFilePath" | "sourceLineNumber" | "positionX" | "positionY" | "createdAt", ExtArgs["result"]["uIComponent"]>
+export type UIComponentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workflowId" | "projectId" | "accessibilityId" | "componentType" | "label" | "sourceFilePath" | "sourceLineNumber" | "positionX" | "positionY" | "createdAt" | "updatedAt", ExtArgs["result"]["uIComponent"]>
 export type UIComponentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workflow?: boolean | Prisma.UIComponent$workflowArgs<ExtArgs>
   project?: boolean | Prisma.UIComponent$projectArgs<ExtArgs>
@@ -928,6 +973,7 @@ export type $UIComponentPayload<ExtArgs extends runtime.Types.Extensions.Interna
     positionX: number | null
     positionY: number | null
     createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["uIComponent"]>
   composites: {}
 }
@@ -1364,6 +1410,7 @@ export interface UIComponentFieldRefs {
   readonly positionX: Prisma.FieldRef<"UIComponent", 'Float'>
   readonly positionY: Prisma.FieldRef<"UIComponent", 'Float'>
   readonly createdAt: Prisma.FieldRef<"UIComponent", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"UIComponent", 'DateTime'>
 }
     
 

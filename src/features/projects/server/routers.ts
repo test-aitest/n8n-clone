@@ -162,10 +162,17 @@ export const projectsRouter = createTRPCRouter({
       // Extract accessibility identifiers from Swift files
       const extractedComponents = await extractAccessibilityIdentifiers(swiftUIFiles);
 
-      // Save extracted UI components
+      // Save extracted UI components (deduplicated)
       if (extractedComponents.length > 0) {
+        const seenIds = new Set<string>();
+        const uniqueComponents = extractedComponents.filter((comp) => {
+          if (seenIds.has(comp.accessibilityId)) return false;
+          seenIds.add(comp.accessibilityId);
+          return true;
+        });
+
         await prisma.uIComponent.createMany({
-          data: extractedComponents.map((comp) => ({
+          data: uniqueComponents.map((comp) => ({
             projectId: project.id,
             accessibilityId: comp.accessibilityId,
             componentType: comp.componentType,
@@ -173,6 +180,7 @@ export const projectsRouter = createTRPCRouter({
             sourceLineNumber: comp.sourceLineNumber,
             label: comp.label,
           })),
+          skipDuplicates: true,
         });
       }
 
@@ -186,6 +194,7 @@ export const projectsRouter = createTRPCRouter({
             sourceFilePath: filePath,
             label: filePath.split("/").pop() || filePath,
           })),
+          skipDuplicates: true,
         });
       }
 
@@ -318,8 +327,16 @@ export const projectsRouter = createTRPCRouter({
       console.log("[rescan] extractedComponents details:", extractedComponents);
 
       if (extractedComponents.length > 0) {
+        // Deduplicate by accessibilityId
+        const seenIds = new Set<string>();
+        const uniqueComponents = extractedComponents.filter((comp) => {
+          if (seenIds.has(comp.accessibilityId)) return false;
+          seenIds.add(comp.accessibilityId);
+          return true;
+        });
+
         await prisma.uIComponent.createMany({
-          data: extractedComponents.map((comp) => ({
+          data: uniqueComponents.map((comp) => ({
             projectId: project.id,
             accessibilityId: comp.accessibilityId,
             componentType: comp.componentType,
@@ -327,6 +344,7 @@ export const projectsRouter = createTRPCRouter({
             sourceLineNumber: comp.sourceLineNumber,
             label: comp.label,
           })),
+          skipDuplicates: true,
         });
       }
 
@@ -340,6 +358,7 @@ export const projectsRouter = createTRPCRouter({
             sourceFilePath: filePath,
             label: filePath.split("/").pop() || filePath,
           })),
+          skipDuplicates: true,
         });
       }
 
@@ -423,32 +442,31 @@ export const projectsRouter = createTRPCRouter({
     .input(
       z.object({
         projectId: z.string(),
-        componentType: z.string().optional(),
+        componentType: z.string().optional().nullable(),
+        sourceFilePath: z.string().optional().nullable(), // 画面名でフィルター
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { projectId, componentType } = input;
+      const { projectId } = input;
+      const componentType = input.componentType || undefined;
+      const sourceFilePath = input.sourceFilePath || undefined;
 
       // Verify project ownership
-      const project = await prisma.project.findUniqueOrThrow({
+      await prisma.project.findUniqueOrThrow({
         where: {
           id: projectId,
           userId: ctx.auth.user.id,
         },
       });
 
-      console.log("[getUIComponents] projectId:", projectId);
-      console.log("[getUIComponents] projectPath:", project.projectPath);
-
       const components = await prisma.uIComponent.findMany({
         where: {
           projectId,
           ...(componentType && { componentType }),
+          ...(sourceFilePath && { sourceFilePath }),
         },
         orderBy: { createdAt: "desc" },
       });
-
-      console.log("[getUIComponents] found components:", components.length);
 
       return components;
     }),

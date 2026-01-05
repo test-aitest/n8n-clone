@@ -219,6 +219,7 @@ export type ProjectWhereInput = {
   templates?: Prisma.TemplateListRelationFilter
   uiComponents?: Prisma.UIComponentListRelationFilter
   packages?: Prisma.PackageListRelationFilter
+  screens?: Prisma.ProjectScreenListRelationFilter
 }
 
 export type ProjectOrderByWithRelationInput = {
@@ -236,6 +237,7 @@ export type ProjectOrderByWithRelationInput = {
   templates?: Prisma.TemplateOrderByRelationAggregateInput
   uiComponents?: Prisma.UIComponentOrderByRelationAggregateInput
   packages?: Prisma.PackageOrderByRelationAggregateInput
+  screens?: Prisma.ProjectScreenOrderByRelationAggregateInput
 }
 
 export type ProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -256,6 +258,7 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   templates?: Prisma.TemplateListRelationFilter
   uiComponents?: Prisma.UIComponentListRelationFilter
   packages?: Prisma.PackageListRelationFilter
+  screens?: Prisma.ProjectScreenListRelationFilter
 }, "id">
 
 export type ProjectOrderByWithAggregationInput = {
@@ -302,6 +305,7 @@ export type ProjectCreateInput = {
   templates?: Prisma.TemplateCreateNestedManyWithoutProjectInput
   uiComponents?: Prisma.UIComponentCreateNestedManyWithoutProjectInput
   packages?: Prisma.PackageCreateNestedManyWithoutProjectInput
+  screens?: Prisma.ProjectScreenCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateInput = {
@@ -318,6 +322,7 @@ export type ProjectUncheckedCreateInput = {
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutProjectInput
   uiComponents?: Prisma.UIComponentUncheckedCreateNestedManyWithoutProjectInput
   packages?: Prisma.PackageUncheckedCreateNestedManyWithoutProjectInput
+  screens?: Prisma.ProjectScreenUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUpdateInput = {
@@ -334,6 +339,7 @@ export type ProjectUpdateInput = {
   templates?: Prisma.TemplateUpdateManyWithoutProjectNestedInput
   uiComponents?: Prisma.UIComponentUpdateManyWithoutProjectNestedInput
   packages?: Prisma.PackageUpdateManyWithoutProjectNestedInput
+  screens?: Prisma.ProjectScreenUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateInput = {
@@ -350,6 +356,7 @@ export type ProjectUncheckedUpdateInput = {
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutProjectNestedInput
   uiComponents?: Prisma.UIComponentUncheckedUpdateManyWithoutProjectNestedInput
   packages?: Prisma.PackageUncheckedUpdateManyWithoutProjectNestedInput
+  screens?: Prisma.ProjectScreenUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectCreateManyInput = {
@@ -402,6 +409,11 @@ export type ProjectNullableScalarRelationFilter = {
   isNot?: Prisma.ProjectWhereInput | null
 }
 
+export type ProjectScalarRelationFilter = {
+  is?: Prisma.ProjectWhereInput
+  isNot?: Prisma.ProjectWhereInput
+}
+
 export type ProjectCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -436,11 +448,6 @@ export type ProjectMinOrderByAggregateInput = {
   appPath?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type ProjectScalarRelationFilter = {
-  is?: Prisma.ProjectWhereInput
-  isNot?: Prisma.ProjectWhereInput
 }
 
 export type ProjectCreateNestedManyWithoutUserInput = {
@@ -517,6 +524,20 @@ export type ProjectUpdateOneWithoutUiComponentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProjectUpdateToOneWithWhereWithoutUiComponentsInput, Prisma.ProjectUpdateWithoutUiComponentsInput>, Prisma.ProjectUncheckedUpdateWithoutUiComponentsInput>
 }
 
+export type ProjectCreateNestedOneWithoutScreensInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutScreensInput, Prisma.ProjectUncheckedCreateWithoutScreensInput>
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutScreensInput
+  connect?: Prisma.ProjectWhereUniqueInput
+}
+
+export type ProjectUpdateOneRequiredWithoutScreensNestedInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutScreensInput, Prisma.ProjectUncheckedCreateWithoutScreensInput>
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutScreensInput
+  upsert?: Prisma.ProjectUpsertWithoutScreensInput
+  connect?: Prisma.ProjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProjectUpdateToOneWithWhereWithoutScreensInput, Prisma.ProjectUpdateWithoutScreensInput>, Prisma.ProjectUncheckedUpdateWithoutScreensInput>
+}
+
 export type ProjectCreateNestedOneWithoutTemplatesInput = {
   create?: Prisma.XOR<Prisma.ProjectCreateWithoutTemplatesInput, Prisma.ProjectUncheckedCreateWithoutTemplatesInput>
   connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutTemplatesInput
@@ -560,6 +581,7 @@ export type ProjectCreateWithoutUserInput = {
   templates?: Prisma.TemplateCreateNestedManyWithoutProjectInput
   uiComponents?: Prisma.UIComponentCreateNestedManyWithoutProjectInput
   packages?: Prisma.PackageCreateNestedManyWithoutProjectInput
+  screens?: Prisma.ProjectScreenCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateWithoutUserInput = {
@@ -575,6 +597,7 @@ export type ProjectUncheckedCreateWithoutUserInput = {
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutProjectInput
   uiComponents?: Prisma.UIComponentUncheckedCreateNestedManyWithoutProjectInput
   packages?: Prisma.PackageUncheckedCreateNestedManyWithoutProjectInput
+  screens?: Prisma.ProjectScreenUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectCreateOrConnectWithoutUserInput = {
@@ -631,6 +654,7 @@ export type ProjectCreateWithoutWorkflowsInput = {
   templates?: Prisma.TemplateCreateNestedManyWithoutProjectInput
   uiComponents?: Prisma.UIComponentCreateNestedManyWithoutProjectInput
   packages?: Prisma.PackageCreateNestedManyWithoutProjectInput
+  screens?: Prisma.ProjectScreenCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateWithoutWorkflowsInput = {
@@ -646,6 +670,7 @@ export type ProjectUncheckedCreateWithoutWorkflowsInput = {
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutProjectInput
   uiComponents?: Prisma.UIComponentUncheckedCreateNestedManyWithoutProjectInput
   packages?: Prisma.PackageUncheckedCreateNestedManyWithoutProjectInput
+  screens?: Prisma.ProjectScreenUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectCreateOrConnectWithoutWorkflowsInput = {
@@ -677,6 +702,7 @@ export type ProjectUpdateWithoutWorkflowsInput = {
   templates?: Prisma.TemplateUpdateManyWithoutProjectNestedInput
   uiComponents?: Prisma.UIComponentUpdateManyWithoutProjectNestedInput
   packages?: Prisma.PackageUpdateManyWithoutProjectNestedInput
+  screens?: Prisma.ProjectScreenUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutWorkflowsInput = {
@@ -692,6 +718,7 @@ export type ProjectUncheckedUpdateWithoutWorkflowsInput = {
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutProjectNestedInput
   uiComponents?: Prisma.UIComponentUncheckedUpdateManyWithoutProjectNestedInput
   packages?: Prisma.PackageUncheckedUpdateManyWithoutProjectNestedInput
+  screens?: Prisma.ProjectScreenUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectCreateWithoutUiComponentsInput = {
@@ -707,6 +734,7 @@ export type ProjectCreateWithoutUiComponentsInput = {
   workflows?: Prisma.WorkflowCreateNestedManyWithoutProjectInput
   templates?: Prisma.TemplateCreateNestedManyWithoutProjectInput
   packages?: Prisma.PackageCreateNestedManyWithoutProjectInput
+  screens?: Prisma.ProjectScreenCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateWithoutUiComponentsInput = {
@@ -722,6 +750,7 @@ export type ProjectUncheckedCreateWithoutUiComponentsInput = {
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutProjectInput
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutProjectInput
   packages?: Prisma.PackageUncheckedCreateNestedManyWithoutProjectInput
+  screens?: Prisma.ProjectScreenUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectCreateOrConnectWithoutUiComponentsInput = {
@@ -753,6 +782,7 @@ export type ProjectUpdateWithoutUiComponentsInput = {
   workflows?: Prisma.WorkflowUpdateManyWithoutProjectNestedInput
   templates?: Prisma.TemplateUpdateManyWithoutProjectNestedInput
   packages?: Prisma.PackageUpdateManyWithoutProjectNestedInput
+  screens?: Prisma.ProjectScreenUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutUiComponentsInput = {
@@ -767,6 +797,87 @@ export type ProjectUncheckedUpdateWithoutUiComponentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutProjectNestedInput
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutProjectNestedInput
+  packages?: Prisma.PackageUncheckedUpdateManyWithoutProjectNestedInput
+  screens?: Prisma.ProjectScreenUncheckedUpdateManyWithoutProjectNestedInput
+}
+
+export type ProjectCreateWithoutScreensInput = {
+  id?: string
+  name: string
+  projectPath: string
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  appPath?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutProjectsInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutProjectInput
+  templates?: Prisma.TemplateCreateNestedManyWithoutProjectInput
+  uiComponents?: Prisma.UIComponentCreateNestedManyWithoutProjectInput
+  packages?: Prisma.PackageCreateNestedManyWithoutProjectInput
+}
+
+export type ProjectUncheckedCreateWithoutScreensInput = {
+  id?: string
+  name: string
+  userId: string
+  projectPath: string
+  bundleId?: string | null
+  targetDeviceId?: string | null
+  appPath?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutProjectInput
+  templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutProjectInput
+  uiComponents?: Prisma.UIComponentUncheckedCreateNestedManyWithoutProjectInput
+  packages?: Prisma.PackageUncheckedCreateNestedManyWithoutProjectInput
+}
+
+export type ProjectCreateOrConnectWithoutScreensInput = {
+  where: Prisma.ProjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutScreensInput, Prisma.ProjectUncheckedCreateWithoutScreensInput>
+}
+
+export type ProjectUpsertWithoutScreensInput = {
+  update: Prisma.XOR<Prisma.ProjectUpdateWithoutScreensInput, Prisma.ProjectUncheckedUpdateWithoutScreensInput>
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutScreensInput, Prisma.ProjectUncheckedCreateWithoutScreensInput>
+  where?: Prisma.ProjectWhereInput
+}
+
+export type ProjectUpdateToOneWithWhereWithoutScreensInput = {
+  where?: Prisma.ProjectWhereInput
+  data: Prisma.XOR<Prisma.ProjectUpdateWithoutScreensInput, Prisma.ProjectUncheckedUpdateWithoutScreensInput>
+}
+
+export type ProjectUpdateWithoutScreensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  projectPath?: Prisma.StringFieldUpdateOperationsInput | string
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutProjectNestedInput
+  templates?: Prisma.TemplateUpdateManyWithoutProjectNestedInput
+  uiComponents?: Prisma.UIComponentUpdateManyWithoutProjectNestedInput
+  packages?: Prisma.PackageUpdateManyWithoutProjectNestedInput
+}
+
+export type ProjectUncheckedUpdateWithoutScreensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  projectPath?: Prisma.StringFieldUpdateOperationsInput | string
+  bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutProjectNestedInput
+  templates?: Prisma.TemplateUncheckedUpdateManyWithoutProjectNestedInput
+  uiComponents?: Prisma.UIComponentUncheckedUpdateManyWithoutProjectNestedInput
   packages?: Prisma.PackageUncheckedUpdateManyWithoutProjectNestedInput
 }
 
@@ -783,6 +894,7 @@ export type ProjectCreateWithoutTemplatesInput = {
   workflows?: Prisma.WorkflowCreateNestedManyWithoutProjectInput
   uiComponents?: Prisma.UIComponentCreateNestedManyWithoutProjectInput
   packages?: Prisma.PackageCreateNestedManyWithoutProjectInput
+  screens?: Prisma.ProjectScreenCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateWithoutTemplatesInput = {
@@ -798,6 +910,7 @@ export type ProjectUncheckedCreateWithoutTemplatesInput = {
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutProjectInput
   uiComponents?: Prisma.UIComponentUncheckedCreateNestedManyWithoutProjectInput
   packages?: Prisma.PackageUncheckedCreateNestedManyWithoutProjectInput
+  screens?: Prisma.ProjectScreenUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectCreateOrConnectWithoutTemplatesInput = {
@@ -829,6 +942,7 @@ export type ProjectUpdateWithoutTemplatesInput = {
   workflows?: Prisma.WorkflowUpdateManyWithoutProjectNestedInput
   uiComponents?: Prisma.UIComponentUpdateManyWithoutProjectNestedInput
   packages?: Prisma.PackageUpdateManyWithoutProjectNestedInput
+  screens?: Prisma.ProjectScreenUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutTemplatesInput = {
@@ -844,6 +958,7 @@ export type ProjectUncheckedUpdateWithoutTemplatesInput = {
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutProjectNestedInput
   uiComponents?: Prisma.UIComponentUncheckedUpdateManyWithoutProjectNestedInput
   packages?: Prisma.PackageUncheckedUpdateManyWithoutProjectNestedInput
+  screens?: Prisma.ProjectScreenUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectCreateWithoutPackagesInput = {
@@ -859,6 +974,7 @@ export type ProjectCreateWithoutPackagesInput = {
   workflows?: Prisma.WorkflowCreateNestedManyWithoutProjectInput
   templates?: Prisma.TemplateCreateNestedManyWithoutProjectInput
   uiComponents?: Prisma.UIComponentCreateNestedManyWithoutProjectInput
+  screens?: Prisma.ProjectScreenCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateWithoutPackagesInput = {
@@ -874,6 +990,7 @@ export type ProjectUncheckedCreateWithoutPackagesInput = {
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutProjectInput
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutProjectInput
   uiComponents?: Prisma.UIComponentUncheckedCreateNestedManyWithoutProjectInput
+  screens?: Prisma.ProjectScreenUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectCreateOrConnectWithoutPackagesInput = {
@@ -905,6 +1022,7 @@ export type ProjectUpdateWithoutPackagesInput = {
   workflows?: Prisma.WorkflowUpdateManyWithoutProjectNestedInput
   templates?: Prisma.TemplateUpdateManyWithoutProjectNestedInput
   uiComponents?: Prisma.UIComponentUpdateManyWithoutProjectNestedInput
+  screens?: Prisma.ProjectScreenUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutPackagesInput = {
@@ -920,6 +1038,7 @@ export type ProjectUncheckedUpdateWithoutPackagesInput = {
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutProjectNestedInput
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutProjectNestedInput
   uiComponents?: Prisma.UIComponentUncheckedUpdateManyWithoutProjectNestedInput
+  screens?: Prisma.ProjectScreenUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectCreateManyUserInput = {
@@ -946,6 +1065,7 @@ export type ProjectUpdateWithoutUserInput = {
   templates?: Prisma.TemplateUpdateManyWithoutProjectNestedInput
   uiComponents?: Prisma.UIComponentUpdateManyWithoutProjectNestedInput
   packages?: Prisma.PackageUpdateManyWithoutProjectNestedInput
+  screens?: Prisma.ProjectScreenUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutUserInput = {
@@ -961,6 +1081,7 @@ export type ProjectUncheckedUpdateWithoutUserInput = {
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutProjectNestedInput
   uiComponents?: Prisma.UIComponentUncheckedUpdateManyWithoutProjectNestedInput
   packages?: Prisma.PackageUncheckedUpdateManyWithoutProjectNestedInput
+  screens?: Prisma.ProjectScreenUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateManyWithoutUserInput = {
@@ -984,6 +1105,7 @@ export type ProjectCountOutputType = {
   templates: number
   uiComponents: number
   packages: number
+  screens: number
 }
 
 export type ProjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -991,6 +1113,7 @@ export type ProjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   templates?: boolean | ProjectCountOutputTypeCountTemplatesArgs
   uiComponents?: boolean | ProjectCountOutputTypeCountUiComponentsArgs
   packages?: boolean | ProjectCountOutputTypeCountPackagesArgs
+  screens?: boolean | ProjectCountOutputTypeCountScreensArgs
 }
 
 /**
@@ -1031,6 +1154,13 @@ export type ProjectCountOutputTypeCountPackagesArgs<ExtArgs extends runtime.Type
   where?: Prisma.PackageWhereInput
 }
 
+/**
+ * ProjectCountOutputType without action
+ */
+export type ProjectCountOutputTypeCountScreensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProjectScreenWhereInput
+}
+
 
 export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1047,6 +1177,7 @@ export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   templates?: boolean | Prisma.Project$templatesArgs<ExtArgs>
   uiComponents?: boolean | Prisma.Project$uiComponentsArgs<ExtArgs>
   packages?: boolean | Prisma.Project$packagesArgs<ExtArgs>
+  screens?: boolean | Prisma.Project$screensArgs<ExtArgs>
   _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["project"]>
 
@@ -1095,6 +1226,7 @@ export type ProjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   templates?: boolean | Prisma.Project$templatesArgs<ExtArgs>
   uiComponents?: boolean | Prisma.Project$uiComponentsArgs<ExtArgs>
   packages?: boolean | Prisma.Project$packagesArgs<ExtArgs>
+  screens?: boolean | Prisma.Project$screensArgs<ExtArgs>
   _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1112,6 +1244,7 @@ export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     templates: Prisma.$TemplatePayload<ExtArgs>[]
     uiComponents: Prisma.$UIComponentPayload<ExtArgs>[]
     packages: Prisma.$PackagePayload<ExtArgs>[]
+    screens: Prisma.$ProjectScreenPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1522,6 +1655,7 @@ export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends runtime.
   templates<T extends Prisma.Project$templatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$templatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   uiComponents<T extends Prisma.Project$uiComponentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$uiComponentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UIComponentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   packages<T extends Prisma.Project$packagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$packagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  screens<T extends Prisma.Project$screensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$screensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectScreenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2049,6 +2183,30 @@ export type Project$packagesArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.PackageScalarFieldEnum | Prisma.PackageScalarFieldEnum[]
+}
+
+/**
+ * Project.screens
+ */
+export type Project$screensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProjectScreen
+   */
+  select?: Prisma.ProjectScreenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProjectScreen
+   */
+  omit?: Prisma.ProjectScreenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectScreenInclude<ExtArgs> | null
+  where?: Prisma.ProjectScreenWhereInput
+  orderBy?: Prisma.ProjectScreenOrderByWithRelationInput | Prisma.ProjectScreenOrderByWithRelationInput[]
+  cursor?: Prisma.ProjectScreenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProjectScreenScalarFieldEnum | Prisma.ProjectScreenScalarFieldEnum[]
 }
 
 /**

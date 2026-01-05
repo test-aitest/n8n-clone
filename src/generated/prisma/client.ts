@@ -90,6 +90,11 @@ export type Execution = Prisma.ExecutionModel
  */
 export type UIComponent = Prisma.UIComponentModel
 /**
+ * Model ProjectScreen
+ * 
+ */
+export type ProjectScreen = Prisma.ProjectScreenModel
+/**
  * Model GoldenMaster
  * 
  */

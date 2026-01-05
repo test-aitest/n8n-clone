@@ -394,6 +394,7 @@ export const ModelName = {
   Connection: 'Connection',
   Execution: 'Execution',
   UIComponent: 'UIComponent',
+  ProjectScreen: 'ProjectScreen',
   GoldenMaster: 'GoldenMaster',
   Project: 'Project',
   Template: 'Template',
@@ -415,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "credential" | "workflow" | "node" | "connection" | "execution" | "uIComponent" | "goldenMaster" | "project" | "template" | "package" | "packageWorkflow" | "packageExecution"
+    modelProps: "user" | "session" | "account" | "verification" | "credential" | "workflow" | "node" | "connection" | "execution" | "uIComponent" | "projectScreen" | "goldenMaster" | "project" | "template" | "package" | "packageWorkflow" | "packageExecution"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1159,6 +1160,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ProjectScreen: {
+      payload: Prisma.$ProjectScreenPayload<ExtArgs>
+      fields: Prisma.ProjectScreenFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProjectScreenFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectScreenPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProjectScreenFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectScreenPayload>
+        }
+        findFirst: {
+          args: Prisma.ProjectScreenFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectScreenPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProjectScreenFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectScreenPayload>
+        }
+        findMany: {
+          args: Prisma.ProjectScreenFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectScreenPayload>[]
+        }
+        create: {
+          args: Prisma.ProjectScreenCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectScreenPayload>
+        }
+        createMany: {
+          args: Prisma.ProjectScreenCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProjectScreenCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectScreenPayload>[]
+        }
+        delete: {
+          args: Prisma.ProjectScreenDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectScreenPayload>
+        }
+        update: {
+          args: Prisma.ProjectScreenUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectScreenPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProjectScreenDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProjectScreenUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProjectScreenUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectScreenPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProjectScreenUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectScreenPayload>
+        }
+        aggregate: {
+          args: Prisma.ProjectScreenAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProjectScreen>
+        }
+        groupBy: {
+          args: Prisma.ProjectScreenGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProjectScreenGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProjectScreenCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProjectScreenCountAggregateOutputType> | number
+        }
+      }
+    }
     GoldenMaster: {
       payload: Prisma.$GoldenMasterPayload<ExtArgs>
       fields: Prisma.GoldenMasterFieldRefs
@@ -1787,10 +1862,23 @@ export const UIComponentScalarFieldEnum = {
   sourceLineNumber: 'sourceLineNumber',
   positionX: 'positionX',
   positionY: 'positionY',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type UIComponentScalarFieldEnum = (typeof UIComponentScalarFieldEnum)[keyof typeof UIComponentScalarFieldEnum]
+
+
+export const ProjectScreenScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  filePath: 'filePath',
+  screenName: 'screenName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProjectScreenScalarFieldEnum = (typeof ProjectScreenScalarFieldEnum)[keyof typeof ProjectScreenScalarFieldEnum]
 
 
 export const GoldenMasterScalarFieldEnum = {
@@ -2166,6 +2254,7 @@ export type GlobalOmitConfig = {
   connection?: Prisma.ConnectionOmit
   execution?: Prisma.ExecutionOmit
   uIComponent?: Prisma.UIComponentOmit
+  projectScreen?: Prisma.ProjectScreenOmit
   goldenMaster?: Prisma.GoldenMasterOmit
   project?: Prisma.ProjectOmit
   template?: Prisma.TemplateOmit

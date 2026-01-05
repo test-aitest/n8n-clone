@@ -32,6 +32,7 @@ const formSchema = z.object({
       message: "Variable name must start with a letter or underscore",
     }),
   timeout: z.string().optional(),
+  screenName: z.string().optional(),
 });
 
 export type UiScanFormValues = z.infer<typeof formSchema>;
@@ -54,6 +55,7 @@ export const UiScanDialog = ({
     defaultValues: {
       variableName: defaultValues.variableName || "uiScan",
       timeout: defaultValues.timeout || "30000",
+      screenName: defaultValues.screenName || "",
     },
   });
 
@@ -62,6 +64,7 @@ export const UiScanDialog = ({
       form.reset({
         variableName: defaultValues.variableName || "uiScan",
         timeout: defaultValues.timeout || "30000",
+        screenName: defaultValues.screenName || "",
       });
     }
   }, [open, defaultValues, form]);
@@ -87,6 +90,22 @@ export const UiScanDialog = ({
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-6 mt-4"
           >
+            <FormField
+              control={form.control}
+              name="screenName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>画面名</FormLabel>
+                  <FormControl>
+                    <Input placeholder="ログイン画面" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    この画面の名前を設定します。要素選択時に画面でフィルタリングできます。
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="variableName"
