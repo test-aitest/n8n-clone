@@ -60,3 +60,11 @@ export const ExecutionStatus = {
 } as const
 
 export type ExecutionStatus = (typeof ExecutionStatus)[keyof typeof ExecutionStatus]
+
+
+export const ExecutionMode = {
+  PARALLEL: 'PARALLEL',
+  SEQUENTIAL: 'SEQUENTIAL'
+} as const
+
+export type ExecutionMode = (typeof ExecutionMode)[keyof typeof ExecutionMode]

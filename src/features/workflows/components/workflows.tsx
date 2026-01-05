@@ -1,6 +1,7 @@
 "use client";
 
 import { formatDistanceToNow } from "date-fns";
+import { useState } from "react";
 import {
   EmptyView,
   EntityContainer,
@@ -22,8 +23,8 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useWorkflowsParams } from "../hooks/use-workflows-params";
 import { useEntitySearch } from "@/hooks/use-entity-search";
-import type { Workflow } from "@/generated/prisma/browser";
 import { WorkflowIcon } from "lucide-react";
+import { AddToPackageDialog } from "./add-to-package-dialog";
 
 export const WorkflowsSearch = () => {
   const [params, setParams] = useWorkflowsParams();
@@ -136,7 +137,15 @@ export const WorkflowsEmpty = () => {
   );
 };
 
-export const WorkflowItem = ({ data }: { data: Workflow }) => {
+interface WorkflowData {
+  id: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export const WorkflowItem = ({ data }: { data: WorkflowData }) => {
+  const [showAddToPackageDialog, setShowAddToPackageDialog] = useState(false);
   const removeWorkflow = useRemoveWorkflow();
   const createTemplate = useCreateTemplateFromWorkflow();
 
@@ -163,25 +172,34 @@ export const WorkflowItem = ({ data }: { data: Workflow }) => {
   };
 
   return (
-    <EntityItem
-      href={`/workflows/${data.id}`}
-      title={data.name}
-      subtitle={
-        <>
-          Updated {formatDistanceToNow(data.updatedAt, { addSuffix: true })}{" "}
-          &bull; Created{" "}
-          {formatDistanceToNow(data.createdAt, { addSuffix: true })}
-        </>
-      }
-      image={
-        <div className="size-8 flex items-center justify-center">
-          <WorkflowIcon className="size-5 text-muted-foreground" />
-        </div>
-      }
-      onRemove={handleRemove}
-      isRemoving={removeWorkflow.isPending}
-      onMakeTemplate={handleMakeTemplate}
-      isMakingTemplate={createTemplate.isPending}
-    />
+    <>
+      <EntityItem
+        href={`/workflows/${data.id}`}
+        title={data.name}
+        subtitle={
+          <>
+            Updated {formatDistanceToNow(data.updatedAt, { addSuffix: true })}{" "}
+            &bull; Created{" "}
+            {formatDistanceToNow(data.createdAt, { addSuffix: true })}
+          </>
+        }
+        image={
+          <div className="size-8 flex items-center justify-center">
+            <WorkflowIcon className="size-5 text-muted-foreground" />
+          </div>
+        }
+        onRemove={handleRemove}
+        isRemoving={removeWorkflow.isPending}
+        onMakeTemplate={handleMakeTemplate}
+        isMakingTemplate={createTemplate.isPending}
+        onAddToPackage={() => setShowAddToPackageDialog(true)}
+      />
+      <AddToPackageDialog
+        open={showAddToPackageDialog}
+        onOpenChange={setShowAddToPackageDialog}
+        workflowId={data.id}
+        workflowName={data.name}
+      />
+    </>
   );
 };

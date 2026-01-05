@@ -82,3 +82,18 @@ export type Project = Prisma.ProjectModel
  * 
  */
 export type Template = Prisma.TemplateModel
+/**
+ * Model Package
+ * 
+ */
+export type Package = Prisma.PackageModel
+/**
+ * Model PackageWorkflow
+ * 
+ */
+export type PackageWorkflow = Prisma.PackageWorkflowModel
+/**
+ * Model PackageExecution
+ * 
+ */
+export type PackageExecution = Prisma.PackageExecutionModel

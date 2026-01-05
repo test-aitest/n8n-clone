@@ -63,7 +63,10 @@ export const ModelName = {
   UIComponent: 'UIComponent',
   GoldenMaster: 'GoldenMaster',
   Project: 'Project',
-  Template: 'Template'
+  Template: 'Template',
+  Package: 'Package',
+  PackageWorkflow: 'PackageWorkflow',
+  PackageExecution: 'PackageExecution'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -276,6 +279,43 @@ export const TemplateScalarFieldEnum = {
 } as const
 
 export type TemplateScalarFieldEnum = (typeof TemplateScalarFieldEnum)[keyof typeof TemplateScalarFieldEnum]
+
+
+export const PackageScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  projectId: 'projectId',
+  userId: 'userId',
+  executionMode: 'executionMode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PackageScalarFieldEnum = (typeof PackageScalarFieldEnum)[keyof typeof PackageScalarFieldEnum]
+
+
+export const PackageWorkflowScalarFieldEnum = {
+  id: 'id',
+  packageId: 'packageId',
+  workflowId: 'workflowId',
+  order: 'order'
+} as const
+
+export type PackageWorkflowScalarFieldEnum = (typeof PackageWorkflowScalarFieldEnum)[keyof typeof PackageWorkflowScalarFieldEnum]
+
+
+export const PackageExecutionScalarFieldEnum = {
+  id: 'id',
+  packageId: 'packageId',
+  status: 'status',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  error: 'error',
+  results: 'results'
+} as const
+
+export type PackageExecutionScalarFieldEnum = (typeof PackageExecutionScalarFieldEnum)[keyof typeof PackageExecutionScalarFieldEnum]
 
 
 export const SortOrder = {

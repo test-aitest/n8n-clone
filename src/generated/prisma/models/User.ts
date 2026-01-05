@@ -204,6 +204,7 @@ export type UserWhereInput = {
   credentials?: Prisma.CredentialListRelationFilter
   projects?: Prisma.ProjectListRelationFilter
   templates?: Prisma.TemplateListRelationFilter
+  packages?: Prisma.PackageListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -220,6 +221,7 @@ export type UserOrderByWithRelationInput = {
   credentials?: Prisma.CredentialOrderByRelationAggregateInput
   projects?: Prisma.ProjectOrderByRelationAggregateInput
   templates?: Prisma.TemplateOrderByRelationAggregateInput
+  packages?: Prisma.PackageOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -239,6 +241,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   credentials?: Prisma.CredentialListRelationFilter
   projects?: Prisma.ProjectListRelationFilter
   templates?: Prisma.TemplateListRelationFilter
+  packages?: Prisma.PackageListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -281,6 +284,7 @@ export type UserCreateInput = {
   credentials?: Prisma.CredentialCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
   templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -297,6 +301,7 @@ export type UserUncheckedCreateInput = {
   credentials?: Prisma.CredentialUncheckedCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -313,6 +318,7 @@ export type UserUpdateInput = {
   credentials?: Prisma.CredentialUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
   templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -329,6 +335,7 @@ export type UserUncheckedUpdateInput = {
   credentials?: Prisma.CredentialUncheckedUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -503,6 +510,20 @@ export type UserUpdateOneWithoutTemplatesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTemplatesInput, Prisma.UserUpdateWithoutTemplatesInput>, Prisma.UserUncheckedUpdateWithoutTemplatesInput>
 }
 
+export type UserCreateNestedOneWithoutPackagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPackagesInput, Prisma.UserUncheckedCreateWithoutPackagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPackagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPackagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPackagesInput, Prisma.UserUncheckedCreateWithoutPackagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPackagesInput
+  upsert?: Prisma.UserUpsertWithoutPackagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPackagesInput, Prisma.UserUpdateWithoutPackagesInput>, Prisma.UserUncheckedUpdateWithoutPackagesInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id: string
   name: string
@@ -516,6 +537,7 @@ export type UserCreateWithoutSessionsInput = {
   credentials?: Prisma.CredentialCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
   templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -531,6 +553,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   credentials?: Prisma.CredentialUncheckedCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -562,6 +585,7 @@ export type UserUpdateWithoutSessionsInput = {
   credentials?: Prisma.CredentialUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
   templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -577,6 +601,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   credentials?: Prisma.CredentialUncheckedUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -592,6 +617,7 @@ export type UserCreateWithoutAccountsInput = {
   credentials?: Prisma.CredentialCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
   templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -607,6 +633,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   credentials?: Prisma.CredentialUncheckedCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -638,6 +665,7 @@ export type UserUpdateWithoutAccountsInput = {
   credentials?: Prisma.CredentialUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
   templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -653,6 +681,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   credentials?: Prisma.CredentialUncheckedUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCredentialsInput = {
@@ -668,6 +697,7 @@ export type UserCreateWithoutCredentialsInput = {
   workflows?: Prisma.WorkflowCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
   templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCredentialsInput = {
@@ -683,6 +713,7 @@ export type UserUncheckedCreateWithoutCredentialsInput = {
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCredentialsInput = {
@@ -714,6 +745,7 @@ export type UserUpdateWithoutCredentialsInput = {
   workflows?: Prisma.WorkflowUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
   templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCredentialsInput = {
@@ -729,6 +761,7 @@ export type UserUncheckedUpdateWithoutCredentialsInput = {
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutWorkflowsInput = {
@@ -744,6 +777,7 @@ export type UserCreateWithoutWorkflowsInput = {
   credentials?: Prisma.CredentialCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
   templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutWorkflowsInput = {
@@ -759,6 +793,7 @@ export type UserUncheckedCreateWithoutWorkflowsInput = {
   credentials?: Prisma.CredentialUncheckedCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutWorkflowsInput = {
@@ -790,6 +825,7 @@ export type UserUpdateWithoutWorkflowsInput = {
   credentials?: Prisma.CredentialUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
   templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWorkflowsInput = {
@@ -805,6 +841,7 @@ export type UserUncheckedUpdateWithoutWorkflowsInput = {
   credentials?: Prisma.CredentialUncheckedUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutProjectsInput = {
@@ -820,6 +857,7 @@ export type UserCreateWithoutProjectsInput = {
   workflows?: Prisma.WorkflowCreateNestedManyWithoutUserInput
   credentials?: Prisma.CredentialCreateNestedManyWithoutUserInput
   templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProjectsInput = {
@@ -835,6 +873,7 @@ export type UserUncheckedCreateWithoutProjectsInput = {
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutUserInput
   credentials?: Prisma.CredentialUncheckedCreateNestedManyWithoutUserInput
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProjectsInput = {
@@ -866,6 +905,7 @@ export type UserUpdateWithoutProjectsInput = {
   workflows?: Prisma.WorkflowUpdateManyWithoutUserNestedInput
   credentials?: Prisma.CredentialUpdateManyWithoutUserNestedInput
   templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProjectsInput = {
@@ -881,6 +921,7 @@ export type UserUncheckedUpdateWithoutProjectsInput = {
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutUserNestedInput
   credentials?: Prisma.CredentialUncheckedUpdateManyWithoutUserNestedInput
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTemplatesInput = {
@@ -896,6 +937,7 @@ export type UserCreateWithoutTemplatesInput = {
   workflows?: Prisma.WorkflowCreateNestedManyWithoutUserInput
   credentials?: Prisma.CredentialCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTemplatesInput = {
@@ -911,6 +953,7 @@ export type UserUncheckedCreateWithoutTemplatesInput = {
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutUserInput
   credentials?: Prisma.CredentialUncheckedCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  packages?: Prisma.PackageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTemplatesInput = {
@@ -942,6 +985,7 @@ export type UserUpdateWithoutTemplatesInput = {
   workflows?: Prisma.WorkflowUpdateManyWithoutUserNestedInput
   credentials?: Prisma.CredentialUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTemplatesInput = {
@@ -957,6 +1001,87 @@ export type UserUncheckedUpdateWithoutTemplatesInput = {
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutUserNestedInput
   credentials?: Prisma.CredentialUncheckedUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  packages?: Prisma.PackageUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPackagesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutUserInput
+  credentials?: Prisma.CredentialCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPackagesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutUserInput
+  credentials?: Prisma.CredentialUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPackagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPackagesInput, Prisma.UserUncheckedCreateWithoutPackagesInput>
+}
+
+export type UserUpsertWithoutPackagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPackagesInput, Prisma.UserUncheckedUpdateWithoutPackagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPackagesInput, Prisma.UserUncheckedCreateWithoutPackagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPackagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPackagesInput, Prisma.UserUncheckedUpdateWithoutPackagesInput>
+}
+
+export type UserUpdateWithoutPackagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutUserNestedInput
+  credentials?: Prisma.CredentialUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPackagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutUserNestedInput
+  credentials?: Prisma.CredentialUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -971,6 +1096,7 @@ export type UserCountOutputType = {
   credentials: number
   projects: number
   templates: number
+  packages: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -980,6 +1106,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   credentials?: boolean | UserCountOutputTypeCountCredentialsArgs
   projects?: boolean | UserCountOutputTypeCountProjectsArgs
   templates?: boolean | UserCountOutputTypeCountTemplatesArgs
+  packages?: boolean | UserCountOutputTypeCountPackagesArgs
 }
 
 /**
@@ -1034,6 +1161,13 @@ export type UserCountOutputTypeCountTemplatesArgs<ExtArgs extends runtime.Types.
   where?: Prisma.TemplateWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPackagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PackageWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1049,6 +1183,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   credentials?: boolean | Prisma.User$credentialsArgs<ExtArgs>
   projects?: boolean | Prisma.User$projectsArgs<ExtArgs>
   templates?: boolean | Prisma.User$templatesArgs<ExtArgs>
+  packages?: boolean | Prisma.User$packagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1090,6 +1225,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   credentials?: boolean | Prisma.User$credentialsArgs<ExtArgs>
   projects?: boolean | Prisma.User$projectsArgs<ExtArgs>
   templates?: boolean | Prisma.User$templatesArgs<ExtArgs>
+  packages?: boolean | Prisma.User$packagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1104,6 +1240,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     credentials: Prisma.$CredentialPayload<ExtArgs>[]
     projects: Prisma.$ProjectPayload<ExtArgs>[]
     templates: Prisma.$TemplatePayload<ExtArgs>[]
+    packages: Prisma.$PackagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1513,6 +1650,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   credentials<T extends Prisma.User$credentialsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$credentialsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   projects<T extends Prisma.User$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   templates<T extends Prisma.User$templatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$templatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  packages<T extends Prisma.User$packagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$packagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2078,6 +2216,30 @@ export type User$templatesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.TemplateScalarFieldEnum | Prisma.TemplateScalarFieldEnum[]
+}
+
+/**
+ * User.packages
+ */
+export type User$packagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Package
+   */
+  select?: Prisma.PackageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Package
+   */
+  omit?: Prisma.PackageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PackageInclude<ExtArgs> | null
+  where?: Prisma.PackageWhereInput
+  orderBy?: Prisma.PackageOrderByWithRelationInput | Prisma.PackageOrderByWithRelationInput[]
+  cursor?: Prisma.PackageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PackageScalarFieldEnum | Prisma.PackageScalarFieldEnum[]
 }
 
 /**

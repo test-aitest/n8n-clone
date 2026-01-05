@@ -28,6 +28,7 @@ model User {
   credentials   Credential[]
   projects      Project[]
   templates     Template[]
+  packages      Package[]
 
   @@map("user")
 }
@@ -126,8 +127,9 @@ model Workflow {
   targetDeviceId String? // Simulator UDID
   platform       String? @default("ios") // "ios" | "android" (future)
 
-  uiComponents   UIComponent[]
-  goldenMasters  GoldenMaster[]
+  uiComponents     UIComponent[]
+  goldenMasters    GoldenMaster[]
+  packageWorkflows PackageWorkflow[]
 
   @@index([projectId])
 }
@@ -293,6 +295,7 @@ model Project {
   workflows      Workflow[]
   templates      Template[]
   uiComponents   UIComponent[]
+  packages       Package[]
 
   @@index([userId])
 }
@@ -325,4 +328,60 @@ model Template {
   @@index([projectId])
   @@index([userId])
   @@index([category])
+}
+
+// ============================================
+// Package Management (Workflow Groups)
+// ============================================
+
+enum ExecutionMode {
+  PARALLEL
+  SEQUENTIAL
+}
+
+model Package {
+  id            String        @id @default(cuid())
+  name          String
+  description   String?
+  projectId     String
+  project       Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  executionMode ExecutionMode @default(SEQUENTIAL)
+
+  workflows  PackageWorkflow[]
+  executions PackageExecution[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([userId])
+}
+
+model PackageWorkflow {
+  id         String   @id @default(cuid())
+  packageId  String
+  package    Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  workflowId String
+  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  order      Int      @default(0)
+
+  @@unique([packageId, workflowId])
+  @@index([packageId])
+}
+
+model PackageExecution {
+  id          String          @id @default(cuid())
+  packageId   String
+  package     Package         @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  status      ExecutionStatus @default(RUNNING)
+  startedAt   DateTime        @default(now())
+  completedAt DateTime?
+  error       String?         @db.Text
+
+  // Results for each workflow execution
+  results Json?
+
+  @@index([packageId])
 }

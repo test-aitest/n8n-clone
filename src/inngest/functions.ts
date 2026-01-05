@@ -36,6 +36,10 @@ import {
   iosExpectVisualChannel,
   iosUiScanChannel,
 } from "./channels/ios-testing";
+import {
+  packageExecutionChannel,
+  type WorkflowStatus,
+} from "./channels/package-execution";
 
 export const executeWorkflow = inngest.createFunction(
   {
@@ -229,5 +233,164 @@ export const scheduledWorkflowChecker = inngest.createFunction(
     }
 
     return { checked: scheduledWorkflows.length };
+  }
+);
+
+// Package execution - executes all workflows in a package
+export const executePackage = inngest.createFunction(
+  {
+    id: "execute-package",
+    retries: process.env.NODE_ENV === "production" ? 3 : 0,
+    onFailure: async ({ event }) => {
+      const packageId = event.data.event.data?.packageId;
+      if (packageId) {
+        // Find the execution by packageId and startedAt (most recent)
+        const execution = await prisma.packageExecution.findFirst({
+          where: { packageId },
+          orderBy: { startedAt: "desc" },
+        });
+        if (execution) {
+          await prisma.packageExecution.update({
+            where: { id: execution.id },
+            data: {
+              status: ExecutionStatus.FAILED,
+              error: event.data.error.message,
+              completedAt: new Date(),
+            },
+          });
+        }
+      }
+    },
+  },
+  {
+    event: "packages/execute.package",
+    channels: [packageExecutionChannel()],
+  },
+  async ({ event, step, publish }) => {
+    const { packageId, executionMode, workflowIds } = event.data;
+
+    if (!packageId || !workflowIds || workflowIds.length === 0) {
+      throw new NonRetriableError("Package ID or workflow IDs are missing");
+    }
+
+    // Initialize workflow statuses
+    const workflowStatuses: Record<string, WorkflowStatus> = {};
+    for (const wfId of workflowIds) {
+      workflowStatuses[wfId] = "pending";
+    }
+
+    // Helper to publish status update
+    const publishStatus = async (overallStatus: "running" | "success" | "failed") => {
+      await publish(
+        packageExecutionChannel().status({
+          packageId,
+          workflowStatuses: { ...workflowStatuses },
+          overallStatus,
+        })
+      );
+    };
+
+    // Create package execution record
+    const packageExecution = await step.run(
+      "create-package-execution",
+      async () => {
+        return prisma.packageExecution.create({
+          data: {
+            packageId,
+          },
+        });
+      }
+    );
+
+    // Publish initial status
+    await publishStatus("running");
+
+    const results: Record<
+      string,
+      { status: "success" | "failed"; executionId?: string; error?: string }
+    > = {};
+
+    if (executionMode === "PARALLEL") {
+      // Mark all as running
+      for (const wfId of workflowIds) {
+        workflowStatuses[wfId] = "running";
+      }
+      await publishStatus("running");
+
+      // Execute all workflows in parallel
+      await step.run("execute-workflows-parallel", async () => {
+        const promises = workflowIds.map(async (workflowId: string) => {
+          try {
+            await sendWorkflowExecution({ workflowId, packageId });
+            results[workflowId] = { status: "success" };
+            workflowStatuses[workflowId] = "success";
+          } catch (error) {
+            results[workflowId] = {
+              status: "failed",
+              error: error instanceof Error ? error.message : "Unknown error",
+            };
+            workflowStatuses[workflowId] = "failed";
+          }
+        });
+
+        await Promise.allSettled(promises);
+      });
+
+      // Publish final parallel status
+      await publishStatus(
+        Object.values(workflowStatuses).some((s) => s === "failed")
+          ? "failed"
+          : "success"
+      );
+    } else {
+      // Execute workflows sequentially
+      for (const workflowId of workflowIds) {
+        // Mark current as running
+        workflowStatuses[workflowId] = "running";
+        await publishStatus("running");
+
+        await step.run(`execute-workflow-${workflowId}`, async () => {
+          try {
+            await sendWorkflowExecution({ workflowId, packageId });
+            results[workflowId] = { status: "success" };
+            workflowStatuses[workflowId] = "success";
+          } catch (error) {
+            results[workflowId] = {
+              status: "failed",
+              error: error instanceof Error ? error.message : "Unknown error",
+            };
+            workflowStatuses[workflowId] = "failed";
+          }
+        });
+
+        // Publish status after each workflow
+        await publishStatus("running");
+      }
+    }
+
+    // Update package execution with results
+    const hasFailures = Object.values(results).some(
+      (r) => r.status === "failed"
+    );
+
+    await step.run("update-package-execution", async () => {
+      return prisma.packageExecution.update({
+        where: { id: packageExecution.id },
+        data: {
+          status: hasFailures ? ExecutionStatus.FAILED : ExecutionStatus.SUCCESS,
+          completedAt: new Date(),
+          results,
+        },
+      });
+    });
+
+    // Publish final status
+    await publishStatus(hasFailures ? "failed" : "success");
+
+    return {
+      packageId,
+      executionId: packageExecution.id,
+      results,
+    };
   }
 );

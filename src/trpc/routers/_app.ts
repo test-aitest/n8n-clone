@@ -5,6 +5,7 @@ import { executionsRouter } from "@/features/executions/server/routers";
 import { iosTestingRouter } from "@/features/ios-testing/server/routers";
 import { projectsRouter } from "@/features/projects/server/routers";
 import { templatesRouter } from "@/features/templates/server/routers";
+import { packagesRouter } from "@/features/packages/server/routers";
 
 export const appRouter = createTRPCRouter({
   workflows: workflowsRouter,
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   iosTesting: iosTestingRouter,
   projects: projectsRouter,
   templates: templatesRouter,
+  packages: packagesRouter,
 });
 
 export type AppRouter = typeof appRouter;

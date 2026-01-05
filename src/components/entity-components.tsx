@@ -3,6 +3,7 @@ import {
   FileIcon,
   Loader2Icon,
   MoreVerticalIcon,
+  PackageIcon,
   PackageOpenIcon,
   PlusIcon,
   TrashIcon,
@@ -254,6 +255,7 @@ interface EntityItemProps {
   isRemoving?: boolean;
   onMakeTemplate?: () => void | Promise<void>;
   isMakingTemplate?: boolean;
+  onAddToPackage?: () => void;
   className?: string;
 }
 
@@ -267,6 +269,7 @@ export const EntityItem = ({
   isRemoving,
   onMakeTemplate,
   isMakingTemplate,
+  onAddToPackage,
   className,
 }: EntityItemProps) => {
   const handleRemove = async (e: React.MouseEvent) => {
@@ -295,6 +298,15 @@ export const EntityItem = ({
     }
   };
 
+  const handleAddToPackage = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (onAddToPackage) {
+      onAddToPackage();
+    }
+  };
+
   return (
     <Link href={href} prefetch>
       <div
@@ -317,10 +329,10 @@ export const EntityItem = ({
             )}
           </div>
         </div>
-        {(actions || onRemove || onMakeTemplate) && (
+        {(actions || onRemove || onMakeTemplate || onAddToPackage) && (
           <div className="flex gap-x-2 items-center shrink-0 ml-4">
             {actions}
-            {(onRemove || onMakeTemplate) && (
+            {(onRemove || onMakeTemplate || onAddToPackage) && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -336,6 +348,12 @@ export const EntityItem = ({
                   align="end"
                   onClick={(e) => e.stopPropagation()}
                 >
+                  {onAddToPackage && (
+                    <DropdownMenuItem onClick={handleAddToPackage}>
+                      <PackageIcon className="size-4" />
+                      Add to Package
+                    </DropdownMenuItem>
+                  )}
                   {onMakeTemplate && (
                     <DropdownMenuItem
                       onClick={handleMakeTemplate}

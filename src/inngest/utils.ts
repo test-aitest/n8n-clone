@@ -59,3 +59,15 @@ export const sendWorkflowExecution = async (data: {
     id: createId(),
   });
 };
+
+export const sendPackageExecution = async (data: {
+  packageId: string;
+  executionMode: string;
+  workflowIds: string[];
+}) => {
+  return inngest.send({
+    name: "packages/execute.package",
+    data,
+    id: createId(),
+  });
+};
