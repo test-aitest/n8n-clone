@@ -257,6 +257,7 @@ interface EntityItemProps {
   isMakingTemplate?: boolean;
   onAddToPackage?: () => void;
   className?: string;
+  children?: React.ReactNode;
 }
 
 export const EntityItem = ({
@@ -271,6 +272,7 @@ export const EntityItem = ({
   isMakingTemplate,
   onAddToPackage,
   className,
+  children,
 }: EntityItemProps) => {
   const handleRemove = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -311,72 +313,75 @@ export const EntityItem = ({
     <Link href={href} prefetch>
       <div
         className={cn(
-          "flex items-center justify-between px-4 py-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors",
+          "flex flex-col rounded-lg border bg-card hover:bg-accent/50 transition-colors",
           isRemoving && "opacity-50 cursor-not-allowed",
           className
         )}
       >
-        <div className="flex items-center gap-3 min-w-0">
-          {image && (
-            <div className="shrink-0 size-9 flex items-center justify-center rounded-md bg-muted">
-              {image}
-            </div>
-          )}
-          <div className="min-w-0">
-            <div className="text-sm font-medium truncate">{title}</div>
-            {!!subtitle && (
-              <div className="text-xs text-muted-foreground">{subtitle}</div>
+        <div className="flex items-center justify-between px-4 py-3">
+          <div className="flex items-center gap-3 min-w-0">
+            {image && (
+              <div className="shrink-0 size-9 flex items-center justify-center rounded-md bg-muted">
+                {image}
+              </div>
             )}
+            <div className="min-w-0">
+              <div className="text-sm font-medium truncate">{title}</div>
+              {!!subtitle && (
+                <div className="text-xs text-muted-foreground">{subtitle}</div>
+              )}
+            </div>
           </div>
-        </div>
-        {(actions || onRemove || onMakeTemplate || onAddToPackage) && (
-          <div className="flex gap-x-2 items-center shrink-0 ml-4">
-            {actions}
-            {(onRemove || onMakeTemplate || onAddToPackage) && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="size-8"
+          {(actions || onRemove || onMakeTemplate || onAddToPackage) && (
+            <div className="flex gap-x-2 items-center shrink-0 ml-4">
+              {actions}
+              {(onRemove || onMakeTemplate || onAddToPackage) && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="size-8"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <MoreVerticalIcon className="size-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <MoreVerticalIcon className="size-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {onAddToPackage && (
-                    <DropdownMenuItem onClick={handleAddToPackage}>
-                      <PackageIcon className="size-4" />
-                      Add to Package
-                    </DropdownMenuItem>
-                  )}
-                  {onMakeTemplate && (
-                    <DropdownMenuItem
-                      onClick={handleMakeTemplate}
-                      disabled={isMakingTemplate}
-                    >
-                      <FileIcon className="size-4" />
-                      Make Template
-                    </DropdownMenuItem>
-                  )}
-                  {onRemove && (
-                    <DropdownMenuItem
-                      onClick={handleRemove}
-                      className="text-destructive focus:text-destructive"
-                    >
-                      <TrashIcon className="size-4" />
-                      Delete
-                    </DropdownMenuItem>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-          </div>
-        )}
+                    {onAddToPackage && (
+                      <DropdownMenuItem onClick={handleAddToPackage}>
+                        <PackageIcon className="size-4" />
+                        Add to Package
+                      </DropdownMenuItem>
+                    )}
+                    {onMakeTemplate && (
+                      <DropdownMenuItem
+                        onClick={handleMakeTemplate}
+                        disabled={isMakingTemplate}
+                      >
+                        <FileIcon className="size-4" />
+                        Make Template
+                      </DropdownMenuItem>
+                    )}
+                    {onRemove && (
+                      <DropdownMenuItem
+                        onClick={handleRemove}
+                        className="text-destructive focus:text-destructive"
+                      >
+                        <TrashIcon className="size-4" />
+                        Delete
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
+          )}
+        </div>
+        {children}
       </div>
     </Link>
   );

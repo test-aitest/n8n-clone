@@ -364,12 +364,19 @@ export const packagesRouter = createTRPCRouter({
       }
 
       // Send package execution event
+      console.log("[executePackage] Sending package execution event:", {
+        packageId: pkg.id,
+        executionMode: pkg.executionMode,
+        workflowIds: pkg.workflows.map((pw) => pw.workflow.id),
+      });
+
       await sendPackageExecution({
         packageId: pkg.id,
         executionMode: pkg.executionMode,
         workflowIds: pkg.workflows.map((pw) => pw.workflow.id),
       });
 
+      console.log("[executePackage] Package execution event sent successfully");
       return pkg;
     }),
 

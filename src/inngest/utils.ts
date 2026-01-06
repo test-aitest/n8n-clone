@@ -1,12 +1,15 @@
-import type { Connection, Node } from "@/generated/prisma/client";
 import toposort from "toposort";
 import { inngest } from "./client";
 import { createId } from "@paralleldrive/cuid2";
 
-export const topologicalSort = (
-  nodes: Node[],
-  connections: Connection[]
-): Node[] => {
+// Generic types for topological sort to support both raw Prisma types and JsonifyObject
+type MinimalNode = { id: string };
+type MinimalConnection = { fromNodeId: string; toNodeId: string };
+
+export const topologicalSort = <T extends MinimalNode>(
+  nodes: T[],
+  connections: MinimalConnection[]
+): T[] => {
   // If no connections, return node as-is (they're all independent)
   if (connections.length === 0) {
     return nodes;

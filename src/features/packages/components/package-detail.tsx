@@ -36,7 +36,7 @@ import {
   ListIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { WorkflowStatus } from "@/inngest/channels/package-execution";
 import { formatDistanceToNow } from "date-fns";
@@ -46,7 +46,6 @@ interface PackageDetailProps {
 }
 
 interface WorkflowItemProps {
-  id: string;
   name: string;
   targetDeviceId: string | null;
   onRemove: () => void;
@@ -66,7 +65,7 @@ const WorkflowItem = ({
       case "pending":
         return <ClockIcon className="size-4 text-muted-foreground" />;
       case "running":
-        return <Loader2 className="size-4 text-blue-600 animate-spin" />;
+        return <Loader2 className="size-4 animate-spin" />;
       case "success":
         return <CheckCircle2Icon className="size-4 text-green-600" />;
       case "failed":
@@ -125,7 +124,6 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
   const executionStatus = usePackageExecutionStatus({
     packageId,
     refreshToken: fetchPackageExecutionRealtimeToken,
-    enabled: isExecuting,
   });
 
   const validationQuery = useValidateParallel(
@@ -149,23 +147,14 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
   };
 
   const handleExecute = () => {
+    // Reset the status to prepare for new execution
+    executionStatus.reset?.();
     setIsExecuting(true);
     executePackage.mutate({ id: packageId });
   };
 
-  // Reset isExecuting when execution completes
-  useEffect(() => {
-    if (
-      executionStatus.overallStatus === "success" ||
-      executionStatus.overallStatus === "failed"
-    ) {
-      // Keep showing status for 3 seconds after completion
-      const timer = setTimeout(() => {
-        setIsExecuting(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [executionStatus.overallStatus]);
+  // Note: We no longer auto-hide the status after completion
+  // The status will remain visible until the user starts a new execution
 
   const handleRemoveWorkflow = (workflowId: string) => {
     removeWorkflow.mutate({
@@ -180,7 +169,9 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
     !validationQuery.data.isValid;
 
   const canExecute =
-    pkg.workflows.length > 0 && !hasValidationErrors && !executePackage.isPending;
+    pkg.workflows.length > 0 &&
+    !hasValidationErrors &&
+    !executePackage.isPending;
 
   return (
     <div className="p-4 md:px-10 md:py-6 h-full">
@@ -188,7 +179,11 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
         {/* Header */}
         <div className="flex flex-row items-center justify-between gap-x-4">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => router.push("/workflows")}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => router.push("/workflows")}
+            >
               <ArrowLeftIcon className="size-4" />
             </Button>
             <div className="flex flex-col gap-0.5">
@@ -224,7 +219,8 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
                 </h1>
               )}
               <p className="text-sm text-muted-foreground">
-                Updated {formatDistanceToNow(pkg.updatedAt, { addSuffix: true })}
+                Updated{" "}
+                {formatDistanceToNow(pkg.updatedAt, { addSuffix: true })}
               </p>
             </div>
           </div>
@@ -233,7 +229,10 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
               variant="outline"
               size="sm"
               onClick={handleSave}
-              disabled={updatePackage.isPending || (name === pkg.name && executionMode === pkg.executionMode)}
+              disabled={
+                updatePackage.isPending ||
+                (name === pkg.name && executionMode === pkg.executionMode)
+              }
             >
               {updatePackage.isPending ? (
                 <Loader2 className="size-4 animate-spin" />
@@ -242,11 +241,7 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
               )}
               Save
             </Button>
-            <Button
-              size="sm"
-              onClick={handleExecute}
-              disabled={!canExecute}
-            >
+            <Button size="sm" onClick={handleExecute} disabled={!canExecute}>
               {executePackage.isPending ? (
                 <Loader2 className="size-4 animate-spin" />
               ) : (
@@ -278,7 +273,7 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
                 )}
               >
                 {executionStatus.overallStatus === "running" && (
-                  <Loader2 className="size-5 animate-spin text-blue-600" />
+                  <Loader2 className="size-5 animate-spin" />
                 )}
                 {executionStatus.overallStatus === "success" && (
                   <CheckCircle2Icon className="size-5 text-green-600" />
@@ -292,13 +287,21 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
               </div>
               <div className="flex-1">
                 <div className="text-sm font-medium">
-                  {executionStatus.overallStatus === "running" && "Executing..."}
-                  {executionStatus.overallStatus === "success" && "Execution Completed"}
-                  {executionStatus.overallStatus === "failed" && "Execution Failed"}
+                  {executionStatus.overallStatus === "running" && (
+                    <>
+                      Executing: {executionStatus.currentWorkflowName || "..."}
+                    </>
+                  )}
+                  {executionStatus.overallStatus === "success" &&
+                    "Execution Completed"}
+                  {executionStatus.overallStatus === "failed" &&
+                    "Execution Failed"}
                   {executionStatus.overallStatus === "idle" && "Starting..."}
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  {executionStatus.counts.success + executionStatus.counts.failed} / {executionStatus.counts.total} workflows completed
+                  {executionStatus.counts.success +
+                    executionStatus.counts.failed}{" "}
+                  / {executionStatus.counts.total} workflows completed
                 </div>
               </div>
             </div>
@@ -307,43 +310,114 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
             {executionStatus.counts.total > 0 && (
               <Progress
                 value={
-                  ((executionStatus.counts.success + executionStatus.counts.failed) /
+                  ((executionStatus.counts.success +
+                    executionStatus.counts.failed) /
                     executionStatus.counts.total) *
                   100
                 }
-                className="h-2"
+                className={cn(
+                  "h-2",
+                  executionStatus.overallStatus === "failed" &&
+                    "[&>div]:bg-red-500",
+                  executionStatus.overallStatus === "success" &&
+                    "[&>div]:bg-green-500"
+                )}
               />
             )}
 
-            {/* Status counts */}
-            <div className="grid gap-2 md:grid-cols-4">
-              <div className="flex items-center gap-3 px-4 py-2 rounded-lg bg-muted/50">
-                <ClockIcon className="size-4 text-muted-foreground" />
-                <div>
-                  <div className="text-lg font-semibold">{executionStatus.counts.pending}</div>
-                  <div className="text-xs text-muted-foreground">Pending</div>
+            {/* Current node info during execution */}
+            {executionStatus.overallStatus === "running" &&
+              executionStatus.currentNode && (
+                <div className="flex flex-col gap-2 p-3 rounded-lg bg-blue-50 border border-blue-200">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-blue-800">
+                      <Loader2 className="size-4 animate-spin" />
+                      <span className="text-sm font-medium">
+                        Executing Node: {executionStatus.currentNode.nodeName}
+                      </span>
+                      <Badge
+                        variant="outline"
+                        className="text-xs border-blue-300"
+                      >
+                        {executionStatus.currentNode.nodeType}
+                      </Badge>
+                    </div>
+                    {executionStatus.nodeProgress && (
+                      <span className="text-xs">
+                        {executionStatus.nodeProgress.completed}/
+                        {executionStatus.nodeProgress.total} nodes
+                      </span>
+                    )}
+                  </div>
                 </div>
+              )}
+
+            {/* Error details */}
+            {executionStatus.overallStatus === "failed" && (
+              <div className="flex flex-col gap-2 p-3 rounded-lg bg-red-50 border border-red-200">
+                <div className="flex items-center gap-2 text-red-800">
+                  <XCircleIcon className="size-4" />
+                  <span className="text-sm font-medium">
+                    Failed:{" "}
+                    {executionStatus.failedWorkflowName || "Unknown workflow"}
+                  </span>
+                </div>
+                {executionStatus.failedNodeName && (
+                  <div className="text-sm text-red-700 pl-6">
+                    Failed at node:{" "}
+                    <span className="font-medium">
+                      {executionStatus.failedNodeName}
+                    </span>
+                  </div>
+                )}
+                {executionStatus.errorMessage && (
+                  <div className="text-sm text-red-700 pl-6">
+                    Error: {executionStatus.errorMessage}
+                  </div>
+                )}
               </div>
-              <div className="flex items-center gap-3 px-4 py-2 rounded-lg bg-blue-50">
-                <Loader2 className="size-4 text-blue-600 animate-spin" />
-                <div>
-                  <div className="text-lg font-semibold">{executionStatus.counts.running}</div>
-                  <div className="text-xs text-muted-foreground">Running</div>
-                </div>
+            )}
+
+            {/* Workflow execution results */}
+            <div className="flex flex-col gap-2">
+              <div className="text-xs font-medium text-muted-foreground">
+                Workflow Results
               </div>
-              <div className="flex items-center gap-3 px-4 py-2 rounded-lg bg-green-50">
-                <CheckCircle2Icon className="size-4 text-green-600" />
-                <div>
-                  <div className="text-lg font-semibold">{executionStatus.counts.success}</div>
-                  <div className="text-xs text-muted-foreground">Success</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 px-4 py-2 rounded-lg bg-red-50">
-                <XCircleIcon className="size-4 text-red-600" />
-                <div>
-                  <div className="text-lg font-semibold">{executionStatus.counts.failed}</div>
-                  <div className="text-xs text-muted-foreground">Failed</div>
-                </div>
+              <div className="space-y-1">
+                {Object.entries(executionStatus.workflowStatuses).map(
+                  ([wfId, wfStatus]) => {
+                    const wfName = executionStatus.workflowNames[wfId] || wfId;
+                    return (
+                      <div
+                        key={wfId}
+                        className={cn(
+                          "flex items-center gap-2 px-3 py-2 rounded text-sm",
+                          wfStatus === "pending" &&
+                            "bg-muted/50 text-muted-foreground",
+                          wfStatus === "running" && "bg-blue-50 text-blue-700",
+                          wfStatus === "success" &&
+                            "bg-green-50 text-green-700",
+                          wfStatus === "failed" && "bg-red-50 text-red-700"
+                        )}
+                      >
+                        {wfStatus === "pending" && (
+                          <ClockIcon className="size-4" />
+                        )}
+                        {wfStatus === "running" && (
+                          <Loader2 className="size-4 animate-spin" />
+                        )}
+                        {wfStatus === "success" && (
+                          <CheckCircle2Icon className="size-4" />
+                        )}
+                        {wfStatus === "failed" && (
+                          <XCircleIcon className="size-4" />
+                        )}
+                        <span className="flex-1 truncate">{wfName}</span>
+                        <span className="text-xs capitalize">{wfStatus}</span>
+                      </div>
+                    );
+                  }
+                )}
               </div>
             </div>
           </div>
@@ -357,17 +431,24 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
                 <AlertTriangleIcon className="size-5 text-red-600" />
               </div>
               <div>
-                <div className="text-sm font-medium text-red-900">Parallel Execution Error</div>
+                <div className="text-sm font-medium text-red-900">
+                  Parallel Execution Error
+                </div>
                 <div className="text-xs text-red-700">
-                  The following workflows use the same simulator and cannot run in parallel
+                  The following workflows use the same simulator and cannot run
+                  in parallel
                 </div>
               </div>
             </div>
             <ul className="text-sm space-y-1 pl-12">
               {validationQuery.data.duplicates.map((dup) => (
                 <li key={dup.deviceId} className="flex items-center gap-2">
-                  <Badge variant="destructive" className="text-xs">{dup.deviceId}</Badge>
-                  <span className="text-red-800">{dup.workflowNames.join(", ")}</span>
+                  <Badge variant="destructive" className="text-xs">
+                    {dup.deviceId}
+                  </Badge>
+                  <span className="text-red-800">
+                    {dup.workflowNames.join(", ")}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -409,7 +490,9 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
                 <ListIcon className="size-4 text-muted-foreground" />
               </div>
               <div>
-                <div className="text-2xl font-semibold">{pkg.workflows.length}</div>
+                <div className="text-2xl font-semibold">
+                  {pkg.workflows.length}
+                </div>
                 <div className="text-xs text-muted-foreground">Workflows</div>
               </div>
             </div>
@@ -423,10 +506,14 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
             <h2 className="text-sm font-medium">Settings</h2>
           </div>
           <div className="flex items-center gap-3 px-4 py-3 rounded-lg border bg-card">
-            <span className="text-sm text-muted-foreground">Execution Mode:</span>
+            <span className="text-sm text-muted-foreground">
+              Execution Mode:
+            </span>
             <Select
               value={executionMode}
-              onValueChange={(v) => setExecutionMode(v as "PARALLEL" | "SEQUENTIAL")}
+              onValueChange={(v) =>
+                setExecutionMode(v as "PARALLEL" | "SEQUENTIAL")
+              }
             >
               <SelectTrigger className="w-48">
                 <SelectValue />
@@ -435,13 +522,14 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
                 <SelectItem value="SEQUENTIAL">
                   Sequential (one at a time)
                 </SelectItem>
-                <SelectItem value="PARALLEL">
-                  Parallel (all at once)
-                </SelectItem>
+                <SelectItem value="PARALLEL">Parallel (all at once)</SelectItem>
               </SelectContent>
             </Select>
             {executionMode === "PARALLEL" && validationQuery.data?.isValid && (
-              <Badge variant="outline" className="text-green-600 border-green-600">
+              <Badge
+                variant="outline"
+                className="text-green-600 border-green-600"
+              >
                 <CheckIcon className="size-3 mr-1" />
                 Valid
               </Badge>
@@ -453,7 +541,9 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
         <div className="flex flex-col gap-y-4">
           <div className="flex items-center gap-2">
             <ListIcon className="size-4 text-muted-foreground" />
-            <h2 className="text-sm font-medium">Workflows ({pkg.workflows.length})</h2>
+            <h2 className="text-sm font-medium">
+              Workflows ({pkg.workflows.length})
+            </h2>
           </div>
 
           {pkg.workflows.length === 0 ? (
@@ -471,7 +561,6 @@ export const PackageDetail = ({ packageId }: PackageDetailProps) => {
               {pkg.workflows.map((pw) => (
                 <WorkflowItem
                   key={pw.workflow.id}
-                  id={pw.workflow.id}
                   name={pw.workflow.name}
                   targetDeviceId={pw.workflow.targetDeviceId}
                   onRemove={() => handleRemoveWorkflow(pw.workflow.id)}
