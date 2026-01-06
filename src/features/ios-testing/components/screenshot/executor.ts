@@ -1,8 +1,10 @@
 import { NonRetriableError } from "inngest";
+import fs from "fs/promises";
 import path from "path";
 import type { NodeExecutor } from "@/features/executions/types";
 import { iosScreenshotChannel } from "@/inngest/channels/ios-testing";
 import * as simulator from "@/lib/ios/simulator";
+import prisma from "@/lib/db";
 
 type ScreenshotData = {
   variableName?: string;
@@ -12,6 +14,7 @@ type ScreenshotData = {
 export const screenshotExecutor: NodeExecutor<ScreenshotData> = async ({
   data,
   nodeId,
+  projectId,
   context,
   step,
   publish,
@@ -41,15 +44,35 @@ export const screenshotExecutor: NodeExecutor<ScreenshotData> = async ({
         );
       }
 
-      // Determine output path
-      let outputPath: string | undefined;
-      if (data.filename) {
-        // Ensure the filename ends with .png
-        const filename = data.filename.endsWith(".png")
-          ? data.filename
-          : `${data.filename}.png`;
-        outputPath = path.join("/tmp", filename);
+      // Determine output directory based on project
+      let screenshotsDir = "/tmp";
+      if (projectId) {
+        const project = await prisma.project.findUnique({
+          where: { id: projectId },
+          select: { projectPath: true },
+        });
+
+        if (project?.projectPath) {
+          // Get project directory (parent of .xcodeproj/.xcworkspace)
+          const projectDir = path.dirname(project.projectPath);
+          screenshotsDir = path.join(projectDir, "screenshots");
+
+          // Create screenshots directory if it doesn't exist
+          try {
+            await fs.mkdir(screenshotsDir, { recursive: true });
+          } catch {
+            // Fallback to /tmp if cannot create directory
+            screenshotsDir = "/tmp";
+          }
+        }
       }
+
+      // Determine output path
+      const timestamp = Date.now();
+      const filename = data.filename
+        ? (data.filename.endsWith(".png") ? data.filename : `${data.filename}.png`)
+        : `screenshot_${timestamp}.png`;
+      const outputPath = path.join(screenshotsDir, filename);
 
       const screenshotResult = await simulator.takeScreenshot(
         deviceId,
