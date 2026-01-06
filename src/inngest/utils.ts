@@ -74,3 +74,31 @@ export const sendPackageExecution = async (data: {
     id: createId(),
   });
 };
+
+// Send event when a schedule trigger is created or updated
+export const sendScheduleUpdated = async (data: {
+  workflowId: string;
+  cronExpression: string;
+  scheduleVersion: string; // Use workflow's updatedAt timestamp as version
+}) => {
+  return inngest.send({
+    name: "workflows/schedule.updated",
+    data,
+    id: createId(),
+  });
+};
+
+// Send event to execute a scheduled workflow at a specific time
+export const sendScheduledExecution = async (data: {
+  workflowId: string;
+  cronExpression: string;
+  scheduleVersion: string;
+  scheduledAt: Date;
+}) => {
+  return inngest.send({
+    name: "workflows/schedule.execute",
+    data,
+    id: createId(),
+    ts: data.scheduledAt.getTime(), // Schedule for future execution
+  });
+};

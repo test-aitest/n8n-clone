@@ -1,7 +1,11 @@
 import { NonRetriableError } from "inngest";
 import { inngest } from "./client";
 import prisma from "@/lib/db";
-import { topologicalSort, sendWorkflowExecution } from "./utils";
+import {
+  topologicalSort,
+  sendWorkflowExecution,
+  sendScheduledExecution,
+} from "./utils";
 import { ExecutionStatus, NodeType, Prisma } from "@/generated/prisma/client";
 import { getExecutor } from "@/features/executions/lib/executor-registry";
 import { stopVideoRecording } from "@/features/ios-testing/components/video-recording/executor";
@@ -189,75 +193,149 @@ export const executeWorkflow = inngest.createFunction(
   }
 );
 
-// Scheduled workflow checker - runs every minute
-export const scheduledWorkflowChecker = inngest.createFunction(
+// Event-driven schedule handler: When a schedule trigger is updated, schedule the next execution
+export const handleScheduleUpdated = inngest.createFunction(
   {
-    id: "scheduled-workflow-checker",
+    id: "handle-schedule-updated",
   },
   {
-    cron: "* * * * *", // Every minute
+    event: "workflows/schedule.updated",
   },
-  async ({ step }) => {
-    const now = new Date();
-    const currentMinute = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      now.getHours(),
-      now.getMinutes(),
-      0,
-      0
-    );
+  async ({ event, step }) => {
+    const { workflowId, cronExpression, scheduleVersion } = event.data;
 
-    // Find all workflows with SCHEDULE_TRIGGER nodes
-    const scheduledWorkflows = await step.run(
-      "find-scheduled-workflows",
+    // Calculate the next execution time
+    const nextExecutionTime = await step.run(
+      "calculate-next-execution",
       async () => {
-        const nodes = await prisma.node.findMany({
-          where: {
-            type: NodeType.SCHEDULE_TRIGGER,
-          },
-          include: {
-            workflow: true,
-          },
-        });
-
-        return nodes;
+        try {
+          const cron = CronExpressionParser.parse(cronExpression);
+          const nextDate = cron.next();
+          return nextDate.toISOString();
+        } catch {
+          return null;
+        }
       }
     );
 
-    // Check each scheduled workflow
-    for (const node of scheduledWorkflows) {
-      const data = node.data as { preset?: string; cronExpression?: string };
-      const cronExpr =
-        data.preset === "custom" ? data.cronExpression : data.preset;
-
-      if (!cronExpr) continue;
-
-      try {
-        const cron = CronExpressionParser.parse(cronExpr);
-        const prevDate = cron.prev();
-
-        // Check if the cron matches current minute
-        if (
-          prevDate.getFullYear() === currentMinute.getFullYear() &&
-          prevDate.getMonth() === currentMinute.getMonth() &&
-          prevDate.getDate() === currentMinute.getDate() &&
-          prevDate.getHours() === currentMinute.getHours() &&
-          prevDate.getMinutes() === currentMinute.getMinutes()
-        ) {
-          // Execute this workflow
-          await step.run(`execute-${node.workflowId}`, async () => {
-            await sendWorkflowExecution({ workflowId: node.workflowId });
-          });
-        }
-      } catch {
-        // Invalid cron expression, skip
-        console.error(`Invalid cron expression for workflow ${node.workflowId}: ${cronExpr}`);
-      }
+    if (!nextExecutionTime) {
+      return { error: "Invalid cron expression", workflowId };
     }
 
-    return { checked: scheduledWorkflows.length };
+    // Schedule the next execution
+    await step.run("schedule-next-execution", async () => {
+      await sendScheduledExecution({
+        workflowId,
+        cronExpression,
+        scheduleVersion,
+        scheduledAt: new Date(nextExecutionTime),
+      });
+    });
+
+    return {
+      workflowId,
+      scheduledAt: nextExecutionTime,
+      scheduleVersion,
+    };
+  }
+);
+
+// Event-driven schedule executor: Execute the workflow at the scheduled time
+export const executeScheduledWorkflow = inngest.createFunction(
+  {
+    id: "execute-scheduled-workflow",
+  },
+  {
+    event: "workflows/schedule.execute",
+  },
+  async ({ event, step }) => {
+    const { workflowId, cronExpression, scheduleVersion } = event.data;
+
+    // Verify the schedule is still valid (hasn't been changed)
+    const isValid = await step.run("verify-schedule", async () => {
+      const workflow = await prisma.workflow.findUnique({
+        where: { id: workflowId },
+        include: {
+          nodes: {
+            where: { type: NodeType.SCHEDULE_TRIGGER },
+          },
+        },
+      });
+
+      if (!workflow || workflow.nodes.length === 0) {
+        return {
+          valid: false,
+          reason: "Workflow or schedule trigger not found",
+        };
+      }
+
+      // Check if the schedule version matches (workflow hasn't been updated)
+      const currentVersion = workflow.updatedAt.toISOString();
+      if (currentVersion !== scheduleVersion) {
+        return { valid: false, reason: "Schedule has been updated" };
+      }
+
+      // Verify cron expression matches
+      const node = workflow.nodes[0];
+      const data = node.data as { preset?: string; cronExpression?: string };
+      const currentCron =
+        data.preset === "custom" ? data.cronExpression : data.preset;
+
+      if (currentCron !== cronExpression) {
+        return { valid: false, reason: "Cron expression has changed" };
+      }
+
+      return { valid: true, reason: null };
+    });
+
+    if (!isValid.valid) {
+      return { skipped: true, reason: isValid.reason || "Unknown", workflowId };
+    }
+
+    // Execute the workflow
+    await step.run("execute-workflow", async () => {
+      await sendWorkflowExecution({ workflowId });
+    });
+
+    // Schedule the next execution
+    const nextExecutionTime = await step.run(
+      "calculate-next-execution",
+      async () => {
+        try {
+          const cron = CronExpressionParser.parse(cronExpression);
+          const nextDate = cron.next();
+          return nextDate.toISOString();
+        } catch {
+          return null;
+        }
+      }
+    );
+
+    if (nextExecutionTime) {
+      // Get the latest schedule version
+      const latestVersion = await step.run("get-latest-version", async () => {
+        const workflow = await prisma.workflow.findUnique({
+          where: { id: workflowId },
+          select: { updatedAt: true },
+        });
+        return workflow?.updatedAt.toISOString() || scheduleVersion;
+      });
+
+      await step.run("schedule-next", async () => {
+        await sendScheduledExecution({
+          workflowId,
+          cronExpression,
+          scheduleVersion: latestVersion,
+          scheduledAt: new Date(nextExecutionTime),
+        });
+      });
+    }
+
+    return {
+      executed: true,
+      workflowId,
+      nextScheduledAt: nextExecutionTime,
+    };
   }
 );
 
@@ -346,7 +424,9 @@ export const executePackage = inngest.createFunction(
         overallStatus,
         workflowNames,
         currentWorkflowId,
-        currentWorkflowName: currentWorkflowId ? workflowNames[currentWorkflowId] : undefined,
+        currentWorkflowName: currentWorkflowId
+          ? workflowNames[currentWorkflowId]
+          : undefined,
         currentNode: nodeInfo?.currentNode ?? currentNode,
         nodeProgress: nodeInfo?.nodeProgress ?? nodeProgress,
         ...errorInfo,
@@ -355,17 +435,25 @@ export const executePackage = inngest.createFunction(
     };
 
     // Create package execution record
-    const packageExecution = await step.run("create-package-execution", async () => {
-      return prisma.packageExecution.create({ data: { packageId } });
-    });
+    const packageExecution = await step.run(
+      "create-package-execution",
+      async () => {
+        return prisma.packageExecution.create({ data: { packageId } });
+      }
+    );
 
     // Publish initial status
     await publishStatus("running");
 
-    const results: Record<string, { status: "success" | "failed"; error?: string }> = {};
+    const results: Record<
+      string,
+      { status: "success" | "failed"; error?: string }
+    > = {};
 
     // Helper function to execute a single workflow with node progress tracking
-    const executeWorkflowWithProgress = async (workflowId: string): Promise<{
+    const executeWorkflowWithProgress = async (
+      workflowId: string
+    ): Promise<{
       success: boolean;
       error?: string;
       failedNodeName?: string;
@@ -390,12 +478,18 @@ export const executePackage = inngest.createFunction(
       });
 
       // Create execution record
-      const executionId = await step.run(`create-execution-${workflowId}`, async () => {
-        const execution = await prisma.execution.create({
-          data: { workflowId, inngestEventId: `pkg-${packageExecution.id}-${workflowId}` },
-        });
-        return execution.id;
-      });
+      const executionId = await step.run(
+        `create-execution-${workflowId}`,
+        async () => {
+          const execution = await prisma.execution.create({
+            data: {
+              workflowId,
+              inngestEventId: `pkg-${packageExecution.id}-${workflowId}`,
+            },
+          });
+          return execution.id;
+        }
+      );
 
       let context: Record<string, unknown> = {};
       let hasVideoRecording = false;
@@ -475,7 +569,8 @@ export const executePackage = inngest.createFunction(
 
         return { success: true };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
 
         // Stop video recording on error
         if (hasVideoRecording) {
@@ -499,12 +594,14 @@ export const executePackage = inngest.createFunction(
         });
 
         // Return failure with node info
-        const failedNodeInfo = localCurrentNode ? {
-          nodeId: localCurrentNode.nodeId,
-          nodeName: localCurrentNode.nodeName,
-          nodeType: localCurrentNode.nodeType,
-          status: "failed" as const,
-        } : undefined;
+        const failedNodeInfo = localCurrentNode
+          ? {
+              nodeId: localCurrentNode.nodeId,
+              nodeName: localCurrentNode.nodeName,
+              nodeType: localCurrentNode.nodeType,
+              status: "failed" as const,
+            }
+          : undefined;
 
         return {
           success: false,
@@ -533,8 +630,13 @@ export const executePackage = inngest.createFunction(
             });
             return { workflowId, status: "success" as const, result };
           } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : "Unknown error";
-            return { workflowId, status: "failed" as const, error: errorMessage };
+            const errorMessage =
+              error instanceof Error ? error.message : "Unknown error";
+            return {
+              workflowId,
+              status: "failed" as const,
+              error: errorMessage,
+            };
           }
         })
       );
@@ -545,20 +647,31 @@ export const executePackage = inngest.createFunction(
           results[workflowId] = { status, error };
           workflowStatuses[workflowId] = status;
           if (status === "failed" && error && !errorInfo.errorMessage) {
-            errorInfo = { errorMessage: error, failedWorkflowId: workflowId, failedWorkflowName: workflowNames[workflowId] };
+            errorInfo = {
+              errorMessage: error,
+              failedWorkflowId: workflowId,
+              failedWorkflowName: workflowNames[workflowId],
+            };
           }
         } else {
-          const workflowId = workflowIds[parallelResults.indexOf(settledResult)];
+          const workflowId =
+            workflowIds[parallelResults.indexOf(settledResult)];
           const errorMessage = settledResult.reason?.message || "Unknown error";
           results[workflowId] = { status: "failed", error: errorMessage };
           workflowStatuses[workflowId] = "failed";
           if (!errorInfo.errorMessage) {
-            errorInfo = { errorMessage, failedWorkflowId: workflowId, failedWorkflowName: workflowNames[workflowId] };
+            errorInfo = {
+              errorMessage,
+              failedWorkflowId: workflowId,
+              failedWorkflowName: workflowNames[workflowId],
+            };
           }
         }
       }
 
-      const hasFailed = Object.values(workflowStatuses).some((s) => s === "failed");
+      const hasFailed = Object.values(workflowStatuses).some(
+        (s) => s === "failed"
+      );
       await publishStatus(hasFailed ? "failed" : "success");
     } else {
       // Execute workflows sequentially with node-level progress
@@ -596,13 +709,17 @@ export const executePackage = inngest.createFunction(
     }
 
     // Update package execution with results
-    const hasFailures = Object.values(results).some((r) => r.status === "failed");
+    const hasFailures = Object.values(results).some(
+      (r) => r.status === "failed"
+    );
 
     await step.run("update-package-execution", async () => {
       return prisma.packageExecution.update({
         where: { id: packageExecution.id },
         data: {
-          status: hasFailures ? ExecutionStatus.FAILED : ExecutionStatus.SUCCESS,
+          status: hasFailures
+            ? ExecutionStatus.FAILED
+            : ExecutionStatus.SUCCESS,
           completedAt: new Date(),
           results,
           error: errorInfo.errorMessage,

@@ -5,7 +5,7 @@ import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { z } from "zod";
 import { PAGINATION } from "@/config/constants";
 import { NodeType } from "@/generated/prisma/client";
-import { sendWorkflowExecution } from "@/inngest/utils";
+import { sendWorkflowExecution, sendScheduleUpdated } from "@/inngest/utils";
 
 export const workflowsRouter = createTRPCRouter({
   execute: protectedProcedure
@@ -72,11 +72,12 @@ export const workflowsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { id, nodes, edges } = input;
 
-      const workflow = await prisma.workflow.findUniqueOrThrow({
+      // Verify workflow exists and user owns it
+      await prisma.workflow.findUniqueOrThrow({
         where: { id, userId: ctx.auth.user.id },
       });
 
-      return await prisma.$transaction(async (tx) => {
+      const updatedWorkflow = await prisma.$transaction(async (tx) => {
         await tx.node.deleteMany({
           where: { workflowId: id },
         });
@@ -102,13 +103,39 @@ export const workflowsRouter = createTRPCRouter({
           })),
         });
 
-        await tx.workflow.update({
+        const updated = await tx.workflow.update({
           where: { id },
           data: { updatedAt: new Date() },
         });
 
-        return workflow;
+        return updated;
       });
+
+      // Check if there's a SCHEDULE_TRIGGER node and send event
+      const scheduleTriggerNode = nodes.find(
+        (node) => node.type === NodeType.SCHEDULE_TRIGGER
+      );
+
+      if (scheduleTriggerNode) {
+        const nodeData = scheduleTriggerNode.data as {
+          preset?: string;
+          cronExpression?: string;
+        };
+        const cronExpression =
+          nodeData?.preset === "custom"
+            ? nodeData?.cronExpression
+            : nodeData?.preset;
+
+        if (cronExpression) {
+          await sendScheduleUpdated({
+            workflowId: id,
+            cronExpression,
+            scheduleVersion: updatedWorkflow.updatedAt.toISOString(),
+          });
+        }
+      }
+
+      return updatedWorkflow;
     }),
   updateName: protectedProcedure
     .input(z.object({ id: z.string(), name: z.string().min(1) }))
