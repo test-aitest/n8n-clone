@@ -8,6 +8,7 @@ import {
   Smartphone,
   Power,
   Download,
+  Trash2,
   Play,
   Square,
   MousePointerClick,
@@ -127,6 +128,12 @@ const iosSimulatorNodes: NodeTypeOption[] = [
     label: "App Install",
     description: "Install an app on Simulator",
     icon: Download,
+  },
+  {
+    type: NodeType.IOS_APP_UNINSTALL,
+    label: "App Uninstall",
+    description: "Uninstall an app from Simulator",
+    icon: Trash2,
   },
   {
     type: NodeType.IOS_APP_LAUNCH,

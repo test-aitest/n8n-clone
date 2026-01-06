@@ -1,36 +1,36 @@
 "use client";
 
 import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
-import { Download } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { memo, useState } from "react";
 import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
-import { IOS_APP_INSTALL_CHANNEL_NAME } from "@/inngest/channels/ios-testing";
+import { IOS_APP_UNINSTALL_CHANNEL_NAME } from "@/inngest/channels/ios-testing";
 import { BaseIOSNode } from "../base-ios-node";
-import { fetchAppInstallRealtimeToken } from "./actions";
-import { AppInstallDialog, type AppInstallFormValues } from "./dialog";
+import { fetchAppUninstallRealtimeToken } from "./actions";
+import { AppUninstallDialog, type AppUninstallFormValues } from "./dialog";
 
-type AppInstallNodeData = {
+type AppUninstallNodeData = {
   variableName?: string;
   deviceId?: string;
-  scheme?: string;
+  bundleId?: string;
 };
 
-type AppInstallNodeType = Node<AppInstallNodeData>;
+type AppUninstallNodeType = Node<AppUninstallNodeData>;
 
-export const AppInstallNode = memo((props: NodeProps<AppInstallNodeType>) => {
+export const AppUninstallNode = memo((props: NodeProps<AppUninstallNodeType>) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { setNodes } = useReactFlow();
 
   const nodeStatus = useNodeStatus({
     nodeId: props.id,
-    channel: IOS_APP_INSTALL_CHANNEL_NAME,
+    channel: IOS_APP_UNINSTALL_CHANNEL_NAME,
     topic: "status",
-    refreshToken: fetchAppInstallRealtimeToken,
+    refreshToken: fetchAppUninstallRealtimeToken,
   });
 
   const handleOpenSettings = () => setDialogOpen(true);
 
-  const handleSubmit = (values: AppInstallFormValues) => {
+  const handleSubmit = (values: AppUninstallFormValues) => {
     setNodes((nodes) =>
       nodes.map((node) => {
         if (node.id === props.id) {
@@ -48,13 +48,13 @@ export const AppInstallNode = memo((props: NodeProps<AppInstallNodeType>) => {
   };
 
   const nodeData = props.data;
-  const description = nodeData?.scheme
-    ? `Scheme: ${nodeData.scheme}`
-    : "Auto-detect scheme";
+  const description = nodeData?.bundleId
+    ? `Bundle: ${nodeData.bundleId}`
+    : "Not configured";
 
   return (
     <>
-      <AppInstallDialog
+      <AppUninstallDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         onSubmit={handleSubmit}
@@ -63,8 +63,8 @@ export const AppInstallNode = memo((props: NodeProps<AppInstallNodeType>) => {
       <BaseIOSNode
         {...props}
         id={props.id}
-        icon={Download}
-        name="App Install"
+        icon={Trash2}
+        name="App Uninstall"
         status={nodeStatus}
         description={description}
         category="simulator"
@@ -75,4 +75,4 @@ export const AppInstallNode = memo((props: NodeProps<AppInstallNodeType>) => {
   );
 });
 
-AppInstallNode.displayName = "AppInstallNode";
+AppUninstallNode.displayName = "AppUninstallNode";

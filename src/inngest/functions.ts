@@ -19,6 +19,7 @@ import {
   iosSimulatorBootChannel,
   iosSimulatorShutdownChannel,
   iosAppInstallChannel,
+  iosAppUninstallChannel,
   iosAppLaunchChannel,
   iosAppTerminateChannel,
   iosTapChannel,
@@ -72,6 +73,7 @@ export const executeWorkflow = inngest.createFunction(
       iosSimulatorBootChannel(),
       iosSimulatorShutdownChannel(),
       iosAppInstallChannel(),
+      iosAppUninstallChannel(),
       iosAppLaunchChannel(),
       iosAppTerminateChannel(),
       iosTapChannel(),
@@ -136,8 +138,16 @@ export const executeWorkflow = inngest.createFunction(
     // Initialize context with any initial data from the trigger
     let context = event.data.initialData || {};
 
+    // Debug: Log sorted nodes
+    console.log("[executeWorkflow] Sorted nodes:", workflowData.sortedNodes.map(n => ({
+      id: n.id,
+      type: n.type,
+      name: (n.data as Record<string, unknown>)?.variableName || n.type,
+    })));
+
     // Execute each node
     for (const node of workflowData.sortedNodes) {
+      console.log(`[executeWorkflow] Executing node: ${node.type} (${node.id})`);
       const executor = getExecutor(node.type as NodeType);
       context = await executor({
         data: node.data as Record<string, unknown>,
@@ -149,6 +159,7 @@ export const executeWorkflow = inngest.createFunction(
         step,
         publish,
       });
+      console.log(`[executeWorkflow] Node completed: ${node.type} (${node.id})`);
     }
 
     await step.run("update-execution", async () => {

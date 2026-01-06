@@ -14,6 +14,7 @@ import { slackExecutor } from "../components/slack/executor";
 import { simulatorBootExecutor } from "@/features/ios-testing/components/simulator-boot/executor";
 import { simulatorShutdownExecutor } from "@/features/ios-testing/components/simulator-shutdown/executor";
 import { appInstallExecutor } from "@/features/ios-testing/components/app-install/executor";
+import { appUninstallExecutor } from "@/features/ios-testing/components/app-uninstall/executor";
 import { appLaunchExecutor } from "@/features/ios-testing/components/app-launch/executor";
 import { appTerminateExecutor } from "@/features/ios-testing/components/app-terminate/executor";
 
@@ -52,6 +53,7 @@ export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.IOS_SIMULATOR_BOOT]: simulatorBootExecutor,
   [NodeType.IOS_SIMULATOR_SHUTDOWN]: simulatorShutdownExecutor,
   [NodeType.IOS_APP_INSTALL]: appInstallExecutor,
+  [NodeType.IOS_APP_UNINSTALL]: appUninstallExecutor,
   [NodeType.IOS_APP_LAUNCH]: appLaunchExecutor,
   [NodeType.IOS_APP_TERMINATE]: appTerminateExecutor,
   // iOS Testing - UI Interaction

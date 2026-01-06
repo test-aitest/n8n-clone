@@ -31,6 +31,11 @@ export const iosAppInstallChannel = channel(IOS_APP_INSTALL_CHANNEL_NAME).addTop
   topic("status").type<IOSChannelStatus>()
 );
 
+export const IOS_APP_UNINSTALL_CHANNEL_NAME = "ios-app-uninstall";
+export const iosAppUninstallChannel = channel(IOS_APP_UNINSTALL_CHANNEL_NAME).addTopic(
+  topic("status").type<IOSChannelStatus>()
+);
+
 export const IOS_APP_LAUNCH_CHANNEL_NAME = "ios-app-launch";
 export const iosAppLaunchChannel = channel(IOS_APP_LAUNCH_CHANNEL_NAME).addTopic(
   topic("status").type<IOSChannelStatus>()

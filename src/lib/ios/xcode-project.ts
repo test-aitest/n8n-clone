@@ -375,6 +375,7 @@ async function checkForSwiftUI(swiftFiles: string[]): Promise<boolean> {
 
 /**
  * Find built .app file in DerivedData
+ * Excludes Index.noindex paths and prefers simulator builds
  */
 export async function findBuiltApp(
   projectPath: string,
@@ -387,36 +388,54 @@ export async function findBuiltApp(
     return null;
   }
 
-  // Search in DerivedData
+  // Search in DerivedData, excluding Index.noindex
   const derivedDataPath = path.join(
     process.env.HOME || "",
     "Library/Developer/Xcode/DerivedData",
   );
 
   const result = await executeCommand(
-    `find "${derivedDataPath}" -name "${projectName}.app" -type d 2>/dev/null | head -1`,
+    `find "${derivedDataPath}" -name "${projectName}.app" -type d 2>/dev/null | grep -v "Index.noindex"`,
     30000,
   );
 
   if (result.success && result.data) {
-    const appPath = result.data.trim();
-    try {
-      await stat(appPath);
-      return appPath;
-    } catch {
-      // App doesn't exist
+    const appPaths = result.data.trim().split("\n").filter(Boolean);
+
+    // Prefer simulator builds (Debug-iphonesimulator) over device builds
+    const simulatorApp = appPaths.find(p => p.includes("iphonesimulator"));
+    if (simulatorApp) {
+      try {
+        await stat(simulatorApp);
+        return simulatorApp;
+      } catch {
+        // App doesn't exist
+      }
+    }
+
+    // Fall back to first valid app path
+    for (const appPath of appPaths) {
+      try {
+        await stat(appPath);
+        return appPath;
+      } catch {
+        // Try next
+      }
     }
   }
 
-  // Also search for any .app in Build/Products
+  // Also search for any .app in Build/Products (excluding Index.noindex)
   const projectDir = path.dirname(projectPath);
   const buildResult = await executeCommand(
-    `find "${projectDir}" -name "*.app" -type d -path "*/Build/Products/*" 2>/dev/null | head -1`,
+    `find "${projectDir}" -name "*.app" -type d -path "*/Build/Products/*" 2>/dev/null | grep -v "Index.noindex"`,
     30000,
   );
 
   if (buildResult.success && buildResult.data) {
-    return buildResult.data.trim();
+    const paths = buildResult.data.trim().split("\n").filter(Boolean);
+    // Prefer simulator builds
+    const simulatorPath = paths.find(p => p.includes("iphonesimulator"));
+    return simulatorPath || paths[0] || null;
   }
 
   return null;

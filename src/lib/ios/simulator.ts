@@ -201,17 +201,29 @@ export async function installApp(
   udid: string,
   appPath: string,
 ): Promise<CommandResult<void>> {
+  console.log("[simulator.installApp] udid:", udid);
+  console.log("[simulator.installApp] appPath:", appPath);
+
   // Verify app path exists
   try {
     await fs.access(appPath);
+    console.log("[simulator.installApp] App path exists");
   } catch {
+    console.log("[simulator.installApp] App path NOT found");
     return { success: false, error: `App not found at path: ${appPath}` };
   }
 
-  const result = await executeCommand(
-    `xcrun simctl install ${escapeShellArg(udid)} ${escapeShellArg(appPath)}`,
-    120000, // 2 minute timeout for large apps
-  );
+  const command = `xcrun simctl install ${escapeShellArg(udid)} ${escapeShellArg(appPath)}`;
+  console.log("[simulator.installApp] Running:", command);
+
+  const result = await executeCommand(command, 120000);
+
+  console.log("[simulator.installApp] Command result:", JSON.stringify(result));
+
+  // Wait a moment after install for app to be ready
+  if (result.success) {
+    await sleep(2000);
+  }
 
   return {
     success: result.success,
@@ -223,14 +235,29 @@ export async function installApp(
 
 /**
  * Uninstall an app from the simulator
+ * Returns success even if app is not installed (nothing to uninstall)
  */
 export async function uninstallApp(
   udid: string,
   bundleId: string,
 ): Promise<CommandResult<void>> {
-  const result = await executeCommand(
-    `xcrun simctl uninstall ${escapeShellArg(udid)} ${escapeShellArg(bundleId)}`,
-  );
+  const command = `xcrun simctl uninstall ${escapeShellArg(udid)} ${escapeShellArg(bundleId)}`;
+  console.log("[simulator.uninstallApp] Running:", command);
+
+  const result = await executeCommand(command);
+
+  console.log("[simulator.uninstallApp] Command result:", JSON.stringify(result));
+
+  // If uninstall fails because app is not installed, treat as success
+  if (!result.success && result.error?.includes("not found")) {
+    console.log("[simulator.uninstallApp] App not found, treating as success");
+    return { success: true };
+  }
+
+  // Wait a moment after uninstall for filesystem cleanup
+  if (result.success) {
+    await sleep(1000);
+  }
 
   return {
     success: result.success,
@@ -260,8 +287,16 @@ export async function launchApp(
   // Build launch arguments
   const launchArgs = args.map((arg) => escapeShellArg(arg)).join(" ");
 
-  const command =
-    `xcrun simctl launch ${envArgs} ${escapeShellArg(udid)} ${escapeShellArg(bundleId)} ${launchArgs}`.trim();
+  // Build command parts, filtering out empty strings
+  const commandParts = [
+    "xcrun simctl launch",
+    envArgs,
+    escapeShellArg(udid),
+    escapeShellArg(bundleId),
+    launchArgs,
+  ].filter(Boolean);
+
+  const command = commandParts.join(" ");
 
   const result = await executeCommand(command);
 

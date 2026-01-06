@@ -18,6 +18,10 @@ export const appLaunchExecutor: NodeExecutor<AppLaunchData> = async ({
   step,
   publish,
 }) => {
+  console.log("[App Launch Executor] START - nodeId:", nodeId);
+  console.log("[App Launch Executor] data:", JSON.stringify(data));
+  console.log("[App Launch Executor] context keys:", Object.keys(context));
+
   await publish(
     iosAppLaunchChannel().status({
       nodeId,

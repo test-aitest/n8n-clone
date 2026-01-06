@@ -33,44 +33,44 @@ const formSchema = z.object({
       message: "Variable name must start with a letter or underscore",
     }),
   deviceId: z.string().min(1, { message: "Device ID is required" }),
-  scheme: z.string().optional(),
+  bundleId: z.string().min(1, { message: "Bundle ID is required" }),
 });
 
-export type AppInstallFormValues = z.infer<typeof formSchema>;
+export type AppUninstallFormValues = z.infer<typeof formSchema>;
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (values: AppInstallFormValues) => void;
-  defaultValues?: Partial<AppInstallFormValues>;
+  onSubmit: (values: AppUninstallFormValues) => void;
+  defaultValues?: Partial<AppUninstallFormValues>;
 }
 
-export const AppInstallDialog = ({
+export const AppUninstallDialog = ({
   open,
   onOpenChange,
   onSubmit,
   defaultValues = {},
 }: Props) => {
-  const form = useForm<AppInstallFormValues>({
+  const form = useForm<AppUninstallFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      variableName: defaultValues.variableName || "installResult",
+      variableName: defaultValues.variableName || "uninstallResult",
       deviceId: defaultValues.deviceId || "",
-      scheme: defaultValues.scheme || "",
+      bundleId: defaultValues.bundleId || "",
     },
   });
 
   useEffect(() => {
     if (open) {
       form.reset({
-        variableName: defaultValues.variableName || "installResult",
+        variableName: defaultValues.variableName || "uninstallResult",
         deviceId: defaultValues.deviceId || "",
-        scheme: defaultValues.scheme || "",
+        bundleId: defaultValues.bundleId || "",
       });
     }
   }, [open, defaultValues, form]);
 
-  const handleSubmit = (values: AppInstallFormValues) => {
+  const handleSubmit = (values: AppUninstallFormValues) => {
     onSubmit(values);
     onOpenChange(false);
   };
@@ -79,9 +79,9 @@ export const AppInstallDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>App Install (Build)</DialogTitle>
+          <DialogTitle>App Uninstall</DialogTitle>
           <DialogDescription>
-            Build the Xcode project and install on the iOS Simulator.
+            Uninstall an app from the iOS Simulator.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -96,7 +96,7 @@ export const AppInstallDialog = ({
                 <FormItem>
                   <FormLabel>Variable Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="installResult" {...field} />
+                    <Input placeholder="uninstallResult" {...field} />
                   </FormControl>
                   <FormDescription>
                     Reference this result in other nodes
@@ -127,15 +127,16 @@ export const AppInstallDialog = ({
             />
             <FormField
               control={form.control}
-              name="scheme"
+              name="bundleId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Scheme (Optional)</FormLabel>
+                  <FormLabel>Bundle ID</FormLabel>
                   <FormControl>
-                    <Input placeholder="MyApp" {...field} />
+                    <Input placeholder="com.example.myapp" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Xcode scheme to build. Leave empty to auto-detect.
+                    The bundle identifier of the app to uninstall (e.g.,
+                    com.example.myapp)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

@@ -19,6 +19,7 @@ import { SlackNode } from "@/features/executions/components/slack";
 import { SimulatorBootNode } from "@/features/ios-testing/components/simulator-boot";
 import { SimulatorShutdownNode } from "@/features/ios-testing/components/simulator-shutdown";
 import { AppInstallNode } from "@/features/ios-testing/components/app-install";
+import { AppUninstallNode } from "@/features/ios-testing/components/app-uninstall";
 import { AppLaunchNode } from "@/features/ios-testing/components/app-launch";
 import { AppTerminateNode } from "@/features/ios-testing/components/app-terminate";
 
@@ -57,6 +58,7 @@ export const nodeComponents = {
   [NodeType.IOS_SIMULATOR_BOOT]: SimulatorBootNode,
   [NodeType.IOS_SIMULATOR_SHUTDOWN]: SimulatorShutdownNode,
   [NodeType.IOS_APP_INSTALL]: AppInstallNode,
+  [NodeType.IOS_APP_UNINSTALL]: AppUninstallNode,
   [NodeType.IOS_APP_LAUNCH]: AppLaunchNode,
   [NodeType.IOS_APP_TERMINATE]: AppTerminateNode,
   // iOS Testing - UI Interaction
