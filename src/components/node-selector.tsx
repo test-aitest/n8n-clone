@@ -19,6 +19,7 @@ import {
   SlidersHorizontal,
   ToggleLeft,
   Camera,
+  Video,
   Clock,
   CheckCircle,
   FileText,
@@ -198,6 +199,12 @@ const iosInteractionNodes: NodeTypeOption[] = [
     label: "Screenshot",
     description: "Take a screenshot",
     icon: Camera,
+  },
+  {
+    type: NodeType.IOS_VIDEO_RECORDING,
+    label: "Video Recording",
+    description: "Record video (auto-stop on workflow end)",
+    icon: Video,
   },
   {
     type: NodeType.IOS_WAIT,

@@ -32,6 +32,7 @@ import { PickerSelectNode } from "@/features/ios-testing/components/picker-selec
 import { SliderSetNode } from "@/features/ios-testing/components/slider-set";
 import { ToggleSwitchNode } from "@/features/ios-testing/components/toggle-switch";
 import { ScreenshotNode } from "@/features/ios-testing/components/screenshot";
+import { VideoRecordingNode } from "@/features/ios-testing/components/video-recording";
 import { WaitNode } from "@/features/ios-testing/components/wait";
 
 // iOS Testing - Expect/Validation
@@ -70,6 +71,7 @@ export const nodeComponents = {
   [NodeType.IOS_SLIDER_SET]: SliderSetNode,
   [NodeType.IOS_TOGGLE_SWITCH]: ToggleSwitchNode,
   [NodeType.IOS_SCREENSHOT]: ScreenshotNode,
+  [NodeType.IOS_VIDEO_RECORDING]: VideoRecordingNode,
   [NodeType.IOS_WAIT]: WaitNode,
   // iOS Testing - Expect/Validation
   [NodeType.IOS_EXPECT_EXISTS]: ExpectExistsNode,

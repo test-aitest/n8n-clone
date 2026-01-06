@@ -164,6 +164,7 @@ enum NodeType {
   IOS_SLIDER_SET
   IOS_TOGGLE_SWITCH
   IOS_SCREENSHOT
+  IOS_VIDEO_RECORDING
   IOS_WAIT
 
   // === iOSテスト: 検証（Expect） ===

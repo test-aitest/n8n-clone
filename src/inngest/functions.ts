@@ -5,6 +5,7 @@ import { topologicalSort } from "./utils";
 import { sendWorkflowExecution } from "./utils";
 import { ExecutionStatus, NodeType } from "@/generated/prisma/client";
 import { getExecutor } from "@/features/executions/lib/executor-registry";
+import { stopVideoRecording } from "@/features/ios-testing/components/video-recording/executor";
 import { CronExpressionParser } from "cron-parser";
 import { httpRequestChannel } from "./channels/http-request";
 import { manualTriggerChannel } from "./channels/manual-trigger";
@@ -30,6 +31,7 @@ import {
   iosSliderSetChannel,
   iosToggleSwitchChannel,
   iosScreenshotChannel,
+  iosVideoRecordingChannel,
   iosWaitChannel,
   iosExpectExistsChannel,
   iosExpectTextChannel,
@@ -84,6 +86,7 @@ export const executeWorkflow = inngest.createFunction(
       iosSliderSetChannel(),
       iosToggleSwitchChannel(),
       iosScreenshotChannel(),
+      iosVideoRecordingChannel(),
       iosWaitChannel(),
       iosExpectExistsChannel(),
       iosExpectTextChannel(),
@@ -145,21 +148,38 @@ export const executeWorkflow = inngest.createFunction(
       name: (n.data as Record<string, unknown>)?.variableName || n.type,
     })));
 
-    // Execute each node
-    for (const node of workflowData.sortedNodes) {
-      console.log(`[executeWorkflow] Executing node: ${node.type} (${node.id})`);
-      const executor = getExecutor(node.type as NodeType);
-      context = await executor({
-        data: node.data as Record<string, unknown>,
-        nodeId: node.id,
-        userId,
-        workflowId,
-        projectId: workflowData.projectId,
-        context,
-        step,
-        publish,
-      });
-      console.log(`[executeWorkflow] Node completed: ${node.type} (${node.id})`);
+    // Execute each node with try-finally to ensure video recording stops
+    let hasVideoRecording = false;
+    try {
+      for (const node of workflowData.sortedNodes) {
+        console.log(`[executeWorkflow] Executing node: ${node.type} (${node.id})`);
+
+        // Check if this is a video recording node
+        if (node.type === NodeType.IOS_VIDEO_RECORDING) {
+          hasVideoRecording = true;
+        }
+
+        const executor = getExecutor(node.type as NodeType);
+        context = await executor({
+          data: node.data as Record<string, unknown>,
+          nodeId: node.id,
+          userId,
+          workflowId,
+          projectId: workflowData.projectId,
+          context,
+          step,
+          publish,
+        });
+        console.log(`[executeWorkflow] Node completed: ${node.type} (${node.id})`);
+      }
+    } finally {
+      // Stop any active video recording
+      if (hasVideoRecording) {
+        await step.run("stop-video-recording", async () => {
+          console.log("[executeWorkflow] Stopping video recording...");
+          await stopVideoRecording();
+        });
+      }
     }
 
     await step.run("update-execution", async () => {

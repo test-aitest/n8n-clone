@@ -87,6 +87,11 @@ export const iosScreenshotChannel = channel(IOS_SCREENSHOT_CHANNEL_NAME).addTopi
   topic("status").type<IOSChannelStatus>()
 );
 
+export const IOS_VIDEO_RECORDING_CHANNEL_NAME = "ios-video-recording";
+export const iosVideoRecordingChannel = channel(IOS_VIDEO_RECORDING_CHANNEL_NAME).addTopic(
+  topic("status").type<IOSChannelStatus>()
+);
+
 export const IOS_WAIT_CHANNEL_NAME = "ios-wait";
 export const iosWaitChannel = channel(IOS_WAIT_CHANNEL_NAME).addTopic(
   topic("status").type<IOSChannelStatus>()

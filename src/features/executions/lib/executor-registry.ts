@@ -27,6 +27,7 @@ import { pickerSelectExecutor } from "@/features/ios-testing/components/picker-s
 import { sliderSetExecutor } from "@/features/ios-testing/components/slider-set/executor";
 import { toggleSwitchExecutor } from "@/features/ios-testing/components/toggle-switch/executor";
 import { screenshotExecutor } from "@/features/ios-testing/components/screenshot/executor";
+import { videoRecordingExecutor } from "@/features/ios-testing/components/video-recording/executor";
 import { waitExecutor } from "@/features/ios-testing/components/wait/executor";
 
 // iOS Testing - Expect/Validation
@@ -65,6 +66,7 @@ export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.IOS_SLIDER_SET]: sliderSetExecutor,
   [NodeType.IOS_TOGGLE_SWITCH]: toggleSwitchExecutor,
   [NodeType.IOS_SCREENSHOT]: screenshotExecutor,
+  [NodeType.IOS_VIDEO_RECORDING]: videoRecordingExecutor,
   [NodeType.IOS_WAIT]: waitExecutor,
   // iOS Testing - Expect/Validation
   [NodeType.IOS_EXPECT_EXISTS]: expectExistsExecutor,
