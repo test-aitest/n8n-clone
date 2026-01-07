@@ -30,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UIElementBrowser } from "../ui-element-browser";
 
 const ELEMENT_TYPES = [
   { value: "Button", label: "Button" },
@@ -57,6 +58,7 @@ const formSchema = z.object({
   elementType: z
     .string()
     .min(1, { message: "Element type is required" }),
+  accessibilityId: z.string().optional(),
   labelMatch: z.string().optional(),
 });
 
@@ -80,6 +82,7 @@ export const TapDialog = ({
     defaultValues: {
       variableName: defaultValues.variableName || "tapResult",
       elementType: defaultValues.elementType || "",
+      accessibilityId: defaultValues.accessibilityId || "",
       labelMatch: defaultValues.labelMatch || "",
     },
   });
@@ -89,6 +92,7 @@ export const TapDialog = ({
       form.reset({
         variableName: defaultValues.variableName || "tapResult",
         elementType: defaultValues.elementType || "",
+        accessibilityId: defaultValues.accessibilityId || "",
         labelMatch: defaultValues.labelMatch || "",
       });
     }
@@ -101,7 +105,7 @@ export const TapDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[85vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Tap Element</DialogTitle>
           <DialogDescription>
@@ -111,68 +115,92 @@ export const TapDialog = ({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-6 mt-4"
+            className="flex flex-col flex-1 min-h-0"
           >
-            <FormField
-              control={form.control}
-              name="variableName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Variable Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="tapResult" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Reference this result in other nodes
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="elementType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Element Type</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+            <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+              <FormField
+                control={form.control}
+                name="variableName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Variable Name</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select element type" />
-                      </SelectTrigger>
+                      <Input placeholder="tapResult" {...field} />
                     </FormControl>
-                    <SelectContent>
-                      {ELEMENT_TYPES.map((type) => (
-                        <SelectItem key={type.value} value={type.value}>
-                          {type.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    The type of UI element to tap
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="labelMatch"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Label Match</FormLabel>
-                  <FormControl>
-                    <Input placeholder="メールアドレス" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Text to match in label/placeholder (partial match)
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
+                    <FormDescription>
+                      Reference this result in other nodes
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="elementType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Element Type</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select element type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {ELEMENT_TYPES.map((type) => (
+                          <SelectItem key={type.value} value={type.value}>
+                            {type.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      The type of UI element to tap
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="accessibilityId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Accessibility ID (Optional)</FormLabel>
+                    <FormControl>
+                      <div className="flex gap-2">
+                        <Input placeholder="loginButton" {...field} />
+                        <UIElementBrowser
+                          onSelect={(id) => form.setValue("accessibilityId", id)}
+                          selectedValue={field.value}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormDescription>
+                      Exact accessibility identifier to find the element
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="labelMatch"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Label Match (Optional)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="メールアドレス" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Text to match in label/placeholder (partial match). Used if Accessibility ID is not set.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <DialogFooter className="pt-4 border-t mt-4">
               <Button type="submit">Save</Button>
             </DialogFooter>
           </form>

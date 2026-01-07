@@ -12,9 +12,9 @@ import {
   Loader2,
   WorkflowIcon,
   LayoutTemplateIcon,
-  ComponentIcon,
   RefreshCwIcon,
 } from "lucide-react";
+import { UIComponentsSection } from "./ui-components-section";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 
@@ -147,7 +147,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
           </div>
 
           {/* Stats */}
-          <div className="grid gap-2 md:grid-cols-3">
+          <div className="grid gap-2 md:grid-cols-2">
             <div className="flex items-center gap-3 px-4 py-3 rounded-lg border bg-card">
               <div className="shrink-0 size-9 flex items-center justify-center rounded-md bg-muted">
                 <WorkflowIcon className="size-4 text-muted-foreground" />
@@ -167,17 +167,13 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                 <div className="text-xs text-muted-foreground">Templates</div>
               </div>
             </div>
-
-            <div className="flex items-center gap-3 px-4 py-3 rounded-lg border bg-card">
-              <div className="shrink-0 size-9 flex items-center justify-center rounded-md bg-muted">
-                <ComponentIcon className="size-4 text-muted-foreground" />
-              </div>
-              <div>
-                <div className="text-2xl font-semibold">{project._count.uiComponents}</div>
-                <div className="text-xs text-muted-foreground">UI Components</div>
-              </div>
-            </div>
           </div>
+
+          {/* UI Components Section */}
+          <UIComponentsSection
+            projectId={projectId}
+            totalCount={project._count.uiComponents}
+          />
 
           {/* App Path */}
           {project.appPath && (

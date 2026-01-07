@@ -13,6 +13,7 @@ import * as wda from "@/lib/ios/wda";
 type TapData = {
   variableName?: string;
   elementType?: string;
+  accessibilityId?: string;
   labelMatch?: string;
 };
 
@@ -40,6 +41,7 @@ export const tapExecutor: NodeExecutor<TapData> = async ({
       // Get device ID and bundle ID from context
       const deviceId = getDeviceIdFromContext(context, NODE_NAME);
       const bundleId = getBundleIdFromContext(context, NODE_NAME);
+      const accessibilityId = data.accessibilityId?.trim() || undefined;
       const labelMatch = data.labelMatch?.trim() || undefined;
 
       // Ensure Appium is running
@@ -68,19 +70,54 @@ export const tapExecutor: NodeExecutor<TapData> = async ({
         );
       }
 
-      // Use WDA for tap with element type and label match
-      const tapResult = await wda.tap(deviceId, data.elementType!, 0, labelMatch);
+      let tapResult: { success: boolean; elementFound: boolean };
+      let selectorDescription: string;
+
+      // If accessibilityId is provided, use it; otherwise fall back to labelMatch
+      if (accessibilityId) {
+        // Find element by accessibility ID and tap it
+        const elementResult = await wda.findElementByAccessibilityId(deviceId, accessibilityId);
+        selectorDescription = `accessibilityId "${accessibilityId}"`;
+
+        if (!elementResult.success || !elementResult.data) {
+          throw createIOSError(
+            IOS_ERROR_CODES.ELEMENT_NOT_FOUND,
+            `${NODE_NAME} failed: Element with ${selectorDescription} not found`,
+            { accessibilityId },
+          );
+        }
+
+        // Get element rect for coordinate tap
+        const rectResult = await wda.getElementRect(deviceId, elementResult.data);
+        if (!rectResult.success || !rectResult.data) {
+          throw createIOSError(
+            IOS_ERROR_CODES.ELEMENT_NOT_INTERACTABLE,
+            `${NODE_NAME} failed: Could not get element rect for ${selectorDescription}`,
+            { accessibilityId },
+          );
+        }
+
+        const { x, y, width, height } = rectResult.data;
+        const centerX = x + width / 2;
+        const centerY = y + height / 2;
+
+        tapResult = await wda.tapCoordinate(deviceId, centerX, centerY);
+        tapResult.elementFound = true;
+      } else {
+        // Use WDA for tap with element type and label match
+        tapResult = await wda.tap(deviceId, data.elementType!, 0, labelMatch);
+        selectorDescription = labelMatch
+          ? `${data.elementType} with label "${labelMatch}"`
+          : data.elementType!;
+      }
 
       if (!tapResult.success) {
-        const selector = labelMatch
-          ? `${data.elementType} with label "${labelMatch}"`
-          : data.elementType;
         throw createIOSError(
           tapResult.elementFound
             ? IOS_ERROR_CODES.ELEMENT_NOT_INTERACTABLE
             : IOS_ERROR_CODES.ELEMENT_NOT_FOUND,
-          `${NODE_NAME} failed: ${selector} ${tapResult.elementFound ? "found but tap failed" : "not found"}`,
-          { elementType: data.elementType, labelMatch },
+          `${NODE_NAME} failed: ${selectorDescription} ${tapResult.elementFound ? "found but tap failed" : "not found"}`,
+          { elementType: data.elementType, accessibilityId, labelMatch },
         );
       }
 
@@ -89,6 +126,7 @@ export const tapExecutor: NodeExecutor<TapData> = async ({
         [data.variableName!]: {
           success: true,
           elementType: data.elementType,
+          accessibilityId,
           labelMatch,
           elementFound: tapResult.elementFound,
         },

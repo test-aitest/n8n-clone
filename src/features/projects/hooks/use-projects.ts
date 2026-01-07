@@ -133,3 +133,58 @@ export const useListSimulators = () => {
   const trpc = useTRPC();
   return useSuspenseQuery(trpc.projects.listSimulators.queryOptions());
 };
+
+/**
+ * Hook to fetch UI components for a project
+ */
+export const useUIComponents = (
+  projectId: string,
+  options?: {
+    componentType?: string | null;
+    sourceFilePath?: string | null;
+  }
+) => {
+  const trpc = useTRPC();
+  return useSuspenseQuery(
+    trpc.projects.getUIComponents.queryOptions({
+      projectId,
+      componentType: options?.componentType,
+      sourceFilePath: options?.sourceFilePath,
+    })
+  );
+};
+
+/**
+ * Hook to fetch project screens
+ */
+export const useProjectScreens = (projectId: string) => {
+  const trpc = useTRPC();
+  return useSuspenseQuery(
+    trpc.projectScreens.getMany.queryOptions({ projectId })
+  );
+};
+
+/**
+ * Hook to update screen name
+ */
+export const useUpdateScreenName = () => {
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+
+  return useMutation(
+    trpc.projectScreens.upsert.mutationOptions({
+      onSuccess: (_data, variables) => {
+        toast.success("Screen name updated");
+        queryClient.invalidateQueries(
+          trpc.projectScreens.getMany.queryOptions({ projectId: variables.projectId })
+        );
+        queryClient.invalidateQueries(
+          trpc.projects.getUIComponents.queryOptions({ projectId: variables.projectId })
+        );
+      },
+      onError: (error) => {
+        toast.error(`Failed to update screen name: ${error.message}`);
+      },
+    })
+  );
+};
