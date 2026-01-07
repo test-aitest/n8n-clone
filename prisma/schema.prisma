@@ -155,6 +155,15 @@ enum NodeType {
   IOS_APP_LAUNCH
   IOS_APP_TERMINATE
 
+  // === iOSテスト: 実機制御 ===
+  IOS_DEVICE_APP_INSTALL
+  IOS_DEVICE_APP_UNINSTALL
+  IOS_DEVICE_APP_LAUNCH
+  IOS_DEVICE_APP_TERMINATE
+
+  // === iOSテスト: セットアップ ===
+  IOS_WDA_SETUP
+
   // === iOSテスト: UIインタラクション ===
   IOS_TAP
   IOS_TEXT_INPUT
@@ -308,6 +317,10 @@ model Project {
   bundleId       String?  // Auto-detected Bundle ID
   targetDeviceId String?  // Default simulator UDID
   appPath        String?  // Path to built .app file
+
+  // Apple Developer Signing (for physical device testing)
+  xcodeOrgId     String?  // Apple Developer Team ID
+  xcodeSigningId String?  // Signing identity (default: "iPhone Developer")
 
   // Metadata
   createdAt      DateTime @default(now())

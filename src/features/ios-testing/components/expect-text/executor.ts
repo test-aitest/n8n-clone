@@ -4,6 +4,7 @@ import {
   createIOSError,
   getBundleIdFromContext,
   getDeviceIdFromContext,
+  getSigningConfigFromProject,
   IOS_ERROR_CODES,
   parseTimeout,
   validateRequired,
@@ -24,6 +25,7 @@ const NODE_NAME = "Expect Text";
 export const expectTextExecutor: NodeExecutor<ExpectTextData> = async ({
   data,
   nodeId,
+  projectId,
   context,
   step,
   publish,
@@ -68,7 +70,8 @@ export const expectTextExecutor: NodeExecutor<ExpectTextData> = async ({
       }
 
       // Create or reuse WDA session
-      const sessionResult = await wda.createSession(deviceId, bundleId);
+      const signingConfig = await getSigningConfigFromProject(projectId, deviceId);
+      const sessionResult = await wda.createSession(deviceId, bundleId, signingConfig);
       if (!sessionResult.success) {
         throw createIOSError(
           IOS_ERROR_CODES.COMMAND_FAILED,

@@ -4,6 +4,7 @@ import {
   createIOSError,
   getBundleIdFromContext,
   getDeviceIdFromContext,
+  getSigningConfigFromProject,
   IOS_ERROR_CODES,
 } from "@/features/ios-testing/lib/errors";
 import { iosWaitChannel } from "@/inngest/channels/ios-testing";
@@ -23,6 +24,7 @@ const NODE_NAME = "Wait";
 export const waitExecutor: NodeExecutor<WaitData> = async ({
   data,
   nodeId,
+  projectId,
   context,
   step,
   publish,
@@ -93,7 +95,8 @@ export const waitExecutor: NodeExecutor<WaitData> = async ({
       }
 
       // Create or reuse WDA session
-      const sessionResult = await wda.createSession(deviceId, bundleId);
+      const signingConfig = await getSigningConfigFromProject(projectId, deviceId);
+      const sessionResult = await wda.createSession(deviceId, bundleId, signingConfig);
       if (!sessionResult.success) {
         throw createIOSError(
           IOS_ERROR_CODES.COMMAND_FAILED,

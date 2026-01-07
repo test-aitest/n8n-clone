@@ -229,6 +229,7 @@ export function TemplateSelectDialog({
                         deviceId: value,
                       }))
                     }
+                    deviceFilter="simulator"
                   />
                 </div>
               );

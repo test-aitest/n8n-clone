@@ -3,6 +3,7 @@ import { promisify } from "util";
 import { z } from "zod";
 import prisma from "@/lib/db";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
+import { deviceController } from "@/lib/ios";
 
 const execAsync = promisify(exec);
 
@@ -18,12 +19,61 @@ interface SimulatorInfo {
 }
 
 /**
+ * Unified device info type (for both simulators and physical devices)
+ */
+interface UnifiedDeviceInfo {
+  udid: string;
+  name: string;
+  state: string;
+  osVersion: string;
+  deviceType: "simulator" | "physical";
+  isAvailable: boolean;
+  connectionType?: "usb" | "wifi" | "unknown";
+  modelName?: string;
+}
+
+/**
  * iOS Testing tRPC Router
  * Provides endpoints for simulator management, UI components, and Golden Masters
  */
 export const iosTestingRouter = createTRPCRouter({
   /**
-   * List available iOS simulators
+   * List all available iOS devices (simulators and physical devices)
+   */
+  listAllDevices: protectedProcedure.query(async (): Promise<UnifiedDeviceInfo[]> => {
+    try {
+      const devices = await deviceController.listAllDevices();
+      return devices.map((device): UnifiedDeviceInfo => {
+        if (device.deviceType === "physical") {
+          return {
+            udid: device.udid,
+            name: device.name,
+            state: device.state,
+            osVersion: device.osVersion,
+            deviceType: "physical",
+            isAvailable: device.state === "connected",
+            connectionType: device.connectionType,
+            modelName: device.modelName,
+          };
+        }
+        // Simulator
+        return {
+          udid: device.udid,
+          name: device.name,
+          state: device.state,
+          osVersion: device.runtime,
+          deviceType: "simulator",
+          isAvailable: device.isAvailable,
+        };
+      });
+    } catch (error) {
+      console.error("Failed to list devices:", error);
+      return [];
+    }
+  }),
+
+  /**
+   * List available iOS simulators (legacy - kept for backward compatibility)
    */
   listSimulators: protectedProcedure.query(async () => {
     try {

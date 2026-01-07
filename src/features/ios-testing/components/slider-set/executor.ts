@@ -3,6 +3,7 @@ import {
   createIOSError,
   getBundleIdFromContext,
   getDeviceIdFromContext,
+  getSigningConfigFromProject,
   IOS_ERROR_CODES,
   validateRequired,
 } from "@/features/ios-testing/lib/errors";
@@ -19,6 +20,7 @@ const NODE_NAME = "Slider Set";
 export const sliderSetExecutor: NodeExecutor<SliderSetData> = async ({
   data,
   nodeId,
+  projectId,
   context,
   step,
   publish,
@@ -63,8 +65,11 @@ export const sliderSetExecutor: NodeExecutor<SliderSetData> = async ({
         );
       }
 
+      // Get signing config for physical devices
+      const signingConfig = await getSigningConfigFromProject(projectId, deviceId);
+
       // Create or reuse WDA session
-      const sessionResult = await wda.createSession(deviceId, bundleId);
+      const sessionResult = await wda.createSession(deviceId, bundleId, signingConfig);
       if (!sessionResult.success) {
         throw createIOSError(
           IOS_ERROR_CODES.COMMAND_FAILED,

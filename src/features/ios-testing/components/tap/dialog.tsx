@@ -190,7 +190,7 @@ export const TapDialog = ({
                   <FormItem>
                     <FormLabel>Label Match (Optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="メールアドレス" {...field} />
+                      <Input placeholder="Email address" {...field} />
                     </FormControl>
                     <FormDescription>
                       Text to match in label/placeholder (partial match). Used if Accessibility ID is not set.

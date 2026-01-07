@@ -3,6 +3,7 @@ import {
   createIOSError,
   getBundleIdFromContext,
   getDeviceIdFromContext,
+  getSigningConfigFromProject,
   IOS_ERROR_CODES,
   validateRequired,
 } from "@/features/ios-testing/lib/errors";
@@ -20,7 +21,7 @@ const NODE_NAME = "Scroll Until Visible";
 
 export const scrollUntilVisibleExecutor: NodeExecutor<
   ScrollUntilVisibleData
-> = async ({ data, nodeId, context, step, publish }) => {
+> = async ({ data, nodeId, projectId, context, step, publish }) => {
   await publish(
     iosScrollUntilVisibleChannel().status({
       nodeId,
@@ -54,8 +55,11 @@ export const scrollUntilVisibleExecutor: NodeExecutor<
         );
       }
 
+      // Get signing config for physical devices
+      const signingConfig = await getSigningConfigFromProject(projectId, deviceId);
+
       // Create or reuse WDA session
-      const sessionResult = await wda.createSession(deviceId, bundleId);
+      const sessionResult = await wda.createSession(deviceId, bundleId, signingConfig);
       if (!sessionResult.success) {
         throw createIOSError(
           IOS_ERROR_CODES.COMMAND_FAILED,

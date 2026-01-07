@@ -123,3 +123,30 @@ export const IOS_UI_SCAN_CHANNEL_NAME = "ios-ui-scan";
 export const iosUiScanChannel = channel(IOS_UI_SCAN_CHANNEL_NAME).addTopic(
   topic("status").type<IOSChannelStatus>()
 );
+
+// Physical Device Control
+export const IOS_DEVICE_APP_INSTALL_CHANNEL_NAME = "ios-device-app-install";
+export const iosDeviceAppInstallChannel = channel(IOS_DEVICE_APP_INSTALL_CHANNEL_NAME).addTopic(
+  topic("status").type<IOSChannelStatus>()
+);
+
+export const IOS_DEVICE_APP_UNINSTALL_CHANNEL_NAME = "ios-device-app-uninstall";
+export const iosDeviceAppUninstallChannel = channel(IOS_DEVICE_APP_UNINSTALL_CHANNEL_NAME).addTopic(
+  topic("status").type<IOSChannelStatus>()
+);
+
+export const IOS_DEVICE_APP_LAUNCH_CHANNEL_NAME = "ios-device-app-launch";
+export const iosDeviceAppLaunchChannel = channel(IOS_DEVICE_APP_LAUNCH_CHANNEL_NAME).addTopic(
+  topic("status").type<IOSChannelStatus>()
+);
+
+export const IOS_DEVICE_APP_TERMINATE_CHANNEL_NAME = "ios-device-app-terminate";
+export const iosDeviceAppTerminateChannel = channel(IOS_DEVICE_APP_TERMINATE_CHANNEL_NAME).addTopic(
+  topic("status").type<IOSChannelStatus>()
+);
+
+// WDA Setup Channel
+export const IOS_WDA_SETUP_CHANNEL_NAME = "ios-wda-setup";
+export const iosWdaSetupChannel = channel(IOS_WDA_SETUP_CHANNEL_NAME).addTopic(
+  topic("status").type<IOSChannelStatus>()
+);

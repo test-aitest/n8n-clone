@@ -7,6 +7,10 @@
 export * as wda from "./wda";
 // Simulator control (simctl wrapper)
 export * as simulator from "./simulator";
+// Physical device control (devicectl wrapper - iOS 17+)
+export * as device from "./device";
+// Unified device controller (handles both simulators and physical devices)
+export * as deviceController from "./device-controller";
 // Xcode project detection
 export * as xcodeProject from "./xcode-project";
 // Type definitions

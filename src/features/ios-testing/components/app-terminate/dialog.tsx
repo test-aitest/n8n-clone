@@ -115,6 +115,7 @@ export const AppTerminateDialog = ({
                     <DeviceSelector
                       value={field.value}
                       onChange={field.onChange}
+                      deviceFilter="simulator"
                     />
                   </FormControl>
                   <FormDescription>

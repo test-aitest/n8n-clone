@@ -4,6 +4,7 @@ import {
   formatErrorForDisplay,
   getBundleIdFromContext,
   getDeviceIdFromContext,
+  getSigningConfigFromProject,
   IOS_ERROR_CODES,
   validateRequired,
 } from "@/features/ios-testing/lib/errors";
@@ -22,6 +23,7 @@ const NODE_NAME = "Tap";
 export const tapExecutor: NodeExecutor<TapData> = async ({
   data,
   nodeId,
+  projectId,
   context,
   step,
   publish,
@@ -61,8 +63,11 @@ export const tapExecutor: NodeExecutor<TapData> = async ({
         );
       }
 
-      // Create or reuse WDA session
-      const sessionResult = await wda.createSession(deviceId, bundleId);
+      // Get signing config for physical devices
+      const signingConfig = await getSigningConfigFromProject(projectId, deviceId);
+
+      // Create or reuse WDA session (with signing config for physical devices)
+      const sessionResult = await wda.createSession(deviceId, bundleId, signingConfig);
       if (!sessionResult.success) {
         throw createIOSError(
           IOS_ERROR_CODES.COMMAND_FAILED,

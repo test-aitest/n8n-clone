@@ -166,7 +166,7 @@ export const ExpectExistsDialog = ({
                 <FormItem>
                   <FormLabel>Label Match</FormLabel>
                   <FormControl>
-                    <Input placeholder="ログイン" {...field} />
+                    <Input placeholder="Login" {...field} />
                   </FormControl>
                   <FormDescription>
                     Text to match in label/placeholder (partial match)

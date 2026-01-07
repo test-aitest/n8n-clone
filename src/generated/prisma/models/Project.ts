@@ -32,6 +32,8 @@ export type ProjectMinAggregateOutputType = {
   bundleId: string | null
   targetDeviceId: string | null
   appPath: string | null
+  xcodeOrgId: string | null
+  xcodeSigningId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,6 +46,8 @@ export type ProjectMaxAggregateOutputType = {
   bundleId: string | null
   targetDeviceId: string | null
   appPath: string | null
+  xcodeOrgId: string | null
+  xcodeSigningId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,6 +60,8 @@ export type ProjectCountAggregateOutputType = {
   bundleId: number
   targetDeviceId: number
   appPath: number
+  xcodeOrgId: number
+  xcodeSigningId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -70,6 +76,8 @@ export type ProjectMinAggregateInputType = {
   bundleId?: true
   targetDeviceId?: true
   appPath?: true
+  xcodeOrgId?: true
+  xcodeSigningId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,6 +90,8 @@ export type ProjectMaxAggregateInputType = {
   bundleId?: true
   targetDeviceId?: true
   appPath?: true
+  xcodeOrgId?: true
+  xcodeSigningId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,6 +104,8 @@ export type ProjectCountAggregateInputType = {
   bundleId?: true
   targetDeviceId?: true
   appPath?: true
+  xcodeOrgId?: true
+  xcodeSigningId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -179,6 +191,8 @@ export type ProjectGroupByOutputType = {
   bundleId: string | null
   targetDeviceId: string | null
   appPath: string | null
+  xcodeOrgId: string | null
+  xcodeSigningId: string | null
   createdAt: Date
   updatedAt: Date
   _count: ProjectCountAggregateOutputType | null
@@ -212,6 +226,8 @@ export type ProjectWhereInput = {
   bundleId?: Prisma.StringNullableFilter<"Project"> | string | null
   targetDeviceId?: Prisma.StringNullableFilter<"Project"> | string | null
   appPath?: Prisma.StringNullableFilter<"Project"> | string | null
+  xcodeOrgId?: Prisma.StringNullableFilter<"Project"> | string | null
+  xcodeSigningId?: Prisma.StringNullableFilter<"Project"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -230,6 +246,8 @@ export type ProjectOrderByWithRelationInput = {
   bundleId?: Prisma.SortOrderInput | Prisma.SortOrder
   targetDeviceId?: Prisma.SortOrderInput | Prisma.SortOrder
   appPath?: Prisma.SortOrderInput | Prisma.SortOrder
+  xcodeOrgId?: Prisma.SortOrderInput | Prisma.SortOrder
+  xcodeSigningId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -251,6 +269,8 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   bundleId?: Prisma.StringNullableFilter<"Project"> | string | null
   targetDeviceId?: Prisma.StringNullableFilter<"Project"> | string | null
   appPath?: Prisma.StringNullableFilter<"Project"> | string | null
+  xcodeOrgId?: Prisma.StringNullableFilter<"Project"> | string | null
+  xcodeSigningId?: Prisma.StringNullableFilter<"Project"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -269,6 +289,8 @@ export type ProjectOrderByWithAggregationInput = {
   bundleId?: Prisma.SortOrderInput | Prisma.SortOrder
   targetDeviceId?: Prisma.SortOrderInput | Prisma.SortOrder
   appPath?: Prisma.SortOrderInput | Prisma.SortOrder
+  xcodeOrgId?: Prisma.SortOrderInput | Prisma.SortOrder
+  xcodeSigningId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProjectCountOrderByAggregateInput
@@ -287,6 +309,8 @@ export type ProjectScalarWhereWithAggregatesInput = {
   bundleId?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   targetDeviceId?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   appPath?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
+  xcodeOrgId?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
+  xcodeSigningId?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Project"> | Date | string
 }
@@ -298,6 +322,8 @@ export type ProjectCreateInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProjectsInput
@@ -316,6 +342,8 @@ export type ProjectUncheckedCreateInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutProjectInput
@@ -332,6 +360,8 @@ export type ProjectUpdateInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
@@ -350,6 +380,8 @@ export type ProjectUncheckedUpdateInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutProjectNestedInput
@@ -367,6 +399,8 @@ export type ProjectCreateManyInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -378,6 +412,8 @@ export type ProjectUpdateManyMutationInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -390,6 +426,8 @@ export type ProjectUncheckedUpdateManyInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -422,6 +460,8 @@ export type ProjectCountOrderByAggregateInput = {
   bundleId?: Prisma.SortOrder
   targetDeviceId?: Prisma.SortOrder
   appPath?: Prisma.SortOrder
+  xcodeOrgId?: Prisma.SortOrder
+  xcodeSigningId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -434,6 +474,8 @@ export type ProjectMaxOrderByAggregateInput = {
   bundleId?: Prisma.SortOrder
   targetDeviceId?: Prisma.SortOrder
   appPath?: Prisma.SortOrder
+  xcodeOrgId?: Prisma.SortOrder
+  xcodeSigningId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -446,6 +488,8 @@ export type ProjectMinOrderByAggregateInput = {
   bundleId?: Prisma.SortOrder
   targetDeviceId?: Prisma.SortOrder
   appPath?: Prisma.SortOrder
+  xcodeOrgId?: Prisma.SortOrder
+  xcodeSigningId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -575,6 +619,8 @@ export type ProjectCreateWithoutUserInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workflows?: Prisma.WorkflowCreateNestedManyWithoutProjectInput
@@ -591,6 +637,8 @@ export type ProjectUncheckedCreateWithoutUserInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutProjectInput
@@ -637,6 +685,8 @@ export type ProjectScalarWhereInput = {
   bundleId?: Prisma.StringNullableFilter<"Project"> | string | null
   targetDeviceId?: Prisma.StringNullableFilter<"Project"> | string | null
   appPath?: Prisma.StringNullableFilter<"Project"> | string | null
+  xcodeOrgId?: Prisma.StringNullableFilter<"Project"> | string | null
+  xcodeSigningId?: Prisma.StringNullableFilter<"Project"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
 }
@@ -648,6 +698,8 @@ export type ProjectCreateWithoutWorkflowsInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProjectsInput
@@ -665,6 +717,8 @@ export type ProjectUncheckedCreateWithoutWorkflowsInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutProjectInput
@@ -696,6 +750,8 @@ export type ProjectUpdateWithoutWorkflowsInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
@@ -713,6 +769,8 @@ export type ProjectUncheckedUpdateWithoutWorkflowsInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutProjectNestedInput
@@ -728,6 +786,8 @@ export type ProjectCreateWithoutUiComponentsInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProjectsInput
@@ -745,6 +805,8 @@ export type ProjectUncheckedCreateWithoutUiComponentsInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutProjectInput
@@ -776,6 +838,8 @@ export type ProjectUpdateWithoutUiComponentsInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
@@ -793,6 +857,8 @@ export type ProjectUncheckedUpdateWithoutUiComponentsInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutProjectNestedInput
@@ -808,6 +874,8 @@ export type ProjectCreateWithoutScreensInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProjectsInput
@@ -825,6 +893,8 @@ export type ProjectUncheckedCreateWithoutScreensInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutProjectInput
@@ -856,6 +926,8 @@ export type ProjectUpdateWithoutScreensInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
@@ -873,6 +945,8 @@ export type ProjectUncheckedUpdateWithoutScreensInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutProjectNestedInput
@@ -888,6 +962,8 @@ export type ProjectCreateWithoutTemplatesInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProjectsInput
@@ -905,6 +981,8 @@ export type ProjectUncheckedCreateWithoutTemplatesInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutProjectInput
@@ -936,6 +1014,8 @@ export type ProjectUpdateWithoutTemplatesInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
@@ -953,6 +1033,8 @@ export type ProjectUncheckedUpdateWithoutTemplatesInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutProjectNestedInput
@@ -968,6 +1050,8 @@ export type ProjectCreateWithoutPackagesInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProjectsInput
@@ -985,6 +1069,8 @@ export type ProjectUncheckedCreateWithoutPackagesInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutProjectInput
@@ -1016,6 +1102,8 @@ export type ProjectUpdateWithoutPackagesInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
@@ -1033,6 +1121,8 @@ export type ProjectUncheckedUpdateWithoutPackagesInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutProjectNestedInput
@@ -1048,6 +1138,8 @@ export type ProjectCreateManyUserInput = {
   bundleId?: string | null
   targetDeviceId?: string | null
   appPath?: string | null
+  xcodeOrgId?: string | null
+  xcodeSigningId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1059,6 +1151,8 @@ export type ProjectUpdateWithoutUserInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workflows?: Prisma.WorkflowUpdateManyWithoutProjectNestedInput
@@ -1075,6 +1169,8 @@ export type ProjectUncheckedUpdateWithoutUserInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutProjectNestedInput
@@ -1091,6 +1187,8 @@ export type ProjectUncheckedUpdateManyWithoutUserInput = {
   bundleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeOrgId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xcodeSigningId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1170,6 +1268,8 @@ export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   bundleId?: boolean
   targetDeviceId?: boolean
   appPath?: boolean
+  xcodeOrgId?: boolean
+  xcodeSigningId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1189,6 +1289,8 @@ export type ProjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   bundleId?: boolean
   targetDeviceId?: boolean
   appPath?: boolean
+  xcodeOrgId?: boolean
+  xcodeSigningId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1202,6 +1304,8 @@ export type ProjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   bundleId?: boolean
   targetDeviceId?: boolean
   appPath?: boolean
+  xcodeOrgId?: boolean
+  xcodeSigningId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1215,11 +1319,13 @@ export type ProjectSelectScalar = {
   bundleId?: boolean
   targetDeviceId?: boolean
   appPath?: boolean
+  xcodeOrgId?: boolean
+  xcodeSigningId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "userId" | "projectPath" | "bundleId" | "targetDeviceId" | "appPath" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "userId" | "projectPath" | "bundleId" | "targetDeviceId" | "appPath" | "xcodeOrgId" | "xcodeSigningId" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
 export type ProjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   workflows?: boolean | Prisma.Project$workflowsArgs<ExtArgs>
@@ -1254,6 +1360,8 @@ export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     bundleId: string | null
     targetDeviceId: string | null
     appPath: string | null
+    xcodeOrgId: string | null
+    xcodeSigningId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["project"]>
@@ -1692,6 +1800,8 @@ export interface ProjectFieldRefs {
   readonly bundleId: Prisma.FieldRef<"Project", 'String'>
   readonly targetDeviceId: Prisma.FieldRef<"Project", 'String'>
   readonly appPath: Prisma.FieldRef<"Project", 'String'>
+  readonly xcodeOrgId: Prisma.FieldRef<"Project", 'String'>
+  readonly xcodeSigningId: Prisma.FieldRef<"Project", 'String'>
   readonly createdAt: Prisma.FieldRef<"Project", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Project", 'DateTime'>
 }

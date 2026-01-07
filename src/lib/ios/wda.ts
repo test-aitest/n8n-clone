@@ -8,7 +8,7 @@
  * - Start Appium: appium
  */
 
-import type { CommandResult, TapResult, TextInputResult, SwipeDirection, SwipeResult } from "./types";
+import type { CommandResult, TapResult, TextInputResult, SwipeDirection, SwipeResult, RealDeviceSigningConfig } from "./types";
 
 // ============================================
 // Types
@@ -89,11 +89,16 @@ async function wdaRequest<T>(
 // ============================================
 
 /**
- * Create a new Appium session for a simulator
+ * Create a new Appium session for a simulator or physical device
+ *
+ * @param udid - Device UDID
+ * @param bundleId - App bundle ID
+ * @param realDeviceConfig - Signing configuration for physical devices (required for real devices)
  */
 export async function createSession(
   udid: string,
   bundleId: string,
+  realDeviceConfig?: RealDeviceSigningConfig,
 ): Promise<CommandResult<WDASession>> {
   // Check if session already exists
   const existingSession = activeSessions.get(udid);
@@ -106,20 +111,33 @@ export async function createSession(
     await deleteSession(udid);
   }
 
+  // Base capabilities for both simulators and physical devices
+  const baseCapabilities: Record<string, unknown> = {
+    platformName: "iOS",
+    "appium:automationName": "XCUITest",
+    "appium:udid": udid,
+    "appium:bundleId": bundleId,
+    "appium:noReset": true,
+    "appium:shouldTerminateApp": false,
+    "appium:skipServerInstallation": false,
+    "appium:usePreinstalledWDA": false,
+    "appium:wdaLaunchTimeout": 120000,
+    "appium:wdaConnectionTimeout": 120000,
+  };
+
+  // Add real device signing capabilities if provided
+  if (realDeviceConfig) {
+    console.log("[WDA] Creating session for physical device with signing config");
+    baseCapabilities["appium:xcodeOrgId"] = realDeviceConfig.xcodeOrgId;
+    baseCapabilities["appium:xcodeSigningId"] = realDeviceConfig.xcodeSigningId || "iPhone Developer";
+    // Additional capabilities for real devices
+    baseCapabilities["appium:showXcodeLog"] = true;
+    baseCapabilities["appium:derivedDataPath"] = `/tmp/appium-wda-${udid}`;
+  }
+
   const capabilities = {
     capabilities: {
-      alwaysMatch: {
-        platformName: "iOS",
-        "appium:automationName": "XCUITest",
-        "appium:udid": udid,
-        "appium:bundleId": bundleId,
-        "appium:noReset": true,
-        "appium:shouldTerminateApp": false,
-        "appium:skipServerInstallation": false,
-        "appium:usePreinstalledWDA": false,
-        "appium:wdaLaunchTimeout": 120000,
-        "appium:wdaConnectionTimeout": 120000,
-      },
+      alwaysMatch: baseCapabilities,
     },
   };
 

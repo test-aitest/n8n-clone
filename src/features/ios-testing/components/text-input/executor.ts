@@ -4,6 +4,7 @@ import {
   createIOSError,
   getBundleIdFromContext,
   getDeviceIdFromContext,
+  getSigningConfigFromProject,
   IOS_ERROR_CODES,
 } from "@/features/ios-testing/lib/errors";
 import { iosTextInputChannel } from "@/inngest/channels/ios-testing";
@@ -22,6 +23,7 @@ const NODE_NAME = "Text Input";
 export const textInputExecutor: NodeExecutor<TextInputData> = async ({
   data,
   nodeId,
+  projectId,
   context,
   step,
   publish,
@@ -64,8 +66,11 @@ export const textInputExecutor: NodeExecutor<TextInputData> = async ({
         );
       }
 
+      // Get signing config for physical devices
+      const signingConfig = await getSigningConfigFromProject(projectId, deviceId);
+
       // Create or reuse WDA session
-      const sessionResult = await wda.createSession(deviceId, bundleId);
+      const sessionResult = await wda.createSession(deviceId, bundleId, signingConfig);
       if (!sessionResult.success) {
         throw createIOSError(
           IOS_ERROR_CODES.COMMAND_FAILED,

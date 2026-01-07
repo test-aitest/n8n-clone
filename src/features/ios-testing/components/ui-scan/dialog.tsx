@@ -95,12 +95,12 @@ export const UiScanDialog = ({
               name="screenName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>画面名</FormLabel>
+                  <FormLabel>Screen Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="ログイン画面" {...field} />
+                    <Input placeholder="Login Screen" {...field} />
                   </FormControl>
                   <FormDescription>
-                    この画面の名前を設定します。要素選択時に画面でフィルタリングできます。
+                    Name this screen for filtering when selecting UI elements.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

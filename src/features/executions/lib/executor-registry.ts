@@ -18,6 +18,15 @@ import { appUninstallExecutor } from "@/features/ios-testing/components/app-unin
 import { appLaunchExecutor } from "@/features/ios-testing/components/app-launch/executor";
 import { appTerminateExecutor } from "@/features/ios-testing/components/app-terminate/executor";
 
+// iOS Testing - Physical Device Control
+import { deviceAppInstallExecutor } from "@/features/ios-testing/components/device-app-install/executor";
+import { deviceAppUninstallExecutor } from "@/features/ios-testing/components/device-app-uninstall/executor";
+import { deviceAppLaunchExecutor } from "@/features/ios-testing/components/device-app-launch/executor";
+import { deviceAppTerminateExecutor } from "@/features/ios-testing/components/device-app-terminate/executor";
+
+// iOS Testing - Setup
+import { wdaSetupExecutor } from "@/features/ios-testing/components/wda-setup/executor";
+
 // iOS Testing - UI Interaction
 import { tapExecutor } from "@/features/ios-testing/components/tap/executor";
 import { textInputExecutor } from "@/features/ios-testing/components/text-input/executor";
@@ -75,6 +84,13 @@ export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.IOS_EXPECT_VISUAL]: expectVisualExecutor,
   // iOS Testing - Analysis
   [NodeType.IOS_UI_SCAN]: uiScanExecutor,
+  // iOS Testing - Physical Device Control
+  [NodeType.IOS_DEVICE_APP_INSTALL]: deviceAppInstallExecutor,
+  [NodeType.IOS_DEVICE_APP_UNINSTALL]: deviceAppUninstallExecutor,
+  [NodeType.IOS_DEVICE_APP_LAUNCH]: deviceAppLaunchExecutor,
+  [NodeType.IOS_DEVICE_APP_TERMINATE]: deviceAppTerminateExecutor,
+  // iOS Testing - Setup
+  [NodeType.IOS_WDA_SETUP]: wdaSetupExecutor,
 };
 
 export const getExecutor = (type: NodeType): NodeExecutor => {

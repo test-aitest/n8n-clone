@@ -270,6 +270,8 @@ export const ProjectScalarFieldEnum = {
   bundleId: 'bundleId',
   targetDeviceId: 'targetDeviceId',
   appPath: 'appPath',
+  xcodeOrgId: 'xcodeOrgId',
+  xcodeSigningId: 'xcodeSigningId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

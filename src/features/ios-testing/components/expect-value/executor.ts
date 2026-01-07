@@ -4,6 +4,7 @@ import {
   createIOSError,
   getBundleIdFromContext,
   getDeviceIdFromContext,
+  getSigningConfigFromProject,
   IOS_ERROR_CODES,
   parseTimeout,
   validateRequired,
@@ -23,6 +24,7 @@ const NODE_NAME = "Expect Value";
 export const expectValueExecutor: NodeExecutor<ExpectValueData> = async ({
   data,
   nodeId,
+  projectId,
   context,
   step,
   publish,
@@ -66,7 +68,8 @@ export const expectValueExecutor: NodeExecutor<ExpectValueData> = async ({
       }
 
       // Create or reuse WDA session
-      const sessionResult = await wda.createSession(deviceId, bundleId);
+      const signingConfig = await getSigningConfigFromProject(projectId, deviceId);
+      const sessionResult = await wda.createSession(deviceId, bundleId, signingConfig);
       if (!sessionResult.success) {
         throw createIOSError(
           IOS_ERROR_CODES.COMMAND_FAILED,

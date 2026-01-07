@@ -47,7 +47,8 @@ export async function listSimulators(): Promise<Simulator[]> {
           name: device.name,
           state: device.state as SimulatorState,
           runtime: runtime.replace("com.apple.CoreSimulator.SimRuntime.", ""),
-          deviceType: device.deviceTypeIdentifier.replace(
+          deviceType: "simulator",
+          deviceTypeIdentifier: device.deviceTypeIdentifier.replace(
             "com.apple.CoreSimulator.SimDeviceType.",
             "",
           ),

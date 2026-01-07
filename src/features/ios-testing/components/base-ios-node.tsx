@@ -17,7 +17,7 @@ interface BaseIOSNodeProps extends NodeProps {
   description?: string;
   children?: ReactNode;
   status?: NodeStatus;
-  category?: "simulator" | "interaction" | "expect" | "analysis";
+  category?: "simulator" | "device" | "interaction" | "expect" | "analysis";
   onSettings?: () => void;
   onDoubleClick?: () => void;
 }
@@ -25,6 +25,7 @@ interface BaseIOSNodeProps extends NodeProps {
 // Category color mapping
 const categoryColors: Record<string, string> = {
   simulator: "border-l-blue-500",
+  device: "border-l-cyan-500",
   interaction: "border-l-green-500",
   expect: "border-l-purple-500",
   analysis: "border-l-orange-500",

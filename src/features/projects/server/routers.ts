@@ -213,6 +213,9 @@ export const projectsRouter = createTRPCRouter({
         bundleId: z.string().optional(),
         targetDeviceId: z.string().optional(),
         appPath: z.string().optional(),
+        // Apple Developer signing settings (for physical device testing)
+        xcodeOrgId: z.string().optional(),
+        xcodeSigningId: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {

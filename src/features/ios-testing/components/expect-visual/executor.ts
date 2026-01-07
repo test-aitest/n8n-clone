@@ -2,8 +2,11 @@ import { readFile } from "fs/promises";
 import { NonRetriableError } from "inngest";
 import path from "path";
 import type { NodeExecutor } from "@/features/executions/types";
+import { getDeviceIdFromContext } from "@/features/ios-testing/lib/errors";
 import { iosExpectVisualChannel } from "@/inngest/channels/ios-testing";
+import { deviceController } from "@/lib/ios";
 import { takeScreenshot } from "@/lib/ios/simulator";
+import * as wda from "@/lib/ios/wda";
 import {
   compareImages,
   compareWithGoldenMaster,
@@ -45,15 +48,8 @@ export const expectVisualExecutor: NodeExecutor<ExpectVisualData> = async ({
         throw new NonRetriableError("Expect Visual: Variable name is required");
       }
 
-      // Get device ID from context
-      const simulator = context.simulator as { deviceId?: string } | undefined;
-      const deviceId =
-        simulator?.deviceId || (context.deviceId as string | undefined);
-      if (!deviceId) {
-        throw new NonRetriableError(
-          "Expect Visual: No device ID found. Make sure simulator is booted first.",
-        );
-      }
+      // Get device ID from context (works for both simulator and physical device flows)
+      const deviceId = getDeviceIdFromContext(context, "Expect Visual");
 
       const threshold = data.threshold ? parseFloat(data.threshold) : 0.1;
 
@@ -63,15 +59,31 @@ export const expectVisualExecutor: NodeExecutor<ExpectVisualData> = async ({
         );
       }
 
-      // Take screenshot of current simulator state
-      const screenshotResult = await takeScreenshot(deviceId);
+      // Check if this is a physical device
+      const isPhysical = await deviceController.isPhysicalDeviceByUdid(deviceId);
 
-      if (!screenshotResult.success || !screenshotResult.buffer) {
-        throw new NonRetriableError("Expect Visual: Failed to take screenshot");
+      let screenshotBuffer: Buffer;
+      let screenshotPath: string;
+
+      if (isPhysical) {
+        // For physical devices, use WDA to take screenshot
+        const wdaResult = await wda.takeScreenshot(deviceId);
+        if (!wdaResult.success || !wdaResult.data) {
+          throw new NonRetriableError(
+            "Expect Visual: Failed to take screenshot from physical device. Make sure an Appium session is active.",
+          );
+        }
+        screenshotBuffer = Buffer.from(wdaResult.data, "base64");
+        screenshotPath = `/tmp/visual-tests/screenshot_${Date.now()}.png`;
+      } else {
+        // For simulators, use simctl
+        const screenshotResult = await takeScreenshot(deviceId);
+        if (!screenshotResult.success || !screenshotResult.buffer) {
+          throw new NonRetriableError("Expect Visual: Failed to take screenshot");
+        }
+        screenshotBuffer = screenshotResult.buffer;
+        screenshotPath = screenshotResult.path;
       }
-
-      const screenshotBuffer = screenshotResult.buffer;
-      const screenshotPath = screenshotResult.path;
 
       // If createBaseline is true, save as new baseline
       if (data.createBaseline) {

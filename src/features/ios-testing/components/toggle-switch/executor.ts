@@ -3,6 +3,7 @@ import {
   createIOSError,
   getBundleIdFromContext,
   getDeviceIdFromContext,
+  getSigningConfigFromProject,
   IOS_ERROR_CODES,
   validateRequired,
 } from "@/features/ios-testing/lib/errors";
@@ -19,6 +20,7 @@ const NODE_NAME = "Toggle Switch";
 export const toggleSwitchExecutor: NodeExecutor<ToggleSwitchData> = async ({
   data,
   nodeId,
+  projectId,
   context,
   step,
   publish,
@@ -56,8 +58,11 @@ export const toggleSwitchExecutor: NodeExecutor<ToggleSwitchData> = async ({
         );
       }
 
+      // Get signing config for physical devices
+      const signingConfig = await getSigningConfigFromProject(projectId, deviceId);
+
       // Create or reuse WDA session
-      const sessionResult = await wda.createSession(deviceId, bundleId);
+      const sessionResult = await wda.createSession(deviceId, bundleId, signingConfig);
       if (!sessionResult.success) {
         throw createIOSError(
           IOS_ERROR_CODES.COMMAND_FAILED,

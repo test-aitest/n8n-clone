@@ -1,9 +1,12 @@
-import { NonRetriableError } from "inngest";
 import fs from "fs/promises";
+import { NonRetriableError } from "inngest";
 import path from "path";
 import type { NodeExecutor } from "@/features/executions/types";
+import { getDeviceIdFromContext } from "@/features/ios-testing/lib/errors";
 import { iosScreenshotChannel } from "@/inngest/channels/ios-testing";
 import * as simulator from "@/lib/ios/simulator";
+import * as wda from "@/lib/ios/wda";
+import { deviceController } from "@/lib/ios";
 import prisma from "@/lib/db";
 
 type ScreenshotData = {
@@ -32,17 +35,8 @@ export const screenshotExecutor: NodeExecutor<ScreenshotData> = async ({
         throw new NonRetriableError("Screenshot: Variable name is required");
       }
 
-      // Get the device ID from context (set by simulator-boot node)
-      const simulatorContext = context.simulator as
-        | { deviceId?: string }
-        | undefined;
-      const deviceId =
-        simulatorContext?.deviceId || (context.deviceId as string | undefined);
-      if (!deviceId) {
-        throw new NonRetriableError(
-          "Screenshot: No device ID found in context. Ensure Simulator Boot node runs first.",
-        );
-      }
+      // Get the device ID from context (works for both simulator and physical device flows)
+      const deviceId = getDeviceIdFromContext(context, "Screenshot");
 
       // Determine output directory based on project
       let screenshotsDir = "/tmp";
@@ -74,23 +68,46 @@ export const screenshotExecutor: NodeExecutor<ScreenshotData> = async ({
         : `screenshot_${timestamp}.png`;
       const outputPath = path.join(screenshotsDir, filename);
 
-      const screenshotResult = await simulator.takeScreenshot(
-        deviceId,
-        outputPath,
-      );
+      // Check if this is a physical device
+      const isPhysical = await deviceController.isPhysicalDeviceByUdid(deviceId);
 
-      if (!screenshotResult.success) {
-        throw new NonRetriableError(
-          "Screenshot failed: Could not capture screenshot from simulator",
+      let screenshotPath: string;
+
+      if (isPhysical) {
+        // For physical devices, use WDA (Appium) to take screenshot
+        // This returns a base64 encoded PNG
+        const wdaResult = await wda.takeScreenshot(deviceId);
+        if (!wdaResult.success || !wdaResult.data) {
+          throw new NonRetriableError(
+            "Screenshot failed: Could not capture screenshot from physical device. Make sure an Appium session is active.",
+          );
+        }
+
+        // Write base64 data to file
+        const imageBuffer = Buffer.from(wdaResult.data, "base64");
+        await fs.writeFile(outputPath, imageBuffer);
+        screenshotPath = outputPath;
+      } else {
+        // For simulators, use simctl
+        const screenshotResult = await simulator.takeScreenshot(
+          deviceId,
+          outputPath,
         );
+
+        if (!screenshotResult.success) {
+          throw new NonRetriableError(
+            "Screenshot failed: Could not capture screenshot from simulator",
+          );
+        }
+        screenshotPath = screenshotResult.path;
       }
 
       return {
         ...context,
         [data.variableName]: {
           success: true,
-          path: screenshotResult.path,
-          filename: data.filename || path.basename(screenshotResult.path),
+          path: screenshotPath,
+          filename: data.filename || path.basename(screenshotPath),
         },
       };
     });

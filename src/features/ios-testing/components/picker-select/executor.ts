@@ -3,6 +3,7 @@ import {
   createIOSError,
   getBundleIdFromContext,
   getDeviceIdFromContext,
+  getSigningConfigFromProject,
   IOS_ERROR_CODES,
   validateRequired,
 } from "@/features/ios-testing/lib/errors";
@@ -20,6 +21,7 @@ const NODE_NAME = "Picker Select";
 export const pickerSelectExecutor: NodeExecutor<PickerSelectData> = async ({
   data,
   nodeId,
+  projectId,
   context,
   step,
   publish,
@@ -61,8 +63,11 @@ export const pickerSelectExecutor: NodeExecutor<PickerSelectData> = async ({
         );
       }
 
+      // Get signing config for physical devices
+      const signingConfig = await getSigningConfigFromProject(projectId, deviceId);
+
       // Create or reuse WDA session
-      const sessionResult = await wda.createSession(deviceId, bundleId);
+      const sessionResult = await wda.createSession(deviceId, bundleId, signingConfig);
       if (!sessionResult.success) {
         throw createIOSError(
           IOS_ERROR_CODES.COMMAND_FAILED,

@@ -4,6 +4,7 @@ import {
   formatErrorForDisplay,
   getBundleIdFromContext,
   getDeviceIdFromContext,
+  getSigningConfigFromProject,
   IOS_ERROR_CODES,
   parseTimeout,
   validateRequired,
@@ -23,6 +24,7 @@ const NODE_NAME = "Expect Exists";
 export const expectExistsExecutor: NodeExecutor<ExpectExistsData> = async ({
   data,
   nodeId,
+  projectId,
   context,
   step,
   publish,
@@ -63,7 +65,8 @@ export const expectExistsExecutor: NodeExecutor<ExpectExistsData> = async ({
       }
 
       // Create or reuse WDA session
-      const sessionResult = await wda.createSession(deviceId, bundleId);
+      const signingConfig = await getSigningConfigFromProject(projectId, deviceId);
+      const sessionResult = await wda.createSession(deviceId, bundleId, signingConfig);
       if (!sessionResult.success) {
         throw createIOSError(
           IOS_ERROR_CODES.COMMAND_FAILED,

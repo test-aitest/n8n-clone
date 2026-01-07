@@ -1,7 +1,21 @@
 /**
  * iOS Testing Library - Type Definitions
- * Types for iOS Simulator control and UI automation
+ * Types for iOS Simulator control, Physical Device, and UI automation
  */
+
+// ============================================
+// Physical Device Types (iOS 17+)
+// ============================================
+
+export interface PhysicalDevice {
+  udid: string;
+  name: string;
+  connectionType: "usb" | "wifi" | "unknown";
+  osVersion: string;
+  deviceType: "physical";
+  state: "connected" | "disconnected";
+  modelName?: string;
+}
 
 // ============================================
 // Simulator Types
@@ -12,11 +26,43 @@ export interface Simulator {
   name: string;
   state: SimulatorState;
   runtime: string;
-  deviceType: string;
+  deviceType: "simulator";  // Changed from string to literal for type safety
+  deviceTypeIdentifier: string;  // e.g., "iPhone-14-Pro"
   isAvailable: boolean;
 }
 
 export type SimulatorState = "Shutdown" | "Booted" | "Booting" | "ShuttingDown";
+
+// ============================================
+// Unified Device Type
+// ============================================
+
+/**
+ * Union type representing either a simulator or physical device
+ */
+export type DeviceInfo = Simulator | PhysicalDevice;
+
+/**
+ * Type guard to check if a device is a physical device
+ */
+export function isPhysicalDevice(device: DeviceInfo): device is PhysicalDevice {
+  return device.deviceType === "physical";
+}
+
+/**
+ * Type guard to check if a device is a simulator
+ */
+export function isSimulator(device: DeviceInfo): device is Simulator {
+  return device.deviceType === "simulator";
+}
+
+/**
+ * Real device signing configuration for Appium
+ */
+export interface RealDeviceSigningConfig {
+  xcodeOrgId: string;        // Apple Developer Team ID
+  xcodeSigningId?: string;   // Default: "iPhone Developer"
+}
 
 export interface SimulatorListResult {
   devices: Record<string, SimulatorDevice[]>;

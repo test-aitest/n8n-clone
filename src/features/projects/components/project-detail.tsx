@@ -1,8 +1,11 @@
 "use client";
 
-import { useSuspenseProject, useRemoveProject, useRescanProject } from "../hooks/use-projects";
+import { useSuspenseProject, useRemoveProject, useRescanProject, useUpdateProject } from "../hooks/use-projects";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   ArrowLeftIcon,
   FolderIcon,
@@ -13,6 +16,8 @@ import {
   WorkflowIcon,
   LayoutTemplateIcon,
   RefreshCwIcon,
+  KeyIcon,
+  SaveIcon,
 } from "lucide-react";
 import { UIComponentsSection } from "./ui-components-section";
 import { toast } from "sonner";
@@ -27,6 +32,28 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const { data: project } = useSuspenseProject(projectId);
   const removeProject = useRemoveProject();
   const rescanProject = useRescanProject();
+  const updateProject = useUpdateProject();
+
+  // State for Apple Developer settings
+  const [xcodeOrgId, setXcodeOrgId] = useState(project.xcodeOrgId || "");
+  const [xcodeSigningId, setXcodeSigningId] = useState(project.xcodeSigningId || "");
+  const [hasSigningChanges, setHasSigningChanges] = useState(false);
+
+  const handleSaveSigningSettings = () => {
+    updateProject.mutate(
+      {
+        id: projectId,
+        xcodeOrgId: xcodeOrgId || undefined,
+        xcodeSigningId: xcodeSigningId || undefined,
+      },
+      {
+        onSuccess: () => {
+          setHasSigningChanges(false);
+          toast.success("Signing settings saved");
+        },
+      }
+    );
+  };
 
   const handleRescan = () => {
     rescanProject.mutate(
@@ -165,6 +192,68 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
               <div>
                 <div className="text-2xl font-semibold">{project._count.templates}</div>
                 <div className="text-xs text-muted-foreground">Templates</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Apple Developer Settings (for physical device testing) */}
+          <div className="flex flex-col gap-y-4 p-4 rounded-lg border bg-card">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <KeyIcon className="size-4 text-muted-foreground" />
+                <h3 className="font-medium">Apple Developer Settings</h3>
+              </div>
+              {hasSigningChanges && (
+                <Button
+                  size="sm"
+                  onClick={handleSaveSigningSettings}
+                  disabled={updateProject.isPending}
+                >
+                  {updateProject.isPending ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <SaveIcon className="size-4" />
+                  )}
+                  Save
+                </Button>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Required for testing on physical iOS devices. Get your Team ID from{" "}
+              <a
+                href="https://developer.apple.com/account"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                Apple Developer Portal
+              </a>
+              .
+            </p>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="xcodeOrgId">Team ID (xcodeOrgId)</Label>
+                <Input
+                  id="xcodeOrgId"
+                  placeholder="e.g., ABC123XYZ"
+                  value={xcodeOrgId}
+                  onChange={(e) => {
+                    setXcodeOrgId(e.target.value);
+                    setHasSigningChanges(true);
+                  }}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="xcodeSigningId">Signing Identity</Label>
+                <Input
+                  id="xcodeSigningId"
+                  placeholder="iPhone Developer (default)"
+                  value={xcodeSigningId}
+                  onChange={(e) => {
+                    setXcodeSigningId(e.target.value);
+                    setHasSigningChanges(true);
+                  }}
+                />
               </div>
             </div>
           </div>

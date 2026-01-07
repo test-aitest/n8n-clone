@@ -118,6 +118,7 @@ export const AppLaunchDialog = ({
                     <DeviceSelector
                       value={field.value}
                       onChange={field.onChange}
+                      deviceFilter="simulator"
                     />
                   </FormControl>
                   <FormDescription>

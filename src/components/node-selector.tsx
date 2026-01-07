@@ -28,6 +28,7 @@ import {
   Scan,
   Calendar,
   Timer,
+  Settings,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -146,6 +147,40 @@ const iosSimulatorNodes: NodeTypeOption[] = [
     type: NodeType.IOS_APP_TERMINATE,
     label: "App Terminate",
     description: "Terminate an app on Simulator",
+    icon: Square,
+  },
+];
+
+// iOS Testing - Physical Device Control
+const iosDeviceNodes: NodeTypeOption[] = [
+  {
+    type: NodeType.IOS_WDA_SETUP,
+    label: "WDA Setup",
+    description: "Setup WebDriverAgent for UI automation on physical device",
+    icon: Settings,
+  },
+  {
+    type: NodeType.IOS_DEVICE_APP_INSTALL,
+    label: "Device App Install",
+    description: "Install an app on physical device (iOS 17+)",
+    icon: Download,
+  },
+  {
+    type: NodeType.IOS_DEVICE_APP_UNINSTALL,
+    label: "Device App Uninstall",
+    description: "Uninstall an app from physical device",
+    icon: Trash2,
+  },
+  {
+    type: NodeType.IOS_DEVICE_APP_LAUNCH,
+    label: "Device App Launch",
+    description: "Launch an app on physical device",
+    icon: Play,
+  },
+  {
+    type: NodeType.IOS_DEVICE_APP_TERMINATE,
+    label: "Device App Terminate",
+    description: "Terminate an app on physical device",
     icon: Square,
   },
 ];
@@ -421,6 +456,42 @@ export function NodeSelector({
                     />
                   ) : (
                     <Icon className="size-5 text-blue-500" />
+                  )}
+                  <div className="flex flex-col items-start text-left">
+                    <span className="font-medium text-sm">
+                      {nodeType.label}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {nodeType.description}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <Separator />
+        <SheetHeader className="px-4 pt-4">
+          <SheetTitle className="text-base">iOS Testing - Physical Device</SheetTitle>
+        </SheetHeader>
+        <div>
+          {iosDeviceNodes.map((nodeType) => {
+            const Icon = nodeType.icon;
+            return (
+              <div
+                key={nodeType.type}
+                className="w-full justify-start h-auto py-4 px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-cyan-500"
+                onClick={() => handleNodeSelect(nodeType)}
+              >
+                <div className="flex items-center gap-6 w-full overflow-hidden">
+                  {typeof Icon === "string" ? (
+                    <img
+                      src={Icon}
+                      alt={nodeType.label}
+                      className="size-5 object-contain rounded-sm"
+                    />
+                  ) : (
+                    <Icon className="size-5 text-cyan-500" />
                   )}
                   <div className="flex flex-col items-start text-left">
                     <span className="font-medium text-sm">

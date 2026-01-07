@@ -9,6 +9,7 @@ import {
 import { ExecutionStatus, NodeType, Prisma } from "@/generated/prisma/client";
 import { getExecutor } from "@/features/executions/lib/executor-registry";
 import { stopVideoRecording } from "@/features/ios-testing/components/video-recording/executor";
+import { stopWdaProcess } from "@/features/ios-testing/components/wda-setup/executor";
 import { CronExpressionParser } from "cron-parser";
 import { httpRequestChannel } from "./channels/http-request";
 import { manualTriggerChannel } from "./channels/manual-trigger";
@@ -145,13 +146,18 @@ export const executeWorkflow = inngest.createFunction(
     // Initialize context with any initial data from the trigger
     let context = event.data.initialData || {};
 
-    // Execute each node with try-finally to ensure video recording stops
+    // Execute each node with try-finally to ensure video recording and WDA stops
     let hasVideoRecording = false;
+    let hasWdaSetup = false;
     try {
       for (const node of workflowData.sortedNodes) {
         // Check if this is a video recording node
         if (node.type === NodeType.IOS_VIDEO_RECORDING) {
           hasVideoRecording = true;
+        }
+        // Check if this is a WDA setup node
+        if (node.type === NodeType.IOS_WDA_SETUP) {
+          hasWdaSetup = true;
         }
 
         const executor = getExecutor(node.type as NodeType);
@@ -171,6 +177,12 @@ export const executeWorkflow = inngest.createFunction(
       if (hasVideoRecording) {
         await step.run("stop-video-recording", async () => {
           await stopVideoRecording();
+        });
+      }
+      // Stop any running WDA process
+      if (hasWdaSetup) {
+        await step.run("stop-wda-process", async () => {
+          await stopWdaProcess();
         });
       }
     }
@@ -493,6 +505,7 @@ export const executePackage = inngest.createFunction(
 
       let context: Record<string, unknown> = {};
       let hasVideoRecording = false;
+      let hasWdaSetup = false;
       // Local tracking of current node
       let localCurrentNode: NodeExecutionInfo | null = null;
 
@@ -518,6 +531,9 @@ export const executePackage = inngest.createFunction(
 
           if (node.type === NodeType.IOS_VIDEO_RECORDING) {
             hasVideoRecording = true;
+          }
+          if (node.type === NodeType.IOS_WDA_SETUP) {
+            hasWdaSetup = true;
           }
 
           // Execute the node
@@ -554,6 +570,12 @@ export const executePackage = inngest.createFunction(
             await stopVideoRecording();
           });
         }
+        // Stop WDA process if needed
+        if (hasWdaSetup) {
+          await step.run(`stop-wda-${workflowId}`, async () => {
+            await stopWdaProcess();
+          });
+        }
 
         // Update execution as success
         await step.run(`complete-execution-${workflowId}`, async () => {
@@ -576,6 +598,15 @@ export const executePackage = inngest.createFunction(
         if (hasVideoRecording) {
           try {
             await stopVideoRecording();
+          } catch {
+            // Ignore stop error
+          }
+        }
+
+        // Stop WDA process on error
+        if (hasWdaSetup) {
+          try {
+            await stopWdaProcess();
           } catch {
             // Ignore stop error
           }

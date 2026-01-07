@@ -76,24 +76,42 @@ export function validateRequired<T extends Record<string, unknown>>(
 
 /**
  * Extract device ID from execution context
+ * Searches through all context values for deviceId
  */
 export function getDeviceIdFromContext(
   context: Record<string, unknown>,
   nodeName: string,
 ): string {
+  // Check direct simulator object
   const simulator = context.simulator as { deviceId?: string } | undefined;
-  const deviceId =
-    simulator?.deviceId || (context.deviceId as string | undefined);
-
-  if (!deviceId) {
-    throw createIOSError(
-      IOS_ERROR_CODES.DEVICE_NOT_BOOTED,
-      `${nodeName}: No device ID found. Make sure simulator is booted first.`,
-      { context: Object.keys(context) },
-    );
+  if (simulator?.deviceId) {
+    return simulator.deviceId;
   }
 
-  return deviceId;
+  // Check direct deviceId
+  if (typeof context.deviceId === "string" && context.deviceId) {
+    return context.deviceId;
+  }
+
+  // Search through all context values to find deviceId
+  // This handles cases like wdaSetupResult.deviceId, deviceLaunchResult.deviceId, etc.
+  for (const value of Object.values(context)) {
+    if (
+      value &&
+      typeof value === "object" &&
+      "deviceId" in value &&
+      typeof (value as { deviceId: unknown }).deviceId === "string" &&
+      (value as { deviceId: string }).deviceId
+    ) {
+      return (value as { deviceId: string }).deviceId;
+    }
+  }
+
+  throw createIOSError(
+    IOS_ERROR_CODES.DEVICE_NOT_BOOTED,
+    `${nodeName}: No device ID found. Make sure WDA Setup or Simulator Boot runs first.`,
+    { context: Object.keys(context) },
+  );
 }
 
 /**
@@ -206,4 +224,49 @@ export function formatErrorForDisplay(error: unknown): {
   }
 
   return { message: String(error) };
+}
+
+/**
+ * Real device signing configuration type
+ */
+export interface RealDeviceSigningConfig {
+  xcodeOrgId: string;
+  xcodeSigningId?: string;
+}
+
+/**
+ * Get real device signing config from project
+ * Returns undefined if not configured or not a physical device
+ */
+export async function getSigningConfigFromProject(
+  projectId: string | null,
+  deviceId: string,
+): Promise<RealDeviceSigningConfig | undefined> {
+  if (!projectId) return undefined;
+
+  // Import dynamically to avoid circular dependencies
+  const { deviceController } = await import("@/lib/ios");
+  const prisma = (await import("@/lib/db")).default;
+
+  // Check if this is a physical device
+  const isPhysical = await deviceController.isPhysicalDeviceByUdid(deviceId);
+  if (!isPhysical) return undefined;
+
+  // Get project signing settings
+  const project = await prisma.project.findUnique({
+    where: { id: projectId },
+    select: { xcodeOrgId: true, xcodeSigningId: true },
+  });
+
+  if (!project?.xcodeOrgId) {
+    console.warn(
+      "[iOS Testing] Physical device detected but no Team ID configured in project settings"
+    );
+    return undefined;
+  }
+
+  return {
+    xcodeOrgId: project.xcodeOrgId,
+    xcodeSigningId: project.xcodeSigningId || undefined,
+  };
 }

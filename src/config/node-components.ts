@@ -23,6 +23,15 @@ import { AppUninstallNode } from "@/features/ios-testing/components/app-uninstal
 import { AppLaunchNode } from "@/features/ios-testing/components/app-launch";
 import { AppTerminateNode } from "@/features/ios-testing/components/app-terminate";
 
+// iOS Testing - Physical Device Control
+import { DeviceAppInstallNode } from "@/features/ios-testing/components/device-app-install";
+import { DeviceAppUninstallNode } from "@/features/ios-testing/components/device-app-uninstall";
+import { DeviceAppLaunchNode } from "@/features/ios-testing/components/device-app-launch";
+import { DeviceAppTerminateNode } from "@/features/ios-testing/components/device-app-terminate";
+
+// iOS Testing - Setup
+import { WdaSetupNode } from "@/features/ios-testing/components/wda-setup";
+
 // iOS Testing - UI Interaction
 import { TapNode } from "@/features/ios-testing/components/tap";
 import { TextInputNode } from "@/features/ios-testing/components/text-input";
@@ -62,6 +71,13 @@ export const nodeComponents = {
   [NodeType.IOS_APP_UNINSTALL]: AppUninstallNode,
   [NodeType.IOS_APP_LAUNCH]: AppLaunchNode,
   [NodeType.IOS_APP_TERMINATE]: AppTerminateNode,
+  // iOS Testing - Physical Device Control
+  [NodeType.IOS_DEVICE_APP_INSTALL]: DeviceAppInstallNode,
+  [NodeType.IOS_DEVICE_APP_UNINSTALL]: DeviceAppUninstallNode,
+  [NodeType.IOS_DEVICE_APP_LAUNCH]: DeviceAppLaunchNode,
+  [NodeType.IOS_DEVICE_APP_TERMINATE]: DeviceAppTerminateNode,
+  // iOS Testing - Setup
+  [NodeType.IOS_WDA_SETUP]: WdaSetupNode,
   // iOS Testing - UI Interaction
   [NodeType.IOS_TAP]: TapNode,
   [NodeType.IOS_TEXT_INPUT]: TextInputNode,

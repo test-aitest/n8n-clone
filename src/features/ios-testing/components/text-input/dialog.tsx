@@ -158,7 +158,7 @@ export const TextInputDialog = ({
                 <FormItem>
                   <FormLabel>Label Match</FormLabel>
                   <FormControl>
-                    <Input placeholder="メールアドレス" {...field} />
+                    <Input placeholder="Email address" {...field} />
                   </FormControl>
                   <FormDescription>
                     Text to match in label/placeholder (partial match)

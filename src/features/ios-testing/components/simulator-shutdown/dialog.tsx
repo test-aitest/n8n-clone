@@ -112,6 +112,7 @@ export const SimulatorShutdownDialog = ({
                     <DeviceSelector
                       value={field.value}
                       onChange={field.onChange}
+                      deviceFilter="simulator"
                     />
                   </FormControl>
                   <FormDescription>
